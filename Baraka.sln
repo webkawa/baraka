@@ -5,7 +5,7 @@ VisualStudioVersion = 15.0.27703.2035
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Baraka", "Baraka\Baraka.csproj", "{2B23E30A-E555-4DFD-93CA-8E613E8484BB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Baraka.API", "Baraka.Services\Baraka.API.csproj", "{3930E55C-AF80-412D-A005-500F0EE1AD16}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Baraka.API", "Baraka.API\Baraka.API.csproj", "{3930E55C-AF80-412D-A005-500F0EE1AD16}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
