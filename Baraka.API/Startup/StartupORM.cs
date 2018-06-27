@@ -7,7 +7,7 @@
     using System.Text;
 
     using Baraka.API.DAO;
-    using Baraka.API.DTO.Configuration;
+    using Baraka.API.Internals.Configuration;
     using Baraka.API.Internals.Persistence;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
@@ -39,12 +39,12 @@
             return services
                 .AddScoped((provider) =>
                 {
-                    Init(provider.GetService<IOptions<ApplicationConfigurationDTO>>().Value.Database);
+                    Init(provider.GetService<IOptions<ApplicationConfiguration>>().Value.Database);
                     return Factory.OpenSession();
                 })
                 .AddScoped((provider) =>
                 {
-                    Init(provider.GetService<IOptions<ApplicationConfigurationDTO>>().Value.Database);
+                    Init(provider.GetService<IOptions<ApplicationConfiguration>>().Value.Database);
                     return Factory.OpenStatelessSession();
                 })
                 .AddScoped((provider) =>
@@ -58,7 +58,7 @@
         /// </summary>
         /// <param name="options">Configuration.</param>
         /// <returns>Fabrique de session.</returns>
-        private static ISessionFactory Init(DatabaseConfigurationDTO options)
+        private static ISessionFactory Init(DatabaseConfiguration options)
         {
             if (Factory == null)
             {
@@ -104,7 +104,7 @@
                                 throw new Error("Invalid database action '{0}'", options.Action);
                         }
                     })
-                    .SetNamingStrategy(new BarakaNamingStrategy())
+                    .SetNamingStrategy(new NamingStrategy())
                     .AddMapping(hbm);
 
                 Factory = pre.BuildSessionFactory();

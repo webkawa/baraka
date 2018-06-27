@@ -1,4 +1,4 @@
-﻿namespace Baraka.API.DTO.Configuration
+﻿namespace Baraka.API.Internals.Configuration
 {
     using System;
     using System.Collections.Generic;
@@ -9,7 +9,7 @@
     /// <summary>
     ///     DTO descriptif de la configuration des logs.
     /// </summary>
-    public class LoggingConfigurationDTO
+    public class LoggerConfiguration
     {
         /// <summary>
         ///     Dossier des logs.

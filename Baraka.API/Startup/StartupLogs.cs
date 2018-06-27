@@ -3,7 +3,8 @@
     using System;
     using System.Collections.Generic;
     using System.Text;
-    using Baraka.API.DTO.Configuration;
+
+    using Baraka.API.Internals.Configuration;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Options;
@@ -32,7 +33,7 @@
             return services
                 .AddScoped<ILogger>((provider) =>
                 {
-                    Init(provider.GetService<IOptions<ApplicationConfigurationDTO>>().Value.Logging);
+                    Init(provider.GetService<IOptions<ApplicationConfiguration>>().Value.Logging);
                     return LogManager.GetLogger("baraka");
                 });
         }
@@ -41,7 +42,7 @@
         ///     Initialisation de la configuration.
         /// </summary>
         /// <param name="options">Liste des options.</param>
-        private static void Init(LoggingConfigurationDTO options)
+        private static void Init(LoggerConfiguration options)
         {
             if (!Started)
             {

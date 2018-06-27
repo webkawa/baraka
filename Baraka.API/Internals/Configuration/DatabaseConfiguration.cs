@@ -1,4 +1,4 @@
-﻿namespace Baraka.API.DTO.Configuration
+﻿namespace Baraka.API.Internals.Configuration
 {
     using Newtonsoft.Json;
     using System;
@@ -8,7 +8,7 @@
     /// <summary>
     ///     Configuration de la connexion à la base de données.
     /// </summary>
-    public class DatabaseConfigurationDTO
+    public class DatabaseConfiguration
     {
         /// <summary>
         ///     Chaîne de connexion.

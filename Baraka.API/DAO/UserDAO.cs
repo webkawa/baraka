@@ -25,13 +25,17 @@
         /// </summary>
         /// <param name="login">Login.</param>
         /// <param name="password">Mot de passe.</param>
+        /// <param name="email">Adresse e-mail.</param>
+        /// <param name="configuration">Configuration.</param>
         /// <returns>Utilisateur créé.</returns>
-        public User Insert(string login, string password)
+        public User Insert(string login, string password, string email, UserConfiguration configuration)
         {
             User user = new User()
             {
                 Login = login,
-                Password = password
+                Password = password,
+                Email = email,
+                Configuration = configuration
             };
             Session.Persist(user);
             return user;

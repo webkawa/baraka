@@ -5,6 +5,7 @@
     using System.Text;
 
     using Baraka.API.DAO;
+    using Baraka.API.Entities;
     using Baraka.API.Internals.Attributes;
     using Microsoft.AspNetCore.Mvc;
     using NHibernate;
@@ -19,11 +20,15 @@
         ///     Génération des données de démonstration.
         /// </summary>
         /// <param name="userDAO">DAO des utilisateurs.</param>
-        [Route("/demo")]
+        [Route("/")]
         [Transactional]
         public string Demo([FromServices] UserDAO userDAO)
         {
-            userDAO.Insert("kawa", "kawa");
+            userDAO.Insert("kawa", "kawa", "guillaume.zavan@gmail.com", new UserConfiguration()
+            {
+                Test = "foo",
+                Test2 = "bar"
+            });
             return "ok";
         }
     }

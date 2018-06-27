@@ -4,7 +4,8 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
-    using Baraka.API.DTO.Configuration;
+
+    using Baraka.API.Internals.Configuration;
     using Microsoft.AspNetCore;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
@@ -49,7 +50,7 @@
         /// </summary>
         /// <param name="app">Constructeur applicatif.</param>
         /// <param name="env">Environnement.</param>
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, IOptions<ApplicationConfigurationDTO> configuration)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, IOptions<ApplicationConfiguration> configuration)
         {
             // Mode développeur
             if (env.IsDevelopment())

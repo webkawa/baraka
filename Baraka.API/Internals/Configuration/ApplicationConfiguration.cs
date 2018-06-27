@@ -1,4 +1,4 @@
-﻿namespace Baraka.API.DTO.Configuration
+﻿namespace Baraka.API.Internals.Configuration
 {
     using System;
     using System.Collections.Generic;
@@ -7,16 +7,16 @@
     /// <summary>
     ///     DTO descriptif de la configuration de l'application.
     /// </summary>
-    public class ApplicationConfigurationDTO
+    public class ApplicationConfiguration
     {
         /// <summary>
         ///     Base de données.
         /// </summary>
-        public DatabaseConfigurationDTO Database { get; set; }
+        public DatabaseConfiguration Database { get; set; }
 
         /// <summary>
         ///     Gestions des logs.
         /// </summary>
-        public LoggingConfigurationDTO Logging { get; set; }
+        public LoggerConfiguration Logging { get; set; }
     }
 }

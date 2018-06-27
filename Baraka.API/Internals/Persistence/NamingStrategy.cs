@@ -11,7 +11,7 @@
     /// <summary>
     ///     Stratégie de nommage NHibernate.
     /// </summary>
-    public class BarakaNamingStrategy : INamingStrategy
+    public class NamingStrategy : INamingStrategy
     {
         /// <summary>
         ///     Liste des mots-clefs protégés.
@@ -74,11 +74,11 @@
         }
 
         /// <summary>
-        ///     
+        ///     Retourne le nom d'une colonne logique.
         /// </summary>
-        /// <param name="columnName"></param>
-        /// <param name="propertyName"></param>
-        /// <returns></returns>
+        /// <param name="columnName">Nom de la colonne.</param>
+        /// <param name="propertyName">Nom de la propriété.</param>
+        /// <returns>Nom qualifié.</returns>
         public string LogicalColumnName(string columnName, string propertyName)
         {
             return StringHelper.IsNotEmpty(columnName) ?

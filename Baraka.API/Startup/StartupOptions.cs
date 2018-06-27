@@ -1,11 +1,12 @@
 ﻿namespace Baraka.API.Startup
 {
-    using Baraka.API.DTO.Configuration;
-    using Microsoft.Extensions.Configuration;
-    using Microsoft.Extensions.DependencyInjection;
     using System;
     using System.Collections.Generic;
     using System.Text;
+
+    using Baraka.API.Internals.Configuration;
+    using Microsoft.Extensions.Configuration;
+    using Microsoft.Extensions.DependencyInjection;
 
     /// <summary>
     ///     Classe de démarrage de la configuration.
@@ -21,7 +22,7 @@
         {
             return services
                 .AddOptions()
-                .Configure<ApplicationConfigurationDTO>(source);
+                .Configure<ApplicationConfiguration>(source);
         }
     }
 }
