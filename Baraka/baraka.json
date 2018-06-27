@@ -1,0 +1,13 @@
+﻿{
+  "database": {
+    "connectionString": "Server=tcp:baraka.database.windows.net,1433;Initial Catalog=baraka;Persist Security Info=False;User ID=administrateur;Password=$bingo!2018;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;",
+    "batchsize": 30,
+    "action": "Recreate"
+  },
+  "logging": {
+    "folder": "D:\\Logs",
+    "until": 15,
+    "format": "${longdate}|${level:uppercase=true}|${logger}|${message}",
+    "level": "TRACE"
+  }
+}
