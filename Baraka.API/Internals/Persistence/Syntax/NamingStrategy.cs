@@ -1,4 +1,4 @@
-﻿namespace Baraka.API.Internals.Persistence
+﻿namespace Baraka.API.Internals.Persistence.Syntax
 {
     using System;
     using System.Collections.Generic;
@@ -19,7 +19,8 @@
         private static string[] ESCAPES = new string[]
         {
             "table",
-            "user"
+            "user",
+            "view"
         };
 
         /// <summary>

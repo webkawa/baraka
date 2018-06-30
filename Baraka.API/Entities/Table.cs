@@ -4,6 +4,10 @@
     using System.Collections.Generic;
     using System.Text;
 
+    using Baraka.API.DTO.Persisted;
+    using Baraka.API.DTO.Persisted.Shared;
+    using Baraka.API.Internals.Persistence.Types;
+
     /// <summary>
     ///     Table constitutive de la base métier.
     /// </summary>
@@ -16,6 +20,16 @@
         {
             Fields = new HashSet<Field>();
         }
+
+        /// <summary>
+        ///     Libellé de la table.
+        /// </summary>
+        public virtual BundleDTO Label { get; set; }
+
+        /// <summary>
+        ///     Code d'accès.
+        /// </summary>
+        public virtual string Code { get; set; }
 
         /// <summary>
         ///     Liste des champs.
@@ -33,10 +47,9 @@
         /// </summary>
         public TableMapping()
         {
-            Bag(
-                e => e.Fields,
-                m => { },
-                o => o.OneToMany());
+            PropertyJsonFixed(e => e.Label);
+            Property(e => e.Code);
+            OneToMany(e => e.Fields);
         }
     }
 }

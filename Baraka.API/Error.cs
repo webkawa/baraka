@@ -14,7 +14,7 @@
         /// </summary>
         /// <param name="message">Message d'erreur.</param>
         /// <param name="format">Arguments de formattage.</param>
-        public Error(string message, params string[] format) : base(string.Format(message, format))
+        public Error(string message, params object[] format) : base(string.Format(message, format))
         {
         }
 
@@ -24,7 +24,7 @@
         /// <param name="inner">Cause de l'erreur.</param>
         /// <param name="message">Message d'erreur.</param>
         /// <param name="format">Arguments de formattage.</param>
-        public Error(Exception inner, string message, params string[] format) : base(string.Format(message, format), inner)
+        public Error(Exception inner, string message, params object[] format) : base(string.Format(message, format), inner)
         {
         }
     }

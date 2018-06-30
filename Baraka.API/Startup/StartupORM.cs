@@ -9,6 +9,7 @@
     using Baraka.API.DAO;
     using Baraka.API.Internals.Configuration;
     using Baraka.API.Internals.Persistence;
+    using Baraka.API.Internals.Persistence.Syntax;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Options;
@@ -47,10 +48,10 @@
                     Init(provider.GetService<IOptions<ApplicationConfiguration>>().Value.Database);
                     return Factory.OpenStatelessSession();
                 })
-                .AddScoped((provider) =>
-                {
-                    return new UserDAO(provider.GetService<ISession>());
-                });
+                .AddScoped((provider) => new FieldDAO(provider.GetService<ISession>()))
+                .AddScoped((provider) => new TableDAO(provider.GetService<ISession>()))
+                .AddScoped((provider) => new UserDAO(provider.GetService<ISession>()))
+                .AddScoped((provider) => new ViewDAO(provider.GetService<ISession>()));
         }
 
         /// <summary>

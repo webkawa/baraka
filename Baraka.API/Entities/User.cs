@@ -1,10 +1,15 @@
 ﻿namespace Baraka.API.Entities
 {
-    using Baraka.API.Internals.Persistence;
-    using NHibernate.Mapping.ByCode.Conformist;
     using System;
     using System.Collections.Generic;
+    using System.Runtime.Serialization;
     using System.Text;
+
+    using Baraka.API.DTO.Persisted;
+    using Baraka.API.DTO.Persisted.Configurations;
+    using Baraka.API.Internals.Persistence;
+    using Baraka.API.Internals.Persistence.Types;
+    using NHibernate.Mapping.ByCode.Conformist;
 
     /// <summary>
     ///     Utilisateur.
@@ -29,7 +34,7 @@
         /// <summary>
         ///     Configuration.
         /// </summary>
-        public virtual UserConfiguration Configuration { get; set; }
+        public virtual UserConfigurationDTO Configuration { get; set; }
     }
 
     /// <summary>
@@ -45,19 +50,7 @@
             Property(e => e.Login);
             Property(e => e.Password);
             Property(e => e.Email);
-            Property(
-                e => e.Configuration, 
-                m => m.Type<JsonType<UserConfiguration>>());
+            PropertyJsonFixed(e => e.Configuration);
         }
-    }
-    
-    /// <summary>
-    ///     Configuration utilisateur.
-    /// </summary>
-    [Serializable]
-    public class UserConfiguration
-    {
-        public string Test { get; set; }
-        public string Test2 { get; set; }
     }
 }
