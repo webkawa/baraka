@@ -29,7 +29,7 @@
         /// <param name="tableDAO">DAO des tables.</param>
         /// <param name="fieldDAO">DAO des champs.</param>
         /// <param name="viewDAO">DAO des vues.</param>
-        [Route("/")]
+        [Route("/demo")]
         [Transactional]
         public Guid Demo(
             [FromServices] AuthenticationManager manager,

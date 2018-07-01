@@ -1,2 +1,2 @@
 cd ui
-vue build src/main.js --dest ../static
+vue build src/main.js --dest ../wwwroot

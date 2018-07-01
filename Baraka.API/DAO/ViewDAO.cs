@@ -39,5 +39,18 @@
             Session.Persist(result);
             return result;
         }
+
+        /// <summary>
+        ///     Retourne la liste des vues disponibles à un utilisateur.
+        /// </summary>
+        /// <param name="user">Utilisateur ciblé.</param>
+        /// <returns>Liste des vues.</returns>
+        public IList<View> GetViewByUser(User user)
+        {
+            // TODO : filtrer
+            return Session
+                .QueryOver<View>()
+                .List();
+        }
     }
 }

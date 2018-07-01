@@ -31,6 +31,9 @@
     /// </summary>
     public class BundleDTO : FixedPersistedDTO
     {
+        /// <summary>
+        ///     Constructeur.
+        /// </summary>
         public BundleDTO()
         {
             Data = new Dictionary<Langage, string>();

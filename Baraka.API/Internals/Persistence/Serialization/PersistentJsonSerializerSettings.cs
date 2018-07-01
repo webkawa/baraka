@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.Text;
 
+    using Baraka.API.Internals.Persistence.Serialization.Converters;
     using Newtonsoft.Json;
     using NHibernate;
 

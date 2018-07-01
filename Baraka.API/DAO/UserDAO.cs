@@ -43,5 +43,20 @@
             Session.Persist(user);
             return user;
         }
+
+        /// <summary>
+        ///     Retourne un utilisateur par le biais de ses identifiants.
+        /// </summary>
+        /// <param name="name">Login ou adresse e-mail.</param>
+        /// <param name="password">Mot de passe non-encrypté.</param>
+        /// <returns>Utilisateur existant ou null.</returns>
+        public User GetByCredentials(string name, string password)
+        {
+            return Session
+                .QueryOver<User>()
+                .Where(e => e.Login == name || e.Email == name)
+                .And(e => e.Password == password.ToSHA256())
+                .SingleOrDefault();
+        }
     }
 }

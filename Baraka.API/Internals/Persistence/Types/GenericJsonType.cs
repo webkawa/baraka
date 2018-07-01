@@ -33,7 +33,6 @@
         /// <summary>
         ///     Constructeur.
         /// </summary>
-        /// <param name="configuration">Actions de configuration.</param>
         public GenericJsonType()
         {
             if (!typeof(TKey).IsEnum)

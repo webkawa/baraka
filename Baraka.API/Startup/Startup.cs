@@ -51,6 +51,7 @@
         /// </summary>
         /// <param name="app">Constructeur applicatif.</param>
         /// <param name="env">Environnement.</param>
+        /// <param name="configuration">Configuration.</param>
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, IOptions<ApplicationConfiguration> configuration)
         {
             // Mode développeur
@@ -61,6 +62,7 @@
 
             // Configuration
             app.UseMvc();
+            app.UseStaticFiles();
         }
     }
 }

@@ -18,6 +18,10 @@
                 .AddSingleton((provider) =>
                 {
                     return new AuthenticationManager();
+                })
+                .AddScoped((provider) =>
+                {
+                    return new AuthenticationHolder();
                 });
         }
     }

@@ -1,18 +1,30 @@
 <template>
-  <div class="home">
-    <img src="../assets/logo.png"/>
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
-  </div>
+    <div class="home">
+        <h2>Choisis ta vue mec</h2>
+        <div v-for="view in views" :key="view.id">
+            <h3>{{ view }}</h3>
+        </div>
+    </div>
 </template>
 
 <script>
-// @ is an alias to /src
-import HelloWorld from '@/components/HelloWorld.vue'
+    import axios from 'axios'
 
-export default {
-  name: 'home',
-  components: {
-    HelloWorld
-  }
-}
+    export default {
+        name: 'home',
+        data: function () {
+            return {
+                views: []
+            }
+        },
+        created: function () {
+            alert("bam");
+            var source = this;
+            axios
+                .get("/views/get")
+                .then(function (response) {
+                    source.views = response.data;
+                });
+        }
+    }
 </script>

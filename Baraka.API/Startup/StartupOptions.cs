@@ -17,6 +17,7 @@
         ///     Référence la configuration.
         /// </summary>
         /// <param name="services">Liste des services.</param>
+        /// <param name="source">Configuration source.</param>
         /// <returns>Liste des services.</returns>
         internal static IServiceCollection AddOptions(this IServiceCollection services, IConfiguration source)
         {

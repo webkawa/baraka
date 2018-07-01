@@ -9,6 +9,7 @@
     using Baraka.API.DTO.Persisted.Configurations;
     using Baraka.API.Internals.Persistence;
     using Baraka.API.Internals.Persistence.Types;
+    using Newtonsoft.Json;
     using NHibernate.Mapping.ByCode.Conformist;
 
     /// <summary>
@@ -24,6 +25,7 @@
         /// <summary>
         ///     Mot de passe.
         /// </summary>
+        [JsonIgnore]
         public virtual string Password { get; set; }
 
         /// <summary>

@@ -1,4 +1,4 @@
-﻿namespace Baraka.API.Internals.Persistence.Serialization
+﻿namespace Baraka.API.Internals.Persistence.Serialization.Converters
 {
     using System;
     using System.Collections.Generic;
