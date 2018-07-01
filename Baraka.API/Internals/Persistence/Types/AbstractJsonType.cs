@@ -10,6 +10,7 @@
     using Baraka.API.DTO.Persisted;
     using Baraka.API.DTO.Persisted.Abstract;
     using Baraka.API.DTO.Persisted.Shared;
+    using Newtonsoft.Json;
     using NHibernate.Engine;
     using NHibernate.SqlTypes;
     using NHibernate.UserTypes;
@@ -19,6 +20,7 @@
     ///     au format JSON par l'intermédiaire d'un DTO cible, simple ou
     ///     polymorphe.
     /// </summary>
+    /// <typeparam name="TObject">Type d'objet persisté.</typeparam>
     public abstract class AbstractJsonType<TObject> : IUserType
         where TObject : IPersistedDTO
     {
@@ -54,19 +56,7 @@
         /// </summary>
         public object DeepCopy(object value)
         {
-            // Voir : https://www.c-sharpcorner.com/UploadFile/ff2f08/deep-copy-of-object-in-C-Sharp/
-            using (MemoryStream stream = new MemoryStream())
-            {
-                if (value.GetType().IsSerializable)
-                {
-                    BinaryFormatter formatter = new BinaryFormatter();
-                    formatter.Serialize(stream, value);
-                    stream.Position = 0;
-                    return formatter.Deserialize(stream);
-                }
-
-                throw new NotImplementedException("Unable to deep copy object");
-            }
+            return (value as IPersistedDTO).DeepCopy();
         }
 
         /// <summary>

@@ -14,7 +14,6 @@
     /// <summary>
     ///     DTO à type générique enregistrable en base de données.
     /// </summary>
-    [Serializable]
     public abstract class GenericPersistedDTO : AbstractPersistedDTO, IGenericPersistedDTO
     {
     }

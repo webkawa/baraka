@@ -7,7 +7,6 @@
     /// <summary>
     ///     DTO descriptive d'une vue de type liste.
     /// </summary>
-    [Serializable]
     public class ListViewDTO : LocalizedViewDTO
     {
     }

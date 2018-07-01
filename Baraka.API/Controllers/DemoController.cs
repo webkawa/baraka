@@ -12,6 +12,7 @@
     using Baraka.API.DTO.Persisted.Views;
     using Baraka.API.Entities;
     using Baraka.API.Internals.Attributes;
+    using Baraka.API.Internals.Authentication;
     using Microsoft.AspNetCore.Mvc;
     using NHibernate;
     using NLog;
@@ -30,7 +31,8 @@
         /// <param name="viewDAO">DAO des vues.</param>
         [Route("/")]
         [Transactional]
-        public string Demo(
+        public Guid Demo(
+            [FromServices] AuthenticationManager manager,
             [FromServices] UserDAO userDAO,
             [FromServices] TableDAO tableDAO,
             [FromServices] FieldDAO fieldDAO,
@@ -40,6 +42,7 @@
             {
                 Culture = Langage.FRA
             });
+            Guid id = manager.OpenEntry(user);
             
             Table table = tableDAO.Insert(
                 new BundleDTO()
@@ -79,7 +82,22 @@
                 "firstname",
                 table);
 
-            View view = viewDAO.Insert(
+            View admin_view = viewDAO.Insert(
+                new BundleDTO()
+                {
+                    Data = new Dictionary<Langage, string>()
+                    {
+                        {
+                            Langage.FRA, "Administration"
+                        }
+                    }
+                },
+                new AdminViewDTO()
+                {
+
+                });
+
+            View list_view = viewDAO.Insert(
                 new BundleDTO()
                 {
                     Data = new Dictionary<Langage, string>()
@@ -94,7 +112,20 @@
                     Table = table
                 });
 
-            return "ok";
+            return id;
+        }
+
+        [Route("/post")]
+        [Transactional]
+        [Authenticate]
+        public IList<View> Post(
+            [FromServices] ISession session,
+            [FromServices] UserDAO userDAO,
+            [FromServices] TableDAO tableDAO,
+            [FromServices] FieldDAO fieldDAO,
+            [FromServices] ViewDAO viewDAO)
+        {
+            return session.QueryOver<View>().List();
         }
     }
 }

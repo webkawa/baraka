@@ -9,6 +9,7 @@
     using Baraka.API.DTO.Persisted;
     using Baraka.API.DTO.Persisted.Abstract;
     using Baraka.API.DTO.Persisted.Shared;
+    using Baraka.API.Internals.Persistence.Serialization;
     using Newtonsoft.Json;
     using NHibernate;
     using NHibernate.Engine;
@@ -33,7 +34,7 @@
         ///     Constructeur.
         /// </summary>
         /// <param name="configuration">Actions de configuration.</param>
-        public GenericJsonType(/*Action<GenericJsonType<TBase, TKey>> configuration*/)
+        public GenericJsonType()
         {
             if (!typeof(TKey).IsEnum)
             {
@@ -42,7 +43,6 @@
 
             KeyToType = new Dictionary<TKey, Type>();
             TypeToKey = new Dictionary<Type, TKey>();
-            //configuration(this);
         }
 
         /// <summary>
@@ -83,13 +83,16 @@
             try
             {
                 // Lecture des paramètres
-                TKey key = Enum.Parse<TKey>(rs.GetString(0));
-                string raw = rs.GetString(1);
+                TKey key = Enum.Parse<TKey>(rs[names[0]].ToString());
+                string raw = rs[names[1]].ToString();
 
                 // Recherche du type
                 if (KeyToType.ContainsKey(key))
                 {
-                    return JsonConvert.DeserializeObject(raw, KeyToType[key]);
+                    return JsonConvert.DeserializeObject(
+                        raw,
+                        KeyToType[key],
+                        new PersistentJsonSerializerSettings());
                 }
                 else
                 {
@@ -128,7 +131,9 @@
                     // Création du paramètre valeur
                     var dataParameter = cmd.CreateParameter();
                     dataParameter.DbType = DbType.String;
-                    dataParameter.Value = JsonConvert.SerializeObject(value);
+                    dataParameter.Value = JsonConvert.SerializeObject(
+                        value,
+                        new PersistentJsonSerializerSettings());
                     cmd.Parameters[index + 1] = dataParameter;
                 }
                 else
@@ -151,6 +156,7 @@
             for (int i = 0; i < configuration.Keys.Count; i++)
             {
                 KeyToType.Add(configuration.Keys[i], configuration.Types[i]);
+                TypeToKey.Add(configuration.Types[i], configuration.Keys[i]);
             }
         }
     }

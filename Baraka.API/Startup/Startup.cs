@@ -41,8 +41,9 @@
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddOptions(Configuration);
-            services.AddMvc(Configuration);
+            services.AddMvc();
             services.AddORM(Configuration);
+            services.AddAuthentication();
         }
         
         /// <summary>

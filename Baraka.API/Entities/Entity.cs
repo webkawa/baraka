@@ -127,10 +127,10 @@
         /// <param name="configuration">Actions de configuration.</param>
         protected void OneToMany<TDestination>(
             Expression<Func<TEntity, IEnumerable<TDestination>>> property, 
-            Action<IBagPropertiesMapper<TEntity, TDestination>> configuration = null) 
+            Action<ISetPropertiesMapper<TEntity, TDestination>> configuration = null) 
             where TDestination : Entity
         {
-            Bag(
+            Set(
                 property,
                 mapping =>
                 {

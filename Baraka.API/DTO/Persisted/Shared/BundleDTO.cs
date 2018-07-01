@@ -12,7 +12,6 @@
     /// <summary>
     ///     Liste des langages supportés.
     /// </summary>
-    [Serializable]
     [JsonConverter(typeof(StringEnumConverter))]
     public enum Langage
     {
@@ -30,7 +29,6 @@
     /// <summary>
     ///     Lot de traductions.
     /// </summary>
-    [Serializable]
     public class BundleDTO : FixedPersistedDTO
     {
         public BundleDTO()

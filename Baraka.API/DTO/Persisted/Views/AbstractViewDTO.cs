@@ -9,7 +9,6 @@
     /// <summary>
     ///     DTO persistable descriptif d'une vue configurable.
     /// </summary>
-    [Serializable]
     public abstract class AbstractViewDTO : GenericPersistedDTO
     {
     }

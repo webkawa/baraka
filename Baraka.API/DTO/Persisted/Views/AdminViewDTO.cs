@@ -5,9 +5,9 @@
     using System.Text;
 
     /// <summary>
-    ///     DTO descriptive d'une vue en mode fiche.
+    ///     Vue administrateur.
     /// </summary>
-    public class FileViewDTO : LocalizedViewDTO
+    public class AdminViewDTO : AbstractViewDTO
     {
     }
 }

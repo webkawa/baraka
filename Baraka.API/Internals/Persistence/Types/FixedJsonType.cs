@@ -11,6 +11,7 @@
     using Baraka.API.DTO.Persisted;
     using Baraka.API.DTO.Persisted.Abstract;
     using Baraka.API.DTO.Persisted.Shared;
+    using Baraka.API.Internals.Persistence.Serialization;
     using Newtonsoft.Json;
     using NHibernate.Engine;
     using NHibernate.SqlTypes;
@@ -48,8 +49,10 @@
         /// <returns>Objet désérialisé.</returns>
         public override object NullSafeGet(DbDataReader rs, string[] names, ISessionImplementor session, object owner)
         {
-            string raw = rs.GetString(0);
-            return JsonConvert.DeserializeObject<TObject>(raw);
+            string raw = rs[names[0]].ToString();
+            return JsonConvert.DeserializeObject<TObject>(
+                raw,
+                new PersistentJsonSerializerSettings());
         }
 
         /// <summary>
@@ -63,7 +66,9 @@
         {
             var parameter = cmd.CreateParameter();
             parameter.DbType = DbType.String;
-            parameter.Value = JsonConvert.SerializeObject(value as TObject);
+            parameter.Value = JsonConvert.SerializeObject(
+                value as TObject,
+                new PersistentJsonSerializerSettings());
             cmd.Parameters[index] = parameter;
         }
     }

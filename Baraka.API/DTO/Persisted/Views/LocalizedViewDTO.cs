@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.Text;
 
+    using Baraka.API.DTO.Persisted.Abstract;
     using Baraka.API.Entities;
 
     /// <summary>
@@ -14,6 +15,6 @@
         /// <summary>
         ///     Table de rattachement.
         /// </summary>
-        public Table Table { get; set; }
+        public PersistedReferenceDTO<Table> Table { get; set; }
     }
 }

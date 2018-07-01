@@ -14,7 +14,6 @@
     /// <summary>
     ///     DTO à type fixe enregistrable en base de données.
     /// </summary>
-    [Serializable]
     public abstract class FixedPersistedDTO : AbstractPersistedDTO, IFixedPersistedDTO
     {
     }

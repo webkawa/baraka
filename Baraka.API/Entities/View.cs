@@ -12,14 +12,19 @@
     public enum ViewType
     {
         /// <summary>
-        ///     Vue en mode liste.
+        ///     Vue administrateur.
         /// </summary>
-        LIST,
+        ADMIN,
 
         /// <summary>
         ///     Vue en mode fiche.
         /// </summary>
         FILE,
+
+        /// <summary>
+        ///     Vue en mode liste.
+        /// </summary>
+        LIST,
 
         /// <summary>
         ///     Vue en mode SQL.
@@ -60,6 +65,7 @@
                 e => e.Model,
                 t =>
                 {
+                    t.AddType<AdminViewDTO>(ViewType.ADMIN);
                     t.AddType<FileViewDTO>(ViewType.FILE);
                     t.AddType<ListViewDTO>(ViewType.LIST);
                     t.AddType<SqlViewDTO>(ViewType.SQL);
