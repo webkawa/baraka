@@ -10,6 +10,7 @@
 
 <script>
     import Auth from "../mixins/authentication"
+    import Store from "@/store"
 
     export default {
         name: 'login',
@@ -21,8 +22,6 @@
                 }
             };
         },
-        mixins: [
-            Auth
-        ]
+        Store
     }
 </script>

@@ -13,17 +13,11 @@
 <script>
     import Login from '@/components/Login.vue'
     import Auth from "@/mixins/authentication"
+    import Store from "@/store"
 
     export default {
         name: 'app',
-        data: function () {
-            return {};
-        },
-        methods: {
-        },
-        mixins: [
-            Auth
-        ],
+        Store,
         components: {
             Login
         }
