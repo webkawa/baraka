@@ -25,97 +25,100 @@
         /// <summary>
         ///     Génération des données de démonstration.
         /// </summary>
+        /// <param name="session">Session.</param>
+        /// <param name="manager">Gestionnaire d'authentification.</param>
         /// <param name="userDAO">DAO des utilisateurs.</param>
         /// <param name="tableDAO">DAO des tables.</param>
         /// <param name="fieldDAO">DAO des champs.</param>
         /// <param name="viewDAO">DAO des vues.</param>
-        [Route("/demo")]
+        [Route("/services/demo")]
         [Transactional]
-        public Guid Demo(
+        public void Demo(
+            [FromServices] ISession session,
             [FromServices] AuthenticationManager manager,
             [FromServices] UserDAO userDAO,
             [FromServices] TableDAO tableDAO,
             [FromServices] FieldDAO fieldDAO,
             [FromServices] ViewDAO viewDAO)
         {
-            User user = userDAO.Insert("kawa", "kawa", "guillaume.zavan@gmail.com", new UserConfigurationDTO()
+            if (session.QueryOver<User>().RowCount() == 0)
             {
-                Culture = Langage.FRA
-            });
-            Guid id = manager.OpenEntry(user);
-            
-            Table table = tableDAO.Insert(
-                new BundleDTO()
+                User user = userDAO.Insert("kawa", "kawa", "guillaume.zavan@gmail.com", new UserConfigurationDTO()
                 {
-                    Data = new Dictionary<Langage, string>()
+                    Culture = Langage.FRA
+                });
+
+                Table table = tableDAO.Insert(
+                    new BundleDTO()
                     {
+                        Data = new Dictionary<Langage, string>()
+                        {
                         {
                             Langage.FRA, "Contact"
                         }
-                    }
-                },
-                "contacts");
+                        }
+                    },
+                    "contacts");
 
-            Field field_lastname = fieldDAO.Insert(
-                new BundleDTO()
-                {
-                    Data = new Dictionary<Langage, string>()
+                Field field_lastname = fieldDAO.Insert(
+                    new BundleDTO()
                     {
+                        Data = new Dictionary<Langage, string>()
+                        {
                         {
                             Langage.FRA, "Nom"
                         }
-                    }
-                },
-                "lastname",
-                table);
+                        }
+                    },
+                    "lastname",
+                    table);
 
-            Field field_firstname = fieldDAO.Insert(
-                new BundleDTO()
-                {
-                    Data = new Dictionary<Langage, string>()
+                Field field_firstname = fieldDAO.Insert(
+                    new BundleDTO()
                     {
+                        Data = new Dictionary<Langage, string>()
+                        {
                         {
                             Langage.FRA, "Prénom"
                         }
-                    }
-                },
-                "firstname",
-                table);
+                        }
+                    },
+                    "firstname",
+                    table);
 
-            View admin_view = viewDAO.Insert(
-                new BundleDTO()
-                {
-                    Data = new Dictionary<Langage, string>()
+                View admin_view = viewDAO.Insert(
+                    new BundleDTO()
                     {
+                        Data = new Dictionary<Langage, string>()
+                        {
                         {
                             Langage.FRA, "Administration"
                         }
-                    }
-                },
-                new AdminViewDTO()
-                {
-
-                });
-
-            View list_view = viewDAO.Insert(
-                new BundleDTO()
-                {
-                    Data = new Dictionary<Langage, string>()
+                        }
+                    },
+                    new AdminViewDTO()
                     {
+
+                    });
+
+                View list_view = viewDAO.Insert(
+                    new BundleDTO()
+                    {
+                        Data = new Dictionary<Langage, string>()
+                        {
                         {
                             Langage.FRA, "Mode liste"
                         }
-                    }
-                },
-                new ListViewDTO()
-                {
-                    Table = table
-                });
-
-            return id;
+                        }
+                    },
+                    new ListViewDTO()
+                    {
+                        Table = table
+                    });
+            };
         }
 
-        [Route("/post")]
+        [Route("/services/post")]
         [Transactional]
         [Authenticate]
         public IList<View> Post(

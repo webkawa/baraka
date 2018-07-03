@@ -1,0 +1,21 @@
+<div>
+  <h2>Connexion</h2>
+  <form>
+    <div>
+      <label>Login</label>
+      <input type="text"
+             name="name"
+             [(ngModel)]="name" />
+    </div>
+    <div>
+      <label>Mot de passe</label>
+      <input type="password"
+             name="password"
+             [(ngModel)]="password" />
+    </div>
+    <input type="button"
+           name="submit"
+           value="Connexion"
+           (click)="authentication.connect(name, password)" />
+  </form>
+</div>

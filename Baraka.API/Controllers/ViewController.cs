@@ -21,7 +21,7 @@
         /// <param name="viewDAO">DAO des vues.</param>
         /// <returns>Liste des vues disponibles pour l'utilisateur.</returns>
         [Authenticate]
-        [Route("/views/get")]
+        [Route("/services/views/get")]
         public IList<View> GetView(
             [FromServices] AuthenticationHolder holder,
             [FromServices] ViewDAO viewDAO)

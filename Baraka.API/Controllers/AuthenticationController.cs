@@ -27,7 +27,7 @@
         /// <param name="userDAO">DAO des utilisateurs.</param>
         /// <returns></returns>
         [HttpGet]
-        [Route("/auth/connect")]
+        [Route("/services/auth/connect")]
         public AuthenticationSessionDTO Connect(
             [FromQuery] string name,
             [FromQuery] string password,

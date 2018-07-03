@@ -61,6 +61,7 @@
             }
 
             // Configuration
+            app.UseStatusCodePagesWithReExecute("/error/{0}");
             app.UseMvc();
             app.UseStaticFiles();
         }

@@ -1,0 +1,7 @@
+<div>
+  <h1>
+    <span>yo {{ credentials.user.login }}</span>
+  </h1>
+  <router-outlet></router-outlet>
+  <div id="loader" *ngIf="loading">Chargement</div>
+</div>

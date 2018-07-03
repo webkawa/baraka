@@ -25,7 +25,6 @@
                 .CreateDefaultBuilder(args)
                 .ConfigureAppConfiguration((hc, configuration) =>
                 {
-
                     var env = hc.HostingEnvironment;
                     configuration
                         .AddJsonFile("baraka.json", optional: false, reloadOnChange: true)

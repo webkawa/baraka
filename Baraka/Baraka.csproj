@@ -10,7 +10,19 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="ui\src\app\layout\root\" />
+    <None Remove="ui\src\app\dto\authentication.session.dto.ts" />
+    <None Remove="ui\src\app\dto\bundle.dto.ts" />
+    <None Remove="ui\src\app\dto\user.dto.ts" />
+    <None Remove="ui\src\app\dto\view.dto.ts" />
+    <None Remove="ui\src\app\internals\headers.interceptor.ts" />
+    <None Remove="ui\src\app\internals\loader.interceptor.ts" />
+    <None Remove="ui\src\app\internals\root.interceptor.ts" />
+    <None Remove="ui\src\app\services\authentication.service.ts" />
+    <None Remove="ui\src\app\services\state.service.ts" />
+    <None Remove="ui\src\app\services\translator.service.ts" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Folder Include="wwwroot\" />
   </ItemGroup>
 
@@ -27,10 +39,19 @@
     <ProjectReference Include="..\Baraka.API\Baraka.API.csproj" />
   </ItemGroup>
 
-  <ProjectExtensions><VisualStudio><UserProperties /></VisualStudio></ProjectExtensions>
+  <ItemGroup>
+    <TypeScriptCompile Include="ui\src\app\dto\authentication.session.dto.ts" />
+    <TypeScriptCompile Include="ui\src\app\dto\bundle.dto.ts" />
+    <TypeScriptCompile Include="ui\src\app\dto\user.dto.ts" />
+    <TypeScriptCompile Include="ui\src\app\dto\view.dto.ts" />
+    <TypeScriptCompile Include="ui\src\app\internals\headers.interceptor.ts" />
+    <TypeScriptCompile Include="ui\src\app\internals\loader.interceptor.ts" />
+    <TypeScriptCompile Include="ui\src\app\internals\root.interceptor.ts" />
+    <TypeScriptCompile Include="ui\src\app\services\authentication.service.ts" />
+    <TypeScriptCompile Include="ui\src\app\services\state.service.ts" />
+    <TypeScriptCompile Include="ui\src\app\services\translator.service.ts" />
+  </ItemGroup>
 
-  <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
-    <Exec Command="ui\build.bat" />
-  </Target>
+  <ProjectExtensions><VisualStudio><UserProperties /></VisualStudio></ProjectExtensions>
 
 </Project>
