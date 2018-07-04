@@ -14,9 +14,9 @@
     <None Remove="ui\src\app\dto\bundle.dto.ts" />
     <None Remove="ui\src\app\dto\user.dto.ts" />
     <None Remove="ui\src\app\dto\view.dto.ts" />
-    <None Remove="ui\src\app\internals\headers.interceptor.ts" />
     <None Remove="ui\src\app\internals\loader.interceptor.ts" />
     <None Remove="ui\src\app\internals\root.interceptor.ts" />
+    <None Remove="ui\src\app\internals\token.interceptor.ts" />
     <None Remove="ui\src\app\services\authentication.service.ts" />
     <None Remove="ui\src\app\services\state.service.ts" />
     <None Remove="ui\src\app\services\translator.service.ts" />
@@ -44,7 +44,7 @@
     <TypeScriptCompile Include="ui\src\app\dto\bundle.dto.ts" />
     <TypeScriptCompile Include="ui\src\app\dto\user.dto.ts" />
     <TypeScriptCompile Include="ui\src\app\dto\view.dto.ts" />
-    <TypeScriptCompile Include="ui\src\app\internals\headers.interceptor.ts" />
+    <TypeScriptCompile Include="ui\src\app\internals\token.interceptor.ts" />
     <TypeScriptCompile Include="ui\src\app\internals\loader.interceptor.ts" />
     <TypeScriptCompile Include="ui\src\app\internals\root.interceptor.ts" />
     <TypeScriptCompile Include="ui\src\app\services\authentication.service.ts" />

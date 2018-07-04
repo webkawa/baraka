@@ -1,6 +1,6 @@
-import { Component, AfterViewInit } from '@angular/core';
+import { Component, AfterViewInit, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 
 import { ViewDTO } from '../dto/view.dto';
 
@@ -18,20 +18,23 @@ import { BundleDTO } from '../dto/bundle.dto';
 export class PageHomeComponent {
 
   public views: ViewDTO[];
-  public tr: Function;
 
   public constructor(
-    public authentication: AuthenticationService,
     public state: StateService,
     public router: Router,
-    private translator: TranslatorService) {
+    public authentication: AuthenticationService,
+    public translator: TranslatorService,
+    private ar: ActivatedRoute) {
 
     this.views = [];
-    this.tr = translator.getTranslation;
-    this.state
-      .getViews()
-      .subscribe((views) => {
-        this.views = views;
-      });
+
+    ar.params.subscribe((params) => {
+      // onInit broken
+      this.state
+        .getViews()
+        .subscribe((views) => {
+          this.views = views;
+        });
+    })
   }
 }

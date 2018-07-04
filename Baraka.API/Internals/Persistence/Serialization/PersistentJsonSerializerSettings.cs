@@ -16,7 +16,8 @@
         /// <summary>
         ///     Constructeur.
         /// </summary>
-        public PersistentJsonSerializerSettings()
+        /// <param name="excPerGenTypes">Indique si le type des types persistents génériques doit être inclu dans la sérialisation.</param>
+        public PersistentJsonSerializerSettings(bool excPerGenTypes)
         {
             ContractResolver = new PersistentJsonContractResolver();
             Converters = new List<JsonConverter>()

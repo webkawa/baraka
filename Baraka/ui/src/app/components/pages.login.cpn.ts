@@ -1,7 +1,7 @@
-import { Component, AfterViewInit } from '@angular/core';
+import { Component, AfterViewInit, OnInit } from '@angular/core';
 
 import { AuthenticationService } from '../services/authentication.service';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { StateService } from '../services/state.service';
 
 /** Mire de connexion */
@@ -18,18 +18,22 @@ export class PageLoginComponent {
   public constructor(
     public authentication: AuthenticationService,
     private state: StateService,
-    private router: Router) {
+    private router: Router,
+    private ar: ActivatedRoute) {
 
-    this.authentication
-      .getCredentials()
-      .subscribe((data) => {
-        if (data.connected) {
-          this.state
-            .loadState()
-            .subscribe((data) => {
-              this.router.navigate(["home"]);
-            });
-        }
-      });
+    ar.params.subscribe((params) => {
+      // onInit broken
+      this.authentication
+        .getCredentials()
+        .subscribe((data) => {
+          if (data.connected) {
+            this.state
+              .loadState()
+              .subscribe((data) => {
+                this.router.navigate(["home"]);
+              });
+          }
+        });
+    });
   }
 }

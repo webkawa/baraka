@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
     using System.Reflection;
     using System.Text;
 
@@ -31,7 +32,7 @@
             try
             {
                 IPersistedDTO copy = Activator.CreateInstance(GetType()) as IPersistedDTO;
-                foreach (PropertyInfo pi in GetType().GetProperties())
+                foreach (PropertyInfo pi in GetType().GetProperties().Where(e => e.CanWrite))
                 {
                     if (typeof(IPersistedDTO).IsAssignableFrom(pi.PropertyType))
                     {

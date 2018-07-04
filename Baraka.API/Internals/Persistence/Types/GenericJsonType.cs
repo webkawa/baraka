@@ -10,6 +10,7 @@
     using Baraka.API.DTO.Persisted.Abstract;
     using Baraka.API.DTO.Persisted.Shared;
     using Baraka.API.Internals.Persistence.Serialization;
+    using Baraka.API.Internals.Persistence.Serialization.Configuration;
     using Newtonsoft.Json;
     using NHibernate;
     using NHibernate.Engine;
@@ -35,13 +36,7 @@
         /// </summary>
         public GenericJsonType()
         {
-            if (!typeof(TKey).IsEnum)
-            {
-                throw new Error("Invalid enumeration type used to process generic JSON...");
-            }
-
-            KeyToType = new Dictionary<TKey, Type>();
-            TypeToKey = new Dictionary<Type, TKey>();
+            Configuration = new GenericJsonTypeConfiguration<TBase, TKey>();
         }
 
         /// <summary>
@@ -58,16 +53,11 @@
                 };
             }
         }
-
+        
         /// <summary>
-        ///     Types supportés classés par clef.
+        ///     Configuration.
         /// </summary>
-        public IDictionary<TKey, Type> KeyToType { get; set; }
-
-        /// <summary>
-        ///     Clefs supportées par type.
-        /// </summary>
-        public IDictionary<Type, TKey> TypeToKey { get; set; }
+        public GenericJsonTypeConfiguration<TBase, TKey> Configuration { get; set; }
 
         /// <summary>
         ///     Lit une valeur dans la base de données et procède à sa conversion dans le DTO cible.
@@ -86,12 +76,12 @@
                 string raw = rs[names[1]].ToString();
 
                 // Recherche du type
-                if (KeyToType.ContainsKey(key))
+                if (Configuration.HasKey(key))
                 {
                     return JsonConvert.DeserializeObject(
                         raw,
-                        KeyToType[key],
-                        new PersistentJsonSerializerSettings());
+                        Configuration.GetByKey(key),
+                        Settings);
                 }
                 else
                 {
@@ -116,10 +106,10 @@
             try
             {
                 // Récupération de la source
-                if (TypeToKey.ContainsKey(value.GetType()))
+                if (Configuration.HasType(value.GetType()))
                 {
                     // Récupération des objets
-                    string key = Enum.GetName(typeof(TKey), TypeToKey[value.GetType()]);
+                    string key = Configuration.NameByType(value.GetType());
 
                     // Création du paramètre type
                     var typeParameter = cmd.CreateParameter();
@@ -132,7 +122,7 @@
                     dataParameter.DbType = DbType.String;
                     dataParameter.Value = JsonConvert.SerializeObject(
                         value,
-                        new PersistentJsonSerializerSettings());
+                        Settings);
                     cmd.Parameters[index + 1] = dataParameter;
                 }
                 else
@@ -151,43 +141,7 @@
         /// </summary>
         public void SetParameterValues(IDictionary<string, string> parameters)
         {
-            GenericJsonTypeConfiguration<TBase, TKey> configuration = new GenericJsonTypeWrapper<TBase, TKey>(parameters["Data"]).Source;
-            for (int i = 0; i < configuration.Keys.Count; i++)
-            {
-                KeyToType.Add(configuration.Keys[i], configuration.Types[i]);
-                TypeToKey.Add(configuration.Types[i], configuration.Keys[i]);
-            }
-        }
-    }
-
-    /// <summary>
-    ///     Configuration du type NHibernate pour les DTO polymorphes.
-    /// </summary>
-    /// <typeparam name="TBase">Type de base des objets sérialisés.</typeparam>
-    /// <typeparam name="TKey">Type d'énumération.</typeparam>
-    public class GenericJsonTypeConfiguration<TBase, TKey>
-        where TBase : IGenericPersistedDTO
-        where TKey : struct, IConvertible
-    {
-        /// <summary>
-        ///     Clefs dans l'ordre.
-        /// </summary>
-        public IList<TKey> Keys { get; set; } = new List<TKey>();
-
-        /// <summary>
-        ///     Types dans l'ordre.
-        /// </summary>
-        public IList<Type> Types { get; set; } = new List<Type>();
-
-        /// <summary>
-        ///     Ajoute le support pour un type final de DTO.
-        /// </summary>
-        /// <typeparam name="TFinal"></typeparam>
-        /// <param name="key"></param>
-        internal void AddType<TFinal>(TKey key) where TFinal : class, TBase
-        {
-            Keys.Add(key);
-            Types.Add(typeof(TFinal));
+            Configuration = new GenericJsonTypeWrapper<TBase, TKey>(parameters["Data"]).Source;
         }
     }
 

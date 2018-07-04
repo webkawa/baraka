@@ -3,6 +3,6 @@
   <p>Choisis une vue.</p>
   <ul>
     <li *ngFor="let view of views"
-        (click)="router.navigate(['view/' + view.id])">{{ view.id }} : {{ tr(view.label) }}</li>
+        [routerLink]="['/view', view.id]">{{ view.id }} : {{ translator.tr(view.label) }}</li>
   </ul>
 </div>

@@ -35,8 +35,11 @@ export class TranslatorService {
    * Retourne la traduction appropriée pour un lot de traductions.
    * @param bundle Lot de traductions
    */
-  public getTranslation(bundle: BundleDTO): string {
-    return bundle[this.getLang()] ? bundle[this.getLang()] : "?";
+  public translate(bundle: BundleDTO): string {
+    return bundle.data[this.getLang()] ? bundle.data[this.getLang()] : "?";
+  }
+  public tr(bundle: BundleDTO): string {
+    return this.translate(bundle);
   }
 
 }

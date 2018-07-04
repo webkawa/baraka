@@ -10,6 +10,7 @@
     using Baraka.API.DTO.Persisted;
     using Baraka.API.DTO.Persisted.Abstract;
     using Baraka.API.DTO.Persisted.Shared;
+    using Baraka.API.Internals.Persistence.Serialization;
     using Newtonsoft.Json;
     using NHibernate.Engine;
     using NHibernate.SqlTypes;
@@ -24,6 +25,14 @@
     public abstract class AbstractJsonType<TObject> : IUserType
         where TObject : IPersistedDTO
     {
+        /// <summary>
+        ///     Constructeur.
+        /// </summary>
+        public AbstractJsonType()
+        {
+            Settings = new PersistentJsonSerializerSettings(false);
+        }
+
         /// <summary>
         ///     <see cref="IUserType.IsMutable" />
         /// </summary>
@@ -50,6 +59,11 @@
         ///     <see cref="IUserType.SqlTypes" />
         /// </summary>
         public abstract SqlType[] SqlTypes { get; }
+
+        /// <summary>
+        ///     Configuration du sérialisateur.
+        /// </summary>
+        protected PersistentJsonSerializerSettings Settings { get; private set; }
 
         /// <summary>
         ///     <see cref="IUserType.DeepCopy(object)" />

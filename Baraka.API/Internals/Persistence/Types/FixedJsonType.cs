@@ -52,7 +52,7 @@
             string raw = rs[names[0]].ToString();
             return JsonConvert.DeserializeObject<TObject>(
                 raw,
-                new PersistentJsonSerializerSettings());
+                Settings);
         }
 
         /// <summary>
@@ -68,7 +68,7 @@
             parameter.DbType = DbType.String;
             parameter.Value = JsonConvert.SerializeObject(
                 value as TObject,
-                new PersistentJsonSerializerSettings());
+                Settings);
             cmd.Parameters[index] = parameter;
         }
     }

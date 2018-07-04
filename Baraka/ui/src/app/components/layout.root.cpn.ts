@@ -12,7 +12,7 @@ import { LoaderInterceptor } from '../internals/loader.interceptor';
   templateUrl: './layout.root.cpn.html',
   styleUrls: ['./layout.root.cpn.less']
 })
-export class LayoutRootComponent {
+export class LayoutRootComponent implements OnInit {
 
   public credentials: AuthenticationSessionDTO;
   public loading: boolean;
@@ -22,6 +22,10 @@ export class LayoutRootComponent {
     private router: Router,
     private loader: LoaderInterceptor,
     private authentication: AuthenticationService) {
+  }
+
+  public ngOnInit(): void {
+    // Démo
     this.http.get("demo").subscribe();
 
     // Suivi des autorisations

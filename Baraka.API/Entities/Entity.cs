@@ -8,6 +8,7 @@
     using Baraka.API.DTO.Persisted;
     using Baraka.API.DTO.Persisted.Abstract;
     using Baraka.API.DTO.Persisted.Shared;
+    using Baraka.API.Internals.Persistence.Serialization.Configuration;
     using Baraka.API.Internals.Persistence.Types;
     using NHibernate.Mapping.ByCode;
     using NHibernate.Mapping.ByCode.Conformist;
@@ -93,6 +94,9 @@
                     // Création de la configuration
                     var inner = new GenericJsonTypeConfiguration<TProperty, TKey>();
                     types(inner);
+
+                    // Référencement
+                    GenericJsonTypeIndex.AddConfiguration<TProperty>(inner);
 
                     // Création de l'enveloppe
                     var wrapper = new GenericJsonTypeWrapper<TProperty, TKey>(inner);

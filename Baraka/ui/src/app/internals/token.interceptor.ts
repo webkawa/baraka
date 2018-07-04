@@ -14,7 +14,10 @@ export class TokenInterceptor implements HttpInterceptor {
 
   private credentials: AuthenticationSessionDTO;
 
-  public constructor(private authentication: AuthenticationService) {
+  public constructor(
+    private authentication: AuthenticationService) {
+
+    this.credentials = new AuthenticationSessionDTO();
     this.authentication
       .getCredentials()
       .subscribe((data) => {

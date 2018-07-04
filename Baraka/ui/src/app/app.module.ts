@@ -8,16 +8,18 @@ import { LayoutRootComponent } from './components/layout.root.cpn';
 import { PageLoginComponent } from './components/pages.login.cpn';
 
 import { AuthenticationService } from './services/authentication.service'
-import { TokenInterceptor } from './internals/headers.interceptor';
+import { TokenInterceptor } from './internals/token.interceptor';
 import { PageHomeComponent } from './components/pages.home.cpn';
 import { RootInterceptor } from './internals/root.interceptor';
 import { LoaderInterceptor } from './internals/loader.interceptor';
+import { PageViewComponent } from './components/pages.view.cpn';
 
 @NgModule({
   declarations: [
     LayoutRootComponent,
     PageHomeComponent,
-    PageLoginComponent
+    PageLoginComponent,
+    PageViewComponent
   ],
   imports: [
     BrowserModule,
@@ -26,8 +28,8 @@ import { LoaderInterceptor } from './internals/loader.interceptor';
     RouterModule.forRoot([
       { path: 'home', component: PageHomeComponent },
       { path: 'login', component: PageLoginComponent },
-      { path: '', redirectTo: '/login', pathMatch: 'full' },
-      { path: '**', component: PageLoginComponent }
+      { path: 'view/:id', component: PageViewComponent },
+      { path: '', redirectTo: '/home', pathMatch: 'full' }
     ])
   ],
   providers: [{
