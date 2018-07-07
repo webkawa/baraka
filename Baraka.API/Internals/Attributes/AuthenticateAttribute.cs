@@ -5,7 +5,9 @@
     using System.Text;
 
     using Baraka.API.Entities;
+    using Baraka.API.Exceptions;
     using Baraka.API.Internals.Authentication;
+    using Baraka.API.Internals.Configuration;
     using Microsoft.AspNetCore.Mvc.Filters;
     using NHibernate;
 
@@ -58,11 +60,11 @@
                 Guid guid;
                 if (string.IsNullOrEmpty(token))
                 {
-                    throw new Error("No token found in request...");
+                    throw new AuthenticationException("No token found in request...");
                 }
                 if (!Guid.TryParse(token, out guid))
                 {
-                    throw new Error("Token parsing failed...");
+                    throw new AuthenticationException("Token parsing failed...");
                 }
 
                 // Vérification du jeton
@@ -73,7 +75,10 @@
             }
             catch (Exception ex)
             {
-                throw new Error(ex, "Token-based authentication failed...");
+                throw new AuthenticationException(ex, "Token-based authentication failed...")
+                {
+                    Display = BundleId.ERROR_UNSECURED_REQUEST
+                };
             }
         }
     }

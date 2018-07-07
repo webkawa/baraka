@@ -12,9 +12,14 @@
   <ItemGroup>
     <None Remove="ui\src\app\dto\authentication.session.dto.ts" />
     <None Remove="ui\src\app\dto\bundle.dto.ts" />
+    <None Remove="ui\src\app\dto\error.dto.ts" />
+    <None Remove="ui\src\app\dto\field.dto.ts" />
+    <None Remove="ui\src\app\dto\table.dto.ts" />
     <None Remove="ui\src\app\dto\user.dto.ts" />
     <None Remove="ui\src\app\dto\view.dto.ts" />
+    <None Remove="ui\src\app\internals\exceptions.interceptor.ts" />
     <None Remove="ui\src\app\internals\loader.interceptor.ts" />
+    <None Remove="ui\src\app\internals\references.interceptor.ts" />
     <None Remove="ui\src\app\internals\root.interceptor.ts" />
     <None Remove="ui\src\app\internals\token.interceptor.ts" />
     <None Remove="ui\src\app\services\authentication.service.ts" />
@@ -42,8 +47,13 @@
   <ItemGroup>
     <TypeScriptCompile Include="ui\src\app\dto\authentication.session.dto.ts" />
     <TypeScriptCompile Include="ui\src\app\dto\bundle.dto.ts" />
+    <TypeScriptCompile Include="ui\src\app\dto\error.dto.ts" />
+    <TypeScriptCompile Include="ui\src\app\dto\field.dto.ts" />
+    <TypeScriptCompile Include="ui\src\app\dto\table.dto.ts" />
     <TypeScriptCompile Include="ui\src\app\dto\user.dto.ts" />
     <TypeScriptCompile Include="ui\src\app\dto\view.dto.ts" />
+    <TypeScriptCompile Include="ui\src\app\internals\exceptions.interceptor.ts" />
+    <TypeScriptCompile Include="ui\src\app\internals\references.interceptor.ts" />
     <TypeScriptCompile Include="ui\src\app\internals\token.interceptor.ts" />
     <TypeScriptCompile Include="ui\src\app\internals\loader.interceptor.ts" />
     <TypeScriptCompile Include="ui\src\app\internals\root.interceptor.ts" />

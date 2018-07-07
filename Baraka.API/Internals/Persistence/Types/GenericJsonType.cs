@@ -9,6 +9,7 @@
     using Baraka.API.DTO.Persisted;
     using Baraka.API.DTO.Persisted.Abstract;
     using Baraka.API.DTO.Persisted.Shared;
+    using Baraka.API.Exceptions;
     using Baraka.API.Internals.Persistence.Serialization;
     using Baraka.API.Internals.Persistence.Serialization.Configuration;
     using Newtonsoft.Json;
@@ -85,12 +86,12 @@
                 }
                 else
                 {
-                    throw new Error("Invalid key '{0}' found in database...", key);
+                    throw new InternalException("Invalid key '{0}' found in database...", key);
                 }
             }
             catch (Exception ex)
             {
-                throw new Error(ex, "Generic JSON deserialization failure...");
+                throw new InternalException(ex, "Generic JSON deserialization failure...");
             }
         }
 
@@ -127,12 +128,12 @@
                 }
                 else
                 {
-                    throw new Error("Invalid type '{0}' passed to persist...", value.GetType());
+                    throw new InternalException("Invalid type '{0}' passed to persist...", value.GetType());
                 }
             }
             catch (Exception ex)
             {
-                throw new Error(ex, "Generic JSON serialization failure...");
+                throw new InternalException(ex, "Generic JSON serialization failure...");
             }
         }
 

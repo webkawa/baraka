@@ -6,6 +6,8 @@
     using System.Text;
 
     using Baraka.API.Entities;
+    using Baraka.API.Exceptions;
+    using Baraka.API.Internals.Configuration;
 
     /// <summary>
     ///     Gestionnaire d'authenfication.
@@ -64,14 +66,20 @@
                 // Vérification de l'entrée
                 if (entry == null)
                 {
-                    throw new Error("Invalid token...");
+                    throw new AuthenticationException("Invalid token '{0}'...", token)
+                    {
+                        Display = BundleId.ERROR_INVALID_TOKEN
+                    };
                 }
 
                 // Vérification de l'expiration
                 if (DateTime.Now > entry.Expiration)
                 {
                     Entries.Remove(entry);
-                    throw new Error("Session has expired...");
+                    throw new AuthenticationException("Session has expired...")
+                    {
+                        Display = BundleId.ERROR_EXPIRED_SESSION
+                    };
                 }
 
                 // Mise à niveau de l'expiration et renvoi
@@ -80,7 +88,7 @@
             }
             catch (Exception ex)
             {
-                throw new Error(ex, "Authentication failed !");
+                throw new AuthenticationException(ex, "Authentication failed !");
             }
         }
     }

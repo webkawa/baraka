@@ -5,6 +5,9 @@ import { Router, NavigationStart } from '@angular/router';
 import { AuthenticationService } from '../services/authentication.service';
 import { AuthenticationSessionDTO } from '../dto/authentication.session.dto';
 import { LoaderInterceptor } from '../internals/loader.interceptor';
+import { ErrorDTO } from '../dto/error.dto';
+import { ExceptionsInterceptor } from '../internals/exceptions.interceptor';
+import { TranslatorService } from '../services/translator.service';
 
 /** Racine de l'application */
 @Component({
@@ -16,15 +19,23 @@ export class LayoutRootComponent implements OnInit {
 
   public credentials: AuthenticationSessionDTO;
   public loading: boolean;
+  public error: ErrorDTO;
 
   public constructor(
+    public translator: TranslatorService,
     private http: HttpClient,
     private router: Router,
     private loader: LoaderInterceptor,
+    private exceptions: ExceptionsInterceptor,
     private authentication: AuthenticationService) {
+
+    this.credentials = new AuthenticationSessionDTO();
+    this.loading = false;
+    this.error = null;
   }
 
   public ngOnInit(): void {
+
     // Démo
     this.http.get("demo").subscribe();
 
@@ -48,6 +59,13 @@ export class LayoutRootComponent implements OnInit {
       .getLoader()
       .subscribe((data) => {
         this.loading = data;
+      });
+
+    // Suivi des erreurs
+    this.exceptions
+      .getFailures()
+      .subscribe((data) => {
+        this.error = data;
       });
   }
 

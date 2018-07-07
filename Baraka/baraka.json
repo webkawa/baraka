@@ -7,7 +7,6 @@
   "logging": {
     "folder": "D:\\Logs",
     "until": 15,
-    "format": "${longdate}|${level:uppercase=true}|${logger}|${message}",
     "level": "TRACE"
   }
 }

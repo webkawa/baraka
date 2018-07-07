@@ -45,6 +45,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _internals_root_interceptor__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./internals/root.interceptor */ "./src/app/internals/root.interceptor.ts");
 /* harmony import */ var _internals_loader_interceptor__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./internals/loader.interceptor */ "./src/app/internals/loader.interceptor.ts");
 /* harmony import */ var _components_pages_view_cpn__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./components/pages.view.cpn */ "./src/app/components/pages.view.cpn.ts");
+/* harmony import */ var _internals_exceptions_interceptor__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./internals/exceptions.interceptor */ "./src/app/internals/exceptions.interceptor.ts");
+/* harmony import */ var _components_layout_popin_cpn__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./components/layout.popin.cpn */ "./src/app/components/layout.popin.cpn.ts");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -63,12 +65,15 @@ var __decorate = (undefined && undefined.__decorate) || function (decorators, ta
 
 
 
+
+
 var AppModule = /** @class */ (function () {
     function AppModule() {
     }
     AppModule = __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_3__["NgModule"])({
             declarations: [
+                _components_layout_popin_cpn__WEBPACK_IMPORTED_MODULE_13__["LayoutPopinComponent"],
                 _components_layout_root_cpn__WEBPACK_IMPORTED_MODULE_5__["LayoutRootComponent"],
                 _components_pages_home_cpn__WEBPACK_IMPORTED_MODULE_8__["PageHomeComponent"],
                 _components_pages_login_cpn__WEBPACK_IMPORTED_MODULE_6__["PageLoginComponent"],
@@ -91,6 +96,10 @@ var AppModule = /** @class */ (function () {
                     multi: true
                 }, {
                     provide: _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HTTP_INTERCEPTORS"],
+                    useExisting: _internals_exceptions_interceptor__WEBPACK_IMPORTED_MODULE_12__["ExceptionsInterceptor"],
+                    multi: true
+                }, {
+                    provide: _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HTTP_INTERCEPTORS"],
                     useClass: _internals_root_interceptor__WEBPACK_IMPORTED_MODULE_9__["RootInterceptor"],
                     multi: true
                 }, {
@@ -108,6 +117,66 @@ var AppModule = /** @class */ (function () {
 
 /***/ }),
 
+/***/ "./src/app/components/layout.popin.cpn.html":
+/*!**************************************************!*\
+  !*** ./src/app/components/layout.popin.cpn.html ***!
+  \**************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "<div class=\"popin\">\r\n  <ng-content></ng-content>\r\n</div>\r\n"
+
+/***/ }),
+
+/***/ "./src/app/components/layout.popin.cpn.less":
+/*!**************************************************!*\
+  !*** ./src/app/components/layout.popin.cpn.less ***!
+  \**************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "div.popin {\n  background: red;\n  color: white;\n  left: 48px;\n  position: fixed;\n  top: 48px;\n}\n"
+
+/***/ }),
+
+/***/ "./src/app/components/layout.popin.cpn.ts":
+/*!************************************************!*\
+  !*** ./src/app/components/layout.popin.cpn.ts ***!
+  \************************************************/
+/*! exports provided: LayoutPopinComponent */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "LayoutPopinComponent", function() { return LayoutPopinComponent; });
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
+var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+
+/** Racine de l'application */
+var LayoutPopinComponent = /** @class */ (function () {
+    function LayoutPopinComponent() {
+    }
+    LayoutPopinComponent.prototype.ngOnInit = function () {
+    };
+    LayoutPopinComponent = __decorate([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"])({
+            selector: 'layout-popin',
+            template: __webpack_require__(/*! ./layout.popin.cpn.html */ "./src/app/components/layout.popin.cpn.html"),
+            styles: [__webpack_require__(/*! ./layout.popin.cpn.less */ "./src/app/components/layout.popin.cpn.less")]
+        })
+    ], LayoutPopinComponent);
+    return LayoutPopinComponent;
+}());
+
+
+
+/***/ }),
+
 /***/ "./src/app/components/layout.root.cpn.html":
 /*!*************************************************!*\
   !*** ./src/app/components/layout.root.cpn.html ***!
@@ -115,7 +184,7 @@ var AppModule = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div>\r\n  <h1>\r\n    <span>yo {{ credentials.user.login }}</span>\r\n  </h1>\r\n  <router-outlet></router-outlet>\r\n  <div id=\"loader\" *ngIf=\"loading\">Chargement</div>\r\n</div>\r\n"
+module.exports = "<div>\r\n  <h1>\r\n    <span>yo {{ credentials.user.login }}</span>\r\n    {{ error }} {{ error != null }}\r\n  </h1>\r\n  <router-outlet></router-outlet>\r\n  <layout-popin *ngIf=\"error\">\r\n    <p>{{ translator.translate(error.message) }}</p>\r\n    <p (click)=\"error = null\">Fermer !</p>\r\n  </layout-popin>\r\n  <div id=\"loader\" *ngIf=\"loading\">Chargement</div>\r\n</div>\r\n"
 
 /***/ }),
 
@@ -144,7 +213,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/common/http */ "./node_modules/@angular/common/fesm5/http.js");
 /* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/router */ "./node_modules/@angular/router/fesm5/router.js");
 /* harmony import */ var _services_authentication_service__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../services/authentication.service */ "./src/app/services/authentication.service.ts");
-/* harmony import */ var _internals_loader_interceptor__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../internals/loader.interceptor */ "./src/app/internals/loader.interceptor.ts");
+/* harmony import */ var _dto_authentication_session_dto__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../dto/authentication.session.dto */ "./src/app/dto/authentication.session.dto.ts");
+/* harmony import */ var _internals_loader_interceptor__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../internals/loader.interceptor */ "./src/app/internals/loader.interceptor.ts");
+/* harmony import */ var _internals_exceptions_interceptor__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../internals/exceptions.interceptor */ "./src/app/internals/exceptions.interceptor.ts");
+/* harmony import */ var _services_translator_service__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../services/translator.service */ "./src/app/services/translator.service.ts");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -159,13 +231,21 @@ var __metadata = (undefined && undefined.__metadata) || function (k, v) {
 
 
 
+
+
+
 /** Racine de l'application */
 var LayoutRootComponent = /** @class */ (function () {
-    function LayoutRootComponent(http, router, loader, authentication) {
+    function LayoutRootComponent(translator, http, router, loader, exceptions, authentication) {
+        this.translator = translator;
         this.http = http;
         this.router = router;
         this.loader = loader;
+        this.exceptions = exceptions;
         this.authentication = authentication;
+        this.credentials = new _dto_authentication_session_dto__WEBPACK_IMPORTED_MODULE_4__["AuthenticationSessionDTO"]();
+        this.loading = false;
+        this.error = null;
     }
     LayoutRootComponent.prototype.ngOnInit = function () {
         var _this = this;
@@ -191,6 +271,12 @@ var LayoutRootComponent = /** @class */ (function () {
             .subscribe(function (data) {
             _this.loading = data;
         });
+        // Suivi des erreurs
+        this.exceptions
+            .getFailures()
+            .subscribe(function (data) {
+            _this.error = data;
+        });
     };
     /**
      * Vérifie les droits d'accès et redirige vers la page de login.
@@ -207,9 +293,11 @@ var LayoutRootComponent = /** @class */ (function () {
             template: __webpack_require__(/*! ./layout.root.cpn.html */ "./src/app/components/layout.root.cpn.html"),
             styles: [__webpack_require__(/*! ./layout.root.cpn.less */ "./src/app/components/layout.root.cpn.less")]
         }),
-        __metadata("design:paramtypes", [_angular_common_http__WEBPACK_IMPORTED_MODULE_1__["HttpClient"],
+        __metadata("design:paramtypes", [_services_translator_service__WEBPACK_IMPORTED_MODULE_7__["TranslatorService"],
+            _angular_common_http__WEBPACK_IMPORTED_MODULE_1__["HttpClient"],
             _angular_router__WEBPACK_IMPORTED_MODULE_2__["Router"],
-            _internals_loader_interceptor__WEBPACK_IMPORTED_MODULE_4__["LoaderInterceptor"],
+            _internals_loader_interceptor__WEBPACK_IMPORTED_MODULE_5__["LoaderInterceptor"],
+            _internals_exceptions_interceptor__WEBPACK_IMPORTED_MODULE_6__["ExceptionsInterceptor"],
             _services_authentication_service__WEBPACK_IMPORTED_MODULE_3__["AuthenticationService"]])
     ], LayoutRootComponent);
     return LayoutRootComponent;
@@ -536,6 +624,67 @@ var UserConfigurationDTO = /** @class */ (function () {
 
 /***/ }),
 
+/***/ "./src/app/internals/exceptions.interceptor.ts":
+/*!*****************************************************!*\
+  !*** ./src/app/internals/exceptions.interceptor.ts ***!
+  \*****************************************************/
+/*! exports provided: ExceptionsInterceptor */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ExceptionsInterceptor", function() { return ExceptionsInterceptor; });
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
+/* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/router */ "./node_modules/@angular/router/fesm5/router.js");
+/* harmony import */ var rxjs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! rxjs */ "./node_modules/rxjs/_esm5/index.js");
+/* harmony import */ var rxjs_operators__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! rxjs/operators */ "./node_modules/rxjs/_esm5/operators/index.js");
+var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (undefined && undefined.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+
+
+/** Gestion de l'indicateur de chargement */
+var ExceptionsInterceptor = /** @class */ (function () {
+    function ExceptionsInterceptor(router) {
+        this.router = router;
+        this.failures = new rxjs__WEBPACK_IMPORTED_MODULE_2__["Subject"]();
+    }
+    ExceptionsInterceptor.prototype.intercept = function (request, next) {
+        var _this = this;
+        return next
+            .handle(request)
+            .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["catchError"])(function (response, data) {
+            _this.failures.next(response.error);
+            return rxjs__WEBPACK_IMPORTED_MODULE_2__["Observable"].create(function (observer) {
+                observer.next(response.error);
+                observer.complete();
+            });
+        }));
+    };
+    ExceptionsInterceptor.prototype.getFailures = function () {
+        return this.failures.asObservable();
+    };
+    ExceptionsInterceptor = __decorate([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Injectable"])({
+            providedIn: 'root'
+        }),
+        __metadata("design:paramtypes", [_angular_router__WEBPACK_IMPORTED_MODULE_1__["Router"]])
+    ], ExceptionsInterceptor);
+    return ExceptionsInterceptor;
+}());
+
+
+
+/***/ }),
+
 /***/ "./src/app/internals/loader.interceptor.ts":
 /*!*************************************************!*\
   !*** ./src/app/internals/loader.interceptor.ts ***!
@@ -818,22 +967,37 @@ var StateService = /** @class */ (function () {
     function StateService(http) {
         this.http = http;
         this.views = new rxjs__WEBPACK_IMPORTED_MODULE_2__["BehaviorSubject"]([]);
+        this.tables = new rxjs__WEBPACK_IMPORTED_MODULE_2__["BehaviorSubject"]([]);
     }
     /** Retourne la liste des vues */
     StateService.prototype.getViews = function () {
         return this.views.asObservable();
     };
+    /** Retourne la liste des tables */
+    StateService.prototype.getTables = function () {
+        return this.tables.asObservable();
+    };
     /** Charge l'état complet de l'application */
     StateService.prototype.loadState = function () {
-        return Object(rxjs__WEBPACK_IMPORTED_MODULE_2__["forkJoin"])(this.loadViews());
+        return Object(rxjs__WEBPACK_IMPORTED_MODULE_2__["forkJoin"])(this.loadViews(), this.loadTables());
     };
     /** Recharge les vues */
     StateService.prototype.loadViews = function () {
         var _this = this;
         return this.http
-            .get("views/get")
+            .get("views/list")
             .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["map"])(function (data) {
             _this.views.next(data);
+            return data;
+        }));
+    };
+    /** Recharge les tables */
+    StateService.prototype.loadTables = function () {
+        var _this = this;
+        return this.http
+            .get("tables/list")
+            .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["map"])(function (data) {
+            _this.tables.next(data);
             return data;
         }));
     };
@@ -893,7 +1057,6 @@ var TranslatorService = /** @class */ (function () {
      * @param bundle Lot de traductions
      */
     TranslatorService.prototype.translate = function (bundle) {
-        console.log(bundle);
         return bundle.data[this.getLang()] ? bundle.data[this.getLang()] : "?";
     };
     TranslatorService.prototype.tr = function (bundle) {

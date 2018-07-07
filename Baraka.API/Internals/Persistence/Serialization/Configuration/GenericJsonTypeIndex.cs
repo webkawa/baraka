@@ -5,6 +5,7 @@
     using System.Text;
 
     using Baraka.API.DTO.Persisted.Abstract;
+    using Baraka.API.Exceptions;
 
     /// <summary>
     ///     Index des configurations de DTO génériques.
@@ -34,7 +35,7 @@
                 buff = buff.BaseType;
             }
 
-            throw new Error("Unable to found persistent DTO configuration for type '{0}'", type);
+            throw new InternalException("Unable to found persistent DTO configuration for type '{0}'", type);
         }
 
         /// <summary>

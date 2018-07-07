@@ -4,6 +4,8 @@
     using System.Collections.Generic;
     using System.Text;
 
+    using Baraka.API.DTO.Http;
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
 
     /// <summary>

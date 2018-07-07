@@ -13,9 +13,12 @@ import { PageHomeComponent } from './components/pages.home.cpn';
 import { RootInterceptor } from './internals/root.interceptor';
 import { LoaderInterceptor } from './internals/loader.interceptor';
 import { PageViewComponent } from './components/pages.view.cpn';
+import { ExceptionsInterceptor } from './internals/exceptions.interceptor';
+import { LayoutPopinComponent } from './components/layout.popin.cpn';
 
 @NgModule({
   declarations: [
+    LayoutPopinComponent,
     LayoutRootComponent,
     PageHomeComponent,
     PageLoginComponent,
@@ -38,13 +41,17 @@ import { PageViewComponent } from './components/pages.view.cpn';
     multi: true
   }, {
     provide: HTTP_INTERCEPTORS,
+    useExisting: ExceptionsInterceptor, /* useExisting pour utiliser une instance de service existante */
+    multi: true
+  }, {
+    provide: HTTP_INTERCEPTORS,
     useClass: RootInterceptor,
     multi: true
   }, {
     provide: HTTP_INTERCEPTORS,
     useClass: TokenInterceptor,
     multi: true
-    }],
+  }],
   bootstrap: [LayoutRootComponent]
 })
 export class AppModule { }

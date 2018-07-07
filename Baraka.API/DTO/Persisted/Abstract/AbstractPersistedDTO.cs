@@ -6,6 +6,8 @@
     using System.Reflection;
     using System.Text;
 
+    using Baraka.API.Exceptions;
+
     /// <summary>
     ///     Interface des DTO persistables.
     /// </summary>
@@ -52,7 +54,7 @@
             }
             catch (Exception ex)
             {
-                throw new Error(ex, "Unable to deep-copy persited DTO of type '{0}'...", GetType());
+                throw new InternalException(ex, "Unable to deep-copy persited DTO of type '{0}'...", GetType());
             }
         }
     }

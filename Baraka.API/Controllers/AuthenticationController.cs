@@ -9,8 +9,10 @@
     using Baraka.API.DAO;
     using Baraka.API.DTO.Http;
     using Baraka.API.Entities;
+    using Baraka.API.Exceptions;
     using Baraka.API.Internals.Attributes;
     using Baraka.API.Internals.Authentication;
+    using Baraka.API.Internals.Configuration;
     using Microsoft.AspNetCore.Mvc;
 
     /// <summary>
@@ -37,7 +39,10 @@
             User user = userDAO.GetByCredentials(name, password);
             if (user == null)
             {
-                throw new Error("Invalid credentials");
+                throw new AuthenticationException("Invalid credentials")
+                {
+                    Display = BundleId.ERROR_INVALID_CREDENTIALS
+                };
             }
             else
             {

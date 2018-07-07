@@ -1,7 +1,12 @@
 <div>
   <h1>
     <span>yo {{ credentials.user.login }}</span>
+    {{ error }} {{ error != null }}
   </h1>
   <router-outlet></router-outlet>
+  <layout-popin *ngIf="error">
+    <p>{{ translator.translate(error.message) }}</p>
+    <p (click)="error = null">Fermer !</p>
+  </layout-popin>
   <div id="loader" *ngIf="loading">Chargement</div>
 </div>

@@ -22,11 +22,6 @@
         public LogLevel Level { get; set; }
 
         /// <summary>
-        ///     Format.
-        /// </summary>
-        public string Format { get; set; }
-
-        /// <summary>
         ///     Nombre maximum de fichiers conservés.
         /// </summary>
         public int Until { get; set; }

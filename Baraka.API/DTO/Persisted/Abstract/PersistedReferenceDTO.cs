@@ -5,6 +5,7 @@
     using System.Text;
 
     using Baraka.API.Entities;
+    using Baraka.API.Exceptions;
     using NHibernate;
 
     /// <summary>
@@ -79,7 +80,7 @@
         {
             if (value?.Id == null)
             {
-                throw new Error("No ID defined on entity...");
+                throw new InternalException("No ID defined on entity...");
             }
             else
             {

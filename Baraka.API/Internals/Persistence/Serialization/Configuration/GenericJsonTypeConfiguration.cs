@@ -1,9 +1,11 @@
 ﻿namespace Baraka.API.Internals.Persistence.Serialization.Configuration
 {
-    using Baraka.API.DTO.Persisted.Abstract;
     using System;
     using System.Collections.Generic;
     using System.Text;
+
+    using Baraka.API.DTO.Persisted.Abstract;
+    using Baraka.API.Exceptions;
 
     /// <summary>
     ///     Interface des configurations de DTO génériques.
@@ -35,7 +37,7 @@
         {
             if (!typeof(TKey).IsEnum)
             {
-                throw new Error("Invalid enumeration type used to process generic JSON...");
+                throw new InternalException("Invalid enumeration type used to process generic JSON...");
             }
 
             TypeForKey = new Dictionary<TKey, Type>();

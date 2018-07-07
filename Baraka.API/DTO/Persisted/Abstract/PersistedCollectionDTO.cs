@@ -6,6 +6,7 @@
     using System.Text;
 
     using Baraka.API.Entities;
+    using Baraka.API.Exceptions;
     using NHibernate;
 
     /// <summary>
@@ -100,7 +101,7 @@
         {
             if (entity?.Id == null)
             {
-                throw new Error("No ID defined on entity to add...");
+                throw new InternalException("No ID defined on entity to add...");
             }
             else
             {
@@ -117,7 +118,7 @@
 
             if (entity?.Id == null)
             {
-                throw new Error("No ID defined on entity to remove...");
+                throw new InternalException("No ID defined on entity to remove...");
             }
             else
             {

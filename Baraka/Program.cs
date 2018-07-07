@@ -28,6 +28,7 @@
                     var env = hc.HostingEnvironment;
                     configuration
                         .AddJsonFile("baraka.json", optional: false, reloadOnChange: true)
+                        .AddJsonFile("baraka.bundles.json", optional: false, reloadOnChange: true)
                         .AddJsonFile($"baraka.{env.EnvironmentName}.json", optional: true, reloadOnChange: true)
                         .AddEnvironmentVariables();
                 })

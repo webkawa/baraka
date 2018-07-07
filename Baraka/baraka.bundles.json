@@ -1,0 +1,49 @@
+{
+  "bundles": {
+    "LOREM_IPSUM": {
+      "Data": {
+        "FRA": "(FR) Lorem ipsum dolor sit amet.",
+        "ENG": "(EN) Lorem ipsum dolor sit amet."
+      }
+    },
+    "ERROR_EXPIRED_SESSION": {
+      "Data": {
+        "FRA": "La session est expirée."
+      }
+    },
+    "ERROR_INVALID_CREDENTIALS": {
+      "Data": {
+        "FRA": "Les identifiants de connexion sont invalides.",
+        "ENG": "Invalid credentials."
+      }
+    },
+    "ERROR_INVALID_TOKEN": {
+      "Data": {
+        "FRA": "Le jeton de connexion est invalide..."
+      }
+    },
+    "ERROR_UNKNOW": {
+      "Data": {
+        "FRA": "Une erreur inconnue est survenue.",
+        "ENG": "An unexpected error has occured."
+      }
+    },
+    "ERROR_UNKNOW_AUTHENTICATION": {
+      "Data": {
+        "FRA": "Une erreur d'autentification est survenue.",
+        "ENG": "An authentication error has occured."
+      }
+    },
+    "ERROR_UNKNOW_INTERNAL": {
+      "Data": {
+        "FRA": "Une erreur interne est survenue.",
+        "ENG": "An internal error has occured."
+      }
+    },
+    "ERROR_UNSECURED_REQUEST": {
+      "Data": {
+        "FRA":  "La requête n'a pas été autorisée par le serveur."
+      }
+    }
+  }
+}

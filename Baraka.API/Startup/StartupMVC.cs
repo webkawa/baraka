@@ -6,11 +6,13 @@
     using System.Security.Claims;
     using System.Text;
 
+    using Baraka.API.Internals.Attributes;
     using Baraka.API.Internals.Persistence.Serialization;
     using Baraka.API.Internals.Persistence.Serialization.Converters;
     using Microsoft.AspNetCore.Mvc.Internal;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
+    using Newtonsoft.Json;
     using NHibernate;
 
     /// <summary>
@@ -25,10 +27,14 @@
         /// <returns>Gestionnaire de configuration.</returns>
         internal static IMvcBuilder AddMvc(this IServiceCollection services)
         {
-            var builder = services.AddMvcCore();
+            var builder = services.AddMvcCore((setup) =>
+            {
+                setup.Filters.Add(new ManageExceptionAttribute());
+            });
             builder.AddFormatterMappings();
             builder.AddJsonFormatters(setup =>
             {
+                setup.PreserveReferencesHandling = PreserveReferencesHandling.Objects;
                 setup.Converters.Add(new PersistentJsonReferencesConverter());
                 setup.Converters.Add(new PersistentJsonCollectionsConverter());
             });

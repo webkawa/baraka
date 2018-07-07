@@ -7,6 +7,8 @@
     using Baraka.API.DTO.Persisted.Shared;
     using Baraka.API.Entities;
     using NHibernate;
+    using NHibernate.SqlCommand;
+    using NHibernate.Transform;
 
     /// <summary>
     ///     DAO des tables.
@@ -36,6 +38,22 @@
             };
             Session.Persist(result);
             return result;
+        }
+
+        /// <summary>
+        ///     Retourne la liste complète des tables en pré-chargeant les champs
+        ///     et informations relatives.
+        /// </summary>
+        /// <returns>Liste complète des tables.</returns>
+        public IList<Table> GetAllWithFields()
+        {
+            Table t = null;
+            Field f = null;
+            return Session
+                .QueryOver(() => t)
+                .JoinAlias(() => t.Fields, () => f, JoinType.LeftOuterJoin)
+                .TransformUsing(Transformers.DistinctRootEntity)
+                .List();
         }
     }
 }

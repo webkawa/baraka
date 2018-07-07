@@ -7,6 +7,7 @@
     using System.Text;
 
     using Baraka.API.DAO;
+    using Baraka.API.Exceptions;
     using Baraka.API.Internals.Configuration;
     using Baraka.API.Internals.Persistence;
     using Baraka.API.Internals.Persistence.Syntax;
@@ -81,7 +82,7 @@
                                     break;
 
                                 default:
-                                    throw new Error("Invalid database action '{0}'", options.Action);
+                                    throw new InternalException("Invalid database action '{0}'", options.Action);
                             }
                         })
                         .SetNamingStrategy(new NamingStrategy())

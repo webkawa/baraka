@@ -1,9 +1,11 @@
 ﻿namespace Baraka.API.Internals.Authentication
 {
-    using Baraka.API.Entities;
     using System;
     using System.Collections.Generic;
     using System.Text;
+
+    using Baraka.API.Entities;
+    using Baraka.API.Exceptions;
 
     /// <summary>
     ///     Service permettant le stockage du statut d'autentification rattaché à la requête
@@ -39,7 +41,7 @@
             {
                 if (_currentAttribute == null)
                 {
-                    throw new Exception("Access to authentication holder failed...");
+                    throw new AuthenticationException("Access to authentication holder failed...");
                 }
 
                 return _currentAttribute;
@@ -58,7 +60,7 @@
         {
             if (Connected)
             {
-                throw new Error("Application tried to rewrite autorisations from user...");
+                throw new AuthenticationException("Application tried to rewrite autorisations from user...");
             }
             else
             {
