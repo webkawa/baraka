@@ -70,7 +70,7 @@
         /// </summary>
         public object DeepCopy(object value)
         {
-            return (value as IPersistedDTO).DeepCopy();
+            return (value as IPersistedDTO)?.DeepCopy() ?? null;
         }
 
         /// <summary>

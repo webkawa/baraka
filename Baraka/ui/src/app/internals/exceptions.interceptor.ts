@@ -38,5 +38,4 @@ export class ExceptionsInterceptor implements HttpInterceptor {
   public getFailures(): Observable<ErrorDTO> {
     return this.failures.asObservable();
   }
-
 }

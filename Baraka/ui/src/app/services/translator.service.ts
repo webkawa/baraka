@@ -15,6 +15,7 @@ import { BundleDTO } from '../dto/bundle.dto';
 export class TranslatorService {
 
   private credentials: AuthenticationSessionDTO;
+  private lang: string;
 
   constructor(
     private authentication: AuthenticationService) {
@@ -23,12 +24,17 @@ export class TranslatorService {
       .getCredentials()
       .subscribe((data) => {
         this.credentials = data;
+        this.lang = data.user.configuration.culture;
       });
   }
 
   /** Retourne la langue de l'utilisateur */
-  public getLang(): string {
-    return this.credentials.connected ? this.credentials.user.configuration.culture : "FRA";
+  public getLang(): Observable<string> {
+    return this.authentication
+      .getCredentials()
+      .pipe(map((data) => {
+        return data.user.configuration.culture;
+      }));
   }
 
   /**
@@ -36,7 +42,7 @@ export class TranslatorService {
    * @param bundle Lot de traductions
    */
   public translate(bundle: BundleDTO): string {
-    return bundle.data[this.getLang()] ? bundle.data[this.getLang()] : "?";
+    return bundle.data[this.lang] ? bundle.data[this.lang] : "?";
   }
   public tr(bundle: BundleDTO): string {
     return this.translate(bundle);

@@ -25,5 +25,22 @@
         {
             return tableDAO.GetAllWithFields();
         }
+
+        /// <summary>
+        ///     Ajoute une table dans la base.
+        /// </summary>
+        /// <param name="add">Table à créer.</param>
+        /// <param name="tableDAO">DAO des tables.</param>
+        /// <returns>Liste des tables après ajout.</returns>
+        [Authenticate]
+        [Route("services/tables/add")]
+        [Transactional]
+        public IList<Table> AddTable(
+            [FromBody] Table add,
+            [FromServices] TableDAO tableDAO)
+        {
+            tableDAO.Insert(add.Label, add.Code);
+            return GetTables(tableDAO);
+        }
     }
 }

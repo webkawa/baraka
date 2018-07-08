@@ -30,6 +30,8 @@ export class LoaderInterceptor implements HttpInterceptor {
     return next
       .handle(request)
       .pipe(map((data) => {
+        console.log("loader");
+        console.log(data);
         if (data.type == 0) {
           /* Dafuq */
           this.count++;

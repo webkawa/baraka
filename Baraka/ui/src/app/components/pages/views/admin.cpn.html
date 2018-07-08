@@ -1,0 +1,25 @@
+<div>
+  <h3>Liste des vues</h3>
+  <div>Ajouter</div>
+  <ul>
+    <li *ngFor="let view of views">
+      <div>{{ view.Id }} {{ translator.tr(view.label) }}</div>
+      <div>
+        <span>Editer</span>
+        <span>Supprimer</span>
+      </div>
+    </li>
+  </ul>
+  <p>Créer une vue</p>
+  <h3>Liste des tables</h3>
+  <div [routerLink]="['tables', 'add']">Ajouter</div>
+  <ul>
+    <li *ngFor="let table of tables">
+      <div>{{ table.Id }} {{ translator.tr(table.label) }}</div>
+      <div>
+        <span>Editer</span>
+        <span>Supprimer</span>
+      </div>
+    </li>
+  </ul>
+</div>

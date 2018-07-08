@@ -4,17 +4,18 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from "@angular/router"
 
-import { LayoutRootComponent } from './components/layout.root.cpn';
-import { PageLoginComponent } from './components/pages.login.cpn';
-
-import { AuthenticationService } from './services/authentication.service'
-import { TokenInterceptor } from './internals/token.interceptor';
-import { PageHomeComponent } from './components/pages.home.cpn';
-import { RootInterceptor } from './internals/root.interceptor';
+import { LayoutPopinComponent } from './components/layout/popin.cpn';
+import { LayoutRootComponent } from './components/layout/root.cpn';
+import { PageHomeComponent } from './components/pages/home.cpn';
+import { PageLoginComponent } from './components/pages/login.cpn';
+import { PageViewComponent } from './components/pages/view.cpn';
+import { PagesViewAdminComponent } from './components/pages/views/admin.cpn';
+import { PagesViewAdminTableAddComponent } from './components/pages/views/admin/table.add.cpn';
 import { LoaderInterceptor } from './internals/loader.interceptor';
-import { PageViewComponent } from './components/pages.view.cpn';
 import { ExceptionsInterceptor } from './internals/exceptions.interceptor';
-import { LayoutPopinComponent } from './components/layout.popin.cpn';
+import { RootInterceptor } from './internals/root.interceptor';
+import { TokenInterceptor } from './internals/token.interceptor';
+import { ReferencesInterceptor } from './internals/references.interceptor';
 
 @NgModule({
   declarations: [
@@ -22,7 +23,9 @@ import { LayoutPopinComponent } from './components/layout.popin.cpn';
     LayoutRootComponent,
     PageHomeComponent,
     PageLoginComponent,
-    PageViewComponent
+    PageViewComponent,
+    PagesViewAdminComponent,
+    PagesViewAdminTableAddComponent
   ],
   imports: [
     BrowserModule,
@@ -32,6 +35,8 @@ import { LayoutPopinComponent } from './components/layout.popin.cpn';
       { path: 'home', component: PageHomeComponent },
       { path: 'login', component: PageLoginComponent },
       { path: 'view/:id', component: PageViewComponent },
+      { path: 'view/:id/admin', component: PagesViewAdminComponent },
+      { path: 'view/:id/admin/tables/add', component: PagesViewAdminTableAddComponent },
       { path: '', redirectTo: '/home', pathMatch: 'full' }
     ])
   ],
@@ -50,6 +55,10 @@ import { LayoutPopinComponent } from './components/layout.popin.cpn';
   }, {
     provide: HTTP_INTERCEPTORS,
     useClass: TokenInterceptor,
+    multi: true
+  }, {
+    provide: HTTP_INTERCEPTORS,
+    useClass: ReferencesInterceptor,
     multi: true
   }],
   bootstrap: [LayoutRootComponent]

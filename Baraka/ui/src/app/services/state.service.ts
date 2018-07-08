@@ -3,18 +3,16 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, Subject, forkJoin, BehaviorSubject } from 'rxjs';
 import { map } from 'rxjs/operators'
 
-
-import { ViewDTO } from '../dto/view.dto';
+import { ViewDTO, AbstractViewDTO } from '../dto/view.dto';
 import { TableDTO } from '../dto/table.dto';
-
 
 /** Service d'état */
 @Injectable({
   providedIn: 'root'
 })
 export class StateService {
-  
-  private views: Subject<ViewDTO[]>
+
+  private views: Subject<ViewDTO<AbstractViewDTO>[]>
   private tables: Subject<TableDTO[]>
 
   constructor(
@@ -24,13 +22,21 @@ export class StateService {
   }
 
   /** Retourne la liste des vues */
-  public getViews(): Observable<ViewDTO[]> {
+  public getViews(): Observable<ViewDTO<AbstractViewDTO>[]> {
     return this.views.asObservable();
   }
 
   /** Retourne la liste des tables */
   public getTables(): Observable<TableDTO[]> {
     return this.tables.asObservable();
+  }
+
+  /**
+   *  Publie la liste des tables.
+   *  @param tables Tables publiées.
+   */
+  public publishTables(tables: TableDTO[]): void {
+    this.tables.next(tables);
   }
 
   /** Charge l'état complet de l'application */
@@ -41,9 +47,9 @@ export class StateService {
   }
 
   /** Recharge les vues */
-  public loadViews(): Observable<ViewDTO[]> {
+  public loadViews(): Observable<ViewDTO<AbstractViewDTO>[]> {
     return this.http
-      .get<ViewDTO[]>("views/list")
+      .get<ViewDTO<AbstractViewDTO>[]>("views/list")
       .pipe(map((data) => {
         this.views.next(data);
         return data;

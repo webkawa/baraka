@@ -2,18 +2,18 @@ import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router, NavigationStart } from '@angular/router';
 
-import { AuthenticationService } from '../services/authentication.service';
-import { AuthenticationSessionDTO } from '../dto/authentication.session.dto';
-import { LoaderInterceptor } from '../internals/loader.interceptor';
-import { ErrorDTO } from '../dto/error.dto';
-import { ExceptionsInterceptor } from '../internals/exceptions.interceptor';
-import { TranslatorService } from '../services/translator.service';
+import { TranslatorService } from '../../services/translator.service';
+import { LoaderInterceptor } from '../../internals/loader.interceptor';
+import { ExceptionsInterceptor } from '../../internals/exceptions.interceptor';
+import { AuthenticationService } from '../../services/authentication.service';
+import { AuthenticationSessionDTO } from '../../dto/authentication.session.dto';
+import { ErrorDTO } from '../../dto/error.dto';
 
 /** Racine de l'application */
 @Component({
   selector: 'layout-root',
-  templateUrl: './layout.root.cpn.html',
-  styleUrls: ['./layout.root.cpn.less']
+  templateUrl: './root.cpn.html',
+  styleUrls: ['./root.cpn.less']
 })
 export class LayoutRootComponent implements OnInit {
 

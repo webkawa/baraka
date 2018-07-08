@@ -1,14 +1,14 @@
 import { Component, AfterViewInit, OnInit } from '@angular/core';
-
-import { AuthenticationService } from '../services/authentication.service';
 import { Router, ActivatedRoute } from '@angular/router';
-import { StateService } from '../services/state.service';
+
+import { AuthenticationService } from '../../services/authentication.service';
+import { StateService } from '../../services/state.service';
 
 /** Mire de connexion */
 @Component({
   selector: 'pages-login',
-  templateUrl: './pages.login.cpn.html',
-  styleUrls: ['./pages.login.cpn.less']
+  templateUrl: './login.cpn.html',
+  styleUrls: ['./login.cpn.less']
 })
 export class PageLoginComponent {
 
