@@ -1,5 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from "@angular/router"
@@ -10,33 +10,37 @@ import { PageHomeComponent } from './components/pages/home.cpn';
 import { PageLoginComponent } from './components/pages/login.cpn';
 import { PageViewComponent } from './components/pages/view.cpn';
 import { PagesViewAdminComponent } from './components/pages/views/admin.cpn';
-import { PagesViewAdminTableAddComponent } from './components/pages/views/admin/table.add.cpn';
 import { LoaderInterceptor } from './internals/loader.interceptor';
 import { ExceptionsInterceptor } from './internals/exceptions.interceptor';
 import { RootInterceptor } from './internals/root.interceptor';
 import { TokenInterceptor } from './internals/token.interceptor';
 import { ReferencesInterceptor } from './internals/references.interceptor';
+import { PagesViewAdminTableEditComponent } from './components/pages/views/admin/table.edit.cpn';
+import { AdminTableEditFormular } from './components/formulars/admin/tables/table.edit.form';
 
 @NgModule({
   declarations: [
+    AdminTableEditFormular,
     LayoutPopinComponent,
     LayoutRootComponent,
     PageHomeComponent,
     PageLoginComponent,
     PageViewComponent,
     PagesViewAdminComponent,
-    PagesViewAdminTableAddComponent
+    PagesViewAdminTableEditComponent
   ],
   imports: [
     BrowserModule,
     FormsModule,
     HttpClientModule,
+    ReactiveFormsModule,
     RouterModule.forRoot([
       { path: 'home', component: PageHomeComponent },
       { path: 'login', component: PageLoginComponent },
-      { path: 'view/:id', component: PageViewComponent },
-      { path: 'view/:id/admin', component: PagesViewAdminComponent },
-      { path: 'view/:id/admin/tables/add', component: PagesViewAdminTableAddComponent },
+      { path: 'view/:view', component: PageViewComponent },
+      { path: 'view/:view/admin', component: PagesViewAdminComponent },
+      { path: 'view/:view/admin/tables/add', component: PagesViewAdminTableEditComponent },
+      { path: 'view/:view/admin/tables/edit/:table', component: PagesViewAdminTableEditComponent },
       { path: '', redirectTo: '/home', pathMatch: 'full' }
     ])
   ],

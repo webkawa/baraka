@@ -19,7 +19,8 @@ export class PageViewComponent extends PagesViewAbstractComponent<AbstractViewDT
     protected ar: ActivatedRoute) {
 
     super(true, state, router, ar);
-    ar.params.subscribe((params) => {
+
+    this.ar.params.subscribe((params) => {
       // onInit broken
     });
   }

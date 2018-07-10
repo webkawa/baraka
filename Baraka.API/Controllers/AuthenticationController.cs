@@ -10,7 +10,7 @@
     using Baraka.API.DTO.Http;
     using Baraka.API.Entities;
     using Baraka.API.Exceptions;
-    using Baraka.API.Internals.Attributes;
+    using Baraka.API.Internals.Attributes.Mvc;
     using Baraka.API.Internals.Authentication;
     using Baraka.API.Internals.Configuration;
     using Microsoft.AspNetCore.Mvc;
@@ -28,7 +28,7 @@
         /// <param name="manager">Gestionnaire d'authentification.</param>
         /// <param name="userDAO">DAO des utilisateurs.</param>
         /// <returns></returns>
-        [HttpGet]
+        [Public]
         [Route("/services/auth/connect")]
         public AuthenticationSessionDTO Connect(
             [FromQuery] string name,

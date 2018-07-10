@@ -34,6 +34,12 @@
         "ENG": "An authentication error has occured."
       }
     },
+    "ERROR_UNKNOW_INPUT": {
+      "Data": {
+        "FRA": "Une des données saisies est invalide.",
+        "ENG": "Invalid input."
+      }
+    },
     "ERROR_UNKNOW_INTERNAL": {
       "Data": {
         "FRA": "Une erreur interne est survenue.",
@@ -42,7 +48,7 @@
     },
     "ERROR_UNSECURED_REQUEST": {
       "Data": {
-        "FRA":  "La requête n'a pas été autorisée par le serveur."
+        "FRA": "La requête n'a pas été autorisée par le serveur."
       }
     }
   }

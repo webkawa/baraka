@@ -25,7 +25,7 @@ export class PagesViewAdminComponent extends PagesViewAbstractComponent<AdminVie
 
     super(false, state, router, ar);
 
-    ar.params.subscribe((params) => {
+    this.ar.params.subscribe((params) => {
       // onInit broken
       this.state
         .getTables()

@@ -23,15 +23,11 @@ export class ReferencesInterceptor implements HttpInterceptor {
     return next
       .handle(request)
       .pipe(map((data) => {
-        console.log("references");
-        console.log(data);
         if (data instanceof HttpResponse) {
           let typed = <HttpResponse<any>>data;
           if (typed.body != null) {
             this.register(typed.body);
             this.attach(typed.body);
-            console.log("typed");
-            console.log(typed);
             this.index = {};
           }
         }

@@ -6,6 +6,8 @@
 
     using Baraka.API.DTO.Persisted.Shared;
     using Baraka.API.Entities;
+    using Baraka.API.Exceptions;
+    using Baraka.API.Internals.Model;
     using NHibernate;
     using NHibernate.SqlCommand;
     using NHibernate.Transform;
@@ -36,8 +38,23 @@
                 Label = label,
                 Code = code
             };
+            new ModelValidator(this).Check(result);
+
             Session.Persist(result);
             return result;
+        }
+
+        /// <summary>
+        ///     Indique si un code de table est disponible pour l'insertion.
+        /// </summary>
+        /// <param name="code">Code évalué.</param>
+        /// <returns>true si le code est disponible.</returns>
+        public bool IsCodeAvailable(string code)
+        {
+            return Session
+                .QueryOver<Table>()
+                .Where(e => e.Code == code)
+                .RowCount() == 0;
         }
 
         /// <summary>

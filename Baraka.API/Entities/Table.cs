@@ -2,10 +2,12 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.ComponentModel.DataAnnotations;
     using System.Text;
 
     using Baraka.API.DTO.Persisted;
     using Baraka.API.DTO.Persisted.Shared;
+    using Baraka.API.Internals.Attributes.Validators;
     using Baraka.API.Internals.Persistence.Types;
 
     /// <summary>
@@ -24,11 +26,16 @@
         /// <summary>
         ///     Libellé de la table.
         /// </summary>
+        [Required]
         public virtual BundleDTO Label { get; set; }
 
         /// <summary>
         ///     Code d'accès.
         /// </summary>
+        [Required]
+        [MinLength(3)]
+        [RegularExpression("[a-z0-9_]+")]
+        [UniqueTableCode]
         public virtual string Code { get; set; }
 
         /// <summary>

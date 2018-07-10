@@ -15,23 +15,22 @@ export abstract class PagesViewAbstractComponent<TView extends AbstractViewDTO> 
     protected router: Router,
     protected ar: ActivatedRoute) {
     
-    ar.params.subscribe((params) => {
+    this.ar.params.subscribe((params) => {
       // onInit broken
       this.state
         .getViews()
         .subscribe((views) => {
+          /* Récupération de la vue */
           this.views = views;
-          for (let i = 0; i < views.length; i++) {
-            if (views[i].id == params["id"]) {
-              this.view = <ViewDTO<TView>>views[i];
-              if (this.redirect) {
-                this.router.navigate(
-                  ["/view", this.view.id, this.view.model.type.toLowerCase()],
-                  {
-                    skipLocationChange: true
-                  });
-              }
-            }
+          this.view = <ViewDTO<TView>>views.filter((v) => v.id == params["view"])[0];
+
+          /* Redirection */
+          if (this.redirect) {
+            this.router.navigate(
+              ["/view", this.view.id, this.view.model.type.toLowerCase()],
+              {
+                skipLocationChange: true
+              });
           }
         });
     });

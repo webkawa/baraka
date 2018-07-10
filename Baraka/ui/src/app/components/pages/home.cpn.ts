@@ -26,7 +26,7 @@ export class PageHomeComponent {
 
     this.views = [];
 
-    ar.params.subscribe((params) => {
+    this.ar.params.subscribe((params) => {
       // onInit broken
       this.state
         .getViews()

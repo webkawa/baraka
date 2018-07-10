@@ -21,7 +21,7 @@ export class PageLoginComponent {
     private router: Router,
     private ar: ActivatedRoute) {
 
-    ar.params.subscribe((params) => {
+    this.ar.params.subscribe((params) => {
       // onInit broken
       this.authentication
         .getCredentials()

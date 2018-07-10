@@ -5,6 +5,7 @@
     using System.Text;
 
     using Baraka.API.DTO.Http;
+    using Baraka.API.Internals.Attributes.Mvc;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
 
@@ -17,6 +18,7 @@
         ///     Gère une erreur 404.
         /// </summary>
         /// <returns>Résultat de l'action.</returns>
+        [Public]
         [Route("error/404")]
         public IActionResult ManageNotFound()
         {

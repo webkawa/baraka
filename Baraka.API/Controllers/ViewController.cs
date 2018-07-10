@@ -20,7 +20,6 @@
         /// <param name="holder">Porte-autorisations.</param>
         /// <param name="viewDAO">DAO des vues.</param>
         /// <returns>Liste des vues disponibles pour l'utilisateur.</returns>
-        [Authenticate]
         [Route("/services/views/list")]
         public IList<View> GetViewsForUser(
             [FromServices] AuthenticationHolder holder,

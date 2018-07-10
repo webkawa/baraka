@@ -11,7 +11,7 @@
     using Baraka.API.DTO.Persisted.Shared;
     using Baraka.API.DTO.Persisted.Views;
     using Baraka.API.Entities;
-    using Baraka.API.Internals.Attributes;
+    using Baraka.API.Internals.Attributes.Mvc;
     using Baraka.API.Internals.Authentication;
     using Microsoft.AspNetCore.Mvc;
     using NHibernate;
@@ -31,8 +31,9 @@
         /// <param name="tableDAO">DAO des tables.</param>
         /// <param name="fieldDAO">DAO des champs.</param>
         /// <param name="viewDAO">DAO des vues.</param>
-        [Route("/services/demo")]
+        [Public]
         [Transactional]
+        [Route("/services/demo")]
         public void Demo(
             [FromServices] ISession session,
             [FromServices] AuthenticationManager manager,
@@ -120,7 +121,6 @@
 
         [Route("/services/post")]
         [Transactional]
-        [Authenticate]
         public IList<View> Post(
             [FromServices] ISession session,
             [FromServices] UserDAO userDAO,

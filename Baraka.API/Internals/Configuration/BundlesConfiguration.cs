@@ -42,6 +42,11 @@
         ERROR_UNKNOW_AUTHENTICATION,
 
         /// <summary>
+        ///     Saisie invalide.
+        /// </summary>
+        ERROR_UNKNOW_INPUT,
+
+        /// <summary>
         ///     Erreur interne.
         /// </summary>
         ERROR_UNKNOW_INTERNAL,

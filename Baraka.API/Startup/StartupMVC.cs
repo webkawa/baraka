@@ -6,9 +6,10 @@
     using System.Security.Claims;
     using System.Text;
 
-    using Baraka.API.Internals.Attributes;
+    using Baraka.API.Internals.Attributes.Mvc;
     using Baraka.API.Internals.Persistence.Serialization;
     using Baraka.API.Internals.Persistence.Serialization.Converters;
+    using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc.Internal;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
@@ -27,9 +28,13 @@
         /// <returns>Gestionnaire de configuration.</returns>
         internal static IMvcBuilder AddMvc(this IServiceCollection services)
         {
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+
             var builder = services.AddMvcCore((setup) =>
             {
-                setup.Filters.Add(new ManageExceptionAttribute());
+
+                setup.Filters.Add(new ManageException());
+                setup.Filters.Add(new Authenticate());
             });
             builder.AddFormatterMappings();
             builder.AddJsonFormatters(setup =>

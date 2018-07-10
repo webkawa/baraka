@@ -44,12 +44,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_pages_login_cpn__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./components/pages/login.cpn */ "./src/app/components/pages/login.cpn.ts");
 /* harmony import */ var _components_pages_view_cpn__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./components/pages/view.cpn */ "./src/app/components/pages/view.cpn.ts");
 /* harmony import */ var _components_pages_views_admin_cpn__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./components/pages/views/admin.cpn */ "./src/app/components/pages/views/admin.cpn.ts");
-/* harmony import */ var _components_pages_views_admin_table_add_cpn__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./components/pages/views/admin/table.add.cpn */ "./src/app/components/pages/views/admin/table.add.cpn.ts");
-/* harmony import */ var _internals_loader_interceptor__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./internals/loader.interceptor */ "./src/app/internals/loader.interceptor.ts");
-/* harmony import */ var _internals_exceptions_interceptor__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./internals/exceptions.interceptor */ "./src/app/internals/exceptions.interceptor.ts");
-/* harmony import */ var _internals_root_interceptor__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ./internals/root.interceptor */ "./src/app/internals/root.interceptor.ts");
-/* harmony import */ var _internals_token_interceptor__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ./internals/token.interceptor */ "./src/app/internals/token.interceptor.ts");
-/* harmony import */ var _internals_references_interceptor__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ./internals/references.interceptor */ "./src/app/internals/references.interceptor.ts");
+/* harmony import */ var _internals_loader_interceptor__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./internals/loader.interceptor */ "./src/app/internals/loader.interceptor.ts");
+/* harmony import */ var _internals_exceptions_interceptor__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./internals/exceptions.interceptor */ "./src/app/internals/exceptions.interceptor.ts");
+/* harmony import */ var _internals_root_interceptor__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./internals/root.interceptor */ "./src/app/internals/root.interceptor.ts");
+/* harmony import */ var _internals_token_interceptor__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ./internals/token.interceptor */ "./src/app/internals/token.interceptor.ts");
+/* harmony import */ var _internals_references_interceptor__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ./internals/references.interceptor */ "./src/app/internals/references.interceptor.ts");
+/* harmony import */ var _components_pages_views_admin_table_edit_cpn__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ./components/pages/views/admin/table.edit.cpn */ "./src/app/components/pages/views/admin/table.edit.cpn.ts");
+/* harmony import */ var _components_formulars_admin_tables_table_edit_form__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! ./components/formulars/admin/tables/table.edit.form */ "./src/app/components/formulars/admin/tables/table.edit.form.ts");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -73,52 +74,56 @@ var __decorate = (undefined && undefined.__decorate) || function (decorators, ta
 
 
 
+
 var AppModule = /** @class */ (function () {
     function AppModule() {
     }
     AppModule = __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_3__["NgModule"])({
             declarations: [
+                _components_formulars_admin_tables_table_edit_form__WEBPACK_IMPORTED_MODULE_17__["AdminTableEditFormular"],
                 _components_layout_popin_cpn__WEBPACK_IMPORTED_MODULE_5__["LayoutPopinComponent"],
                 _components_layout_root_cpn__WEBPACK_IMPORTED_MODULE_6__["LayoutRootComponent"],
                 _components_pages_home_cpn__WEBPACK_IMPORTED_MODULE_7__["PageHomeComponent"],
                 _components_pages_login_cpn__WEBPACK_IMPORTED_MODULE_8__["PageLoginComponent"],
                 _components_pages_view_cpn__WEBPACK_IMPORTED_MODULE_9__["PageViewComponent"],
                 _components_pages_views_admin_cpn__WEBPACK_IMPORTED_MODULE_10__["PagesViewAdminComponent"],
-                _components_pages_views_admin_table_add_cpn__WEBPACK_IMPORTED_MODULE_11__["PagesViewAdminTableAddComponent"]
+                _components_pages_views_admin_table_edit_cpn__WEBPACK_IMPORTED_MODULE_16__["PagesViewAdminTableEditComponent"]
             ],
             imports: [
                 _angular_platform_browser__WEBPACK_IMPORTED_MODULE_0__["BrowserModule"],
                 _angular_forms__WEBPACK_IMPORTED_MODULE_1__["FormsModule"],
                 _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpClientModule"],
+                _angular_forms__WEBPACK_IMPORTED_MODULE_1__["ReactiveFormsModule"],
                 _angular_router__WEBPACK_IMPORTED_MODULE_4__["RouterModule"].forRoot([
                     { path: 'home', component: _components_pages_home_cpn__WEBPACK_IMPORTED_MODULE_7__["PageHomeComponent"] },
                     { path: 'login', component: _components_pages_login_cpn__WEBPACK_IMPORTED_MODULE_8__["PageLoginComponent"] },
-                    { path: 'view/:id', component: _components_pages_view_cpn__WEBPACK_IMPORTED_MODULE_9__["PageViewComponent"] },
-                    { path: 'view/:id/admin', component: _components_pages_views_admin_cpn__WEBPACK_IMPORTED_MODULE_10__["PagesViewAdminComponent"] },
-                    { path: 'view/:id/admin/tables/add', component: _components_pages_views_admin_table_add_cpn__WEBPACK_IMPORTED_MODULE_11__["PagesViewAdminTableAddComponent"] },
+                    { path: 'view/:view', component: _components_pages_view_cpn__WEBPACK_IMPORTED_MODULE_9__["PageViewComponent"] },
+                    { path: 'view/:view/admin', component: _components_pages_views_admin_cpn__WEBPACK_IMPORTED_MODULE_10__["PagesViewAdminComponent"] },
+                    { path: 'view/:view/admin/tables/add', component: _components_pages_views_admin_table_edit_cpn__WEBPACK_IMPORTED_MODULE_16__["PagesViewAdminTableEditComponent"] },
+                    { path: 'view/:view/admin/tables/edit/:table', component: _components_pages_views_admin_table_edit_cpn__WEBPACK_IMPORTED_MODULE_16__["PagesViewAdminTableEditComponent"] },
                     { path: '', redirectTo: '/home', pathMatch: 'full' }
                 ])
             ],
             providers: [{
                     provide: _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HTTP_INTERCEPTORS"],
-                    useExisting: _internals_loader_interceptor__WEBPACK_IMPORTED_MODULE_12__["LoaderInterceptor"],
+                    useExisting: _internals_loader_interceptor__WEBPACK_IMPORTED_MODULE_11__["LoaderInterceptor"],
                     multi: true
                 }, {
                     provide: _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HTTP_INTERCEPTORS"],
-                    useExisting: _internals_exceptions_interceptor__WEBPACK_IMPORTED_MODULE_13__["ExceptionsInterceptor"],
+                    useExisting: _internals_exceptions_interceptor__WEBPACK_IMPORTED_MODULE_12__["ExceptionsInterceptor"],
                     multi: true
                 }, {
                     provide: _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HTTP_INTERCEPTORS"],
-                    useClass: _internals_root_interceptor__WEBPACK_IMPORTED_MODULE_14__["RootInterceptor"],
+                    useClass: _internals_root_interceptor__WEBPACK_IMPORTED_MODULE_13__["RootInterceptor"],
                     multi: true
                 }, {
                     provide: _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HTTP_INTERCEPTORS"],
-                    useClass: _internals_token_interceptor__WEBPACK_IMPORTED_MODULE_15__["TokenInterceptor"],
+                    useClass: _internals_token_interceptor__WEBPACK_IMPORTED_MODULE_14__["TokenInterceptor"],
                     multi: true
                 }, {
                     provide: _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HTTP_INTERCEPTORS"],
-                    useClass: _internals_references_interceptor__WEBPACK_IMPORTED_MODULE_16__["ReferencesInterceptor"],
+                    useClass: _internals_references_interceptor__WEBPACK_IMPORTED_MODULE_15__["ReferencesInterceptor"],
                     multi: true
                 }],
             bootstrap: [_components_layout_root_cpn__WEBPACK_IMPORTED_MODULE_6__["LayoutRootComponent"]]
@@ -126,6 +131,259 @@ var AppModule = /** @class */ (function () {
     ], AppModule);
     return AppModule;
 }());
+
+
+
+/***/ }),
+
+/***/ "./src/app/components/formulars/admin/edit.abs.ts":
+/*!********************************************************!*\
+  !*** ./src/app/components/formulars/admin/edit.abs.ts ***!
+  \********************************************************/
+/*! exports provided: AdminEditAbstractFormular */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "AdminEditAbstractFormular", function() { return AdminEditAbstractFormular; });
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
+var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (undefined && undefined.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+/** Classe de base pour un formulaire permettant l'ajout ou la mise à jour d'une entité standard. */
+var AdminEditAbstractFormular = /** @class */ (function () {
+    function AdminEditAbstractFormular(http, url) {
+        this.http = http;
+        this.url = url;
+    }
+    AdminEditAbstractFormular.prototype.ngOnInit = function () {
+        this.persisted = this.entity != null;
+        if (!this.persisted) {
+            this.entity = this.init();
+        }
+        else {
+            this.init();
+        }
+    };
+    /** Procède à l'ajout ou à la mise à jour. */
+    AdminEditAbstractFormular.prototype.addOrSave = function () {
+        this.sync(1);
+    };
+    /** Procède à l'ajout. */
+    AdminEditAbstractFormular.prototype.add = function () {
+        this.sync(2);
+    };
+    /** Procède à la mise à jour. */
+    AdminEditAbstractFormular.prototype.save = function () {
+        this.sync(3);
+    };
+    /**
+     * Soumission du formulaire.
+     * @param mode Mode d'utilisation (1: insertion et édition ; 2: insertion uniquement ; 3: édition uniquement.)
+     */
+    AdminEditAbstractFormular.prototype.sync = function (mode) {
+        var _this = this;
+        if (mode == 2 && this.persisted)
+            return;
+        if (mode == 3 && !this.persisted)
+            return;
+        var action = this.persisted ? "edit" : "add";
+        if (this.pre()) {
+            alert("im");
+            this.http
+                .post(this.url + "/" + action, this.entity)
+                .subscribe(function (data) {
+                _this.entity = data;
+                if (_this.persisted) {
+                    _this.postSave();
+                }
+                else {
+                    _this.persisted = true;
+                    _this.postAdd();
+                }
+                _this.postAll();
+            });
+        }
+    };
+    __decorate([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Input"])(),
+        __metadata("design:type", Object)
+    ], AdminEditAbstractFormular.prototype, "entity", void 0);
+    return AdminEditAbstractFormular;
+}());
+
+
+
+/***/ }),
+
+/***/ "./src/app/components/formulars/admin/tables/table.edit.form.html":
+/*!************************************************************************!*\
+  !*** ./src/app/components/formulars/admin/tables/table.edit.form.html ***!
+  \************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "<form class=\"form-group\" [formGroup]=\"form\" (submit)=\"addOrSave()\">\r\n  <h2>Ajouter une table</h2>\r\n  <div>\r\n    <label>Nom</label>\r\n    <input type=\"text\"\r\n           class=\"form-control\"\r\n           formControlName=\"name\" />\r\n    <p *ngIf=\"name.invalid && name.dirty\">Wtf is this shit ?</p>\r\n  </div>\r\n  <div>\r\n    <label>Code</label>\r\n    <input type=\"text\"\r\n           class=\"form-control\"\r\n           formControlName=\"code\" />\r\n    <p *ngIf=\"code.invalid && code.dirty\">Wut ?</p>\r\n  </div>\r\n  <div *ngIf=\"!persisted\">\r\n    <input type=\"submit\"\r\n           value=\"Ajouter\"\r\n           [disabled]=\"form.invalid\" />\r\n  </div>\r\n</form>\r\n"
+
+/***/ }),
+
+/***/ "./src/app/components/formulars/admin/tables/table.edit.form.less":
+/*!************************************************************************!*\
+  !*** ./src/app/components/formulars/admin/tables/table.edit.form.less ***!
+  \************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = ""
+
+/***/ }),
+
+/***/ "./src/app/components/formulars/admin/tables/table.edit.form.ts":
+/*!**********************************************************************!*\
+  !*** ./src/app/components/formulars/admin/tables/table.edit.form.ts ***!
+  \**********************************************************************/
+/*! exports provided: AdminTableEditFormular */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "AdminTableEditFormular", function() { return AdminTableEditFormular; });
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
+/* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/router */ "./node_modules/@angular/router/fesm5/router.js");
+/* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/common/http */ "./node_modules/@angular/common/fesm5/http.js");
+/* harmony import */ var _angular_forms__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @angular/forms */ "./node_modules/@angular/forms/fesm5/forms.js");
+/* harmony import */ var _services_validators_service__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../../services/validators.service */ "./src/app/services/validators.service.ts");
+/* harmony import */ var _utils_string_utils__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../../../utils/string.utils */ "./src/app/utils/string.utils.ts");
+/* harmony import */ var _dto_table_dto__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../../../dto/table.dto */ "./src/app/dto/table.dto.ts");
+/* harmony import */ var _services_translator_service__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../../../services/translator.service */ "./src/app/services/translator.service.ts");
+/* harmony import */ var _services_state_service__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../../../services/state.service */ "./src/app/services/state.service.ts");
+/* harmony import */ var _edit_abs__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../edit.abs */ "./src/app/components/formulars/admin/edit.abs.ts");
+/* harmony import */ var _dto_view_dto__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../../../../dto/view.dto */ "./src/app/dto/view.dto.ts");
+var __extends = (undefined && undefined.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (undefined && undefined.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+
+
+
+
+
+
+
+
+
+/** Formulaire d'ajout ou de modification simple d'une table */
+var AdminTableEditFormular = /** @class */ (function (_super) {
+    __extends(AdminTableEditFormular, _super);
+    function AdminTableEditFormular(translator, http, state, router, validators) {
+        var _this = _super.call(this, http, "tables") || this;
+        _this.translator = translator;
+        _this.http = http;
+        _this.state = state;
+        _this.router = router;
+        _this.validators = validators;
+        return _this;
+    }
+    AdminTableEditFormular.prototype.ngOnInit = function () {
+        var _this = this;
+        /* Création du formulaire */
+        this.name = new _angular_forms__WEBPACK_IMPORTED_MODULE_3__["FormControl"]('', [
+            _angular_forms__WEBPACK_IMPORTED_MODULE_3__["Validators"].required,
+            _angular_forms__WEBPACK_IMPORTED_MODULE_3__["Validators"].minLength(3)
+        ]);
+        this.code = new _angular_forms__WEBPACK_IMPORTED_MODULE_3__["FormControl"]('', [
+            _angular_forms__WEBPACK_IMPORTED_MODULE_3__["Validators"].required,
+            _angular_forms__WEBPACK_IMPORTED_MODULE_3__["Validators"].minLength(3),
+            _angular_forms__WEBPACK_IMPORTED_MODULE_3__["Validators"].pattern(/^[a-z0-9_]+$/)
+        ], [this.validators.check("tables/check-code?code=")]);
+        this.form = new _angular_forms__WEBPACK_IMPORTED_MODULE_3__["FormGroup"]({
+            name: this.name,
+            code: this.code
+        });
+        /* Instanciation */
+        _super.prototype.ngOnInit.call(this);
+        /* Gestion du code */
+        this.name
+            .valueChanges
+            .subscribe(function (data) {
+            if (!_this.persisted && _this.code.pristine) {
+                var treated = _utils_string_utils__WEBPACK_IMPORTED_MODULE_5__["StringUtils"].StringToCode(_this.name.value);
+                _this.code.setValue(treated);
+            }
+        });
+        /* Gestion des tables */
+        this.state
+            .getTables()
+            .subscribe(function (data) { return _this.tables = data; });
+    };
+    AdminTableEditFormular.prototype.init = function () {
+        if (this.persisted) {
+            this.name.setValue(this.translator.tr(this.entity.label));
+            this.code.setValue(this.entity.code);
+        }
+        return new _dto_table_dto__WEBPACK_IMPORTED_MODULE_6__["TableDTO"]();
+    };
+    AdminTableEditFormular.prototype.pre = function () {
+        if (this.form.valid) {
+            this.entity.code = this.code.value;
+            this.entity.label = this.translator.getNewBundle(this.name.value);
+            return true;
+        }
+        return false;
+    };
+    AdminTableEditFormular.prototype.postAdd = function () {
+        this.tables.push(this.entity);
+        alert("/view/" + this.view.id + "/admin" + "/tables" + "/edit/" + this.entity.id);
+        this.router.navigate(["/view", this.view.id, "admin", "tables", "edit", this.entity.id]);
+    };
+    AdminTableEditFormular.prototype.postSave = function () {
+        alert("save?");
+    };
+    AdminTableEditFormular.prototype.postAll = function () {
+        this.state.publishTables(this.tables);
+    };
+    __decorate([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Input"])(),
+        __metadata("design:type", _dto_view_dto__WEBPACK_IMPORTED_MODULE_10__["ViewDTO"])
+    ], AdminTableEditFormular.prototype, "view", void 0);
+    AdminTableEditFormular = __decorate([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"])({
+            selector: 'admin-table-edit',
+            template: __webpack_require__(/*! ./table.edit.form.html */ "./src/app/components/formulars/admin/tables/table.edit.form.html"),
+            styles: [__webpack_require__(/*! ./table.edit.form.less */ "./src/app/components/formulars/admin/tables/table.edit.form.less")]
+        }),
+        __metadata("design:paramtypes", [_services_translator_service__WEBPACK_IMPORTED_MODULE_7__["TranslatorService"],
+            _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpClient"],
+            _services_state_service__WEBPACK_IMPORTED_MODULE_8__["StateService"],
+            _angular_router__WEBPACK_IMPORTED_MODULE_1__["Router"],
+            _services_validators_service__WEBPACK_IMPORTED_MODULE_4__["ValidatorsService"]])
+    ], AdminTableEditFormular);
+    return AdminTableEditFormular;
+}(_edit_abs__WEBPACK_IMPORTED_MODULE_9__["AdminEditAbstractFormular"]));
 
 
 
@@ -382,7 +640,7 @@ var PageHomeComponent = /** @class */ (function () {
         this.translator = translator;
         this.ar = ar;
         this.views = [];
-        ar.params.subscribe(function (params) {
+        this.ar.params.subscribe(function (params) {
             // onInit broken
             _this.state
                 .getViews()
@@ -467,7 +725,7 @@ var PageLoginComponent = /** @class */ (function () {
         this.state = state;
         this.router = router;
         this.ar = ar;
-        ar.params.subscribe(function (params) {
+        this.ar.params.subscribe(function (params) {
             // onInit broken
             _this.authentication
                 .getCredentials()
@@ -518,21 +776,19 @@ var PagesViewAbstractComponent = /** @class */ (function () {
         this.state = state;
         this.router = router;
         this.ar = ar;
-        ar.params.subscribe(function (params) {
+        this.ar.params.subscribe(function (params) {
             // onInit broken
             _this.state
                 .getViews()
                 .subscribe(function (views) {
+                /* Récupération de la vue */
                 _this.views = views;
-                for (var i = 0; i < views.length; i++) {
-                    if (views[i].id == params["id"]) {
-                        _this.view = views[i];
-                        if (_this.redirect) {
-                            _this.router.navigate(["/view", _this.view.id, _this.view.model.type.toLowerCase()], {
-                                skipLocationChange: true
-                            });
-                        }
-                    }
+                _this.view = views.filter(function (v) { return v.id == params["view"]; })[0];
+                /* Redirection */
+                if (_this.redirect) {
+                    _this.router.navigate(["/view", _this.view.id, _this.view.model.type.toLowerCase()], {
+                        skipLocationChange: true
+                    });
                 }
             });
         });
@@ -611,7 +867,7 @@ var PageViewComponent = /** @class */ (function (_super) {
         _this.state = state;
         _this.router = router;
         _this.ar = ar;
-        ar.params.subscribe(function (params) {
+        _this.ar.params.subscribe(function (params) {
             // onInit broken
         });
         return _this;
@@ -703,7 +959,7 @@ var PagesViewAdminComponent = /** @class */ (function (_super) {
         _this.state = state;
         _this.router = router;
         _this.ar = ar;
-        ar.params.subscribe(function (params) {
+        _this.ar.params.subscribe(function (params) {
             // onInit broken
             _this.state
                 .getTables()
@@ -731,45 +987,42 @@ var PagesViewAdminComponent = /** @class */ (function (_super) {
 
 /***/ }),
 
-/***/ "./src/app/components/pages/views/admin/table.add.cpn.html":
-/*!*****************************************************************!*\
-  !*** ./src/app/components/pages/views/admin/table.add.cpn.html ***!
-  \*****************************************************************/
+/***/ "./src/app/components/pages/views/admin/table.edit.cpn.html":
+/*!******************************************************************!*\
+  !*** ./src/app/components/pages/views/admin/table.edit.cpn.html ***!
+  \******************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div>\r\n  <div *ngIf=\"!loading\">\r\n    <h2>Ajouter une table</h2>\r\n    <form (submit)=\"add()\">\r\n      <div>\r\n        <label>Nom</label>\r\n        <input type=\"text\"\r\n               name=\"name\"\r\n               [(ngModel)]=\"table.label.data[lang]\" />\r\n      </div>\r\n      <div>\r\n        <label>Code</label>\r\n        <input type=\"text\"\r\n               name=\"code\"\r\n               [(ngModel)]=\"table.code\" />\r\n      </div>\r\n      <div>\r\n        <input type=\"submit\" value=\"Ajouter\" />\r\n      </div>\r\n    </form>\r\n  </div>\r\n  <div *ngIf=\"loading\">Création en cours...</div>\r\n</div>\r\n"
+module.exports = "<div>\r\n  <h2>Editer une table</h2>\r\n  <div class=\"column\">\r\n    <h3>Table</h3>\r\n    <admin-table-edit [entity]=\"table\" [view]=\"view\"></admin-table-edit>\r\n    <h3>Champs</h3>\r\n    <ul *ngIf=\"table != null\">\r\n      <li *ngFor=\"let f of table.fields\"\r\n          (click)=\"field = f\">{{ translator.translate(f.label) }}</li>\r\n    </ul>\r\n  </div>\r\n  <div class=\"column\">\r\n    <h3>Fu</h3>\r\n  </div>\r\n</div>\r\n"
 
 /***/ }),
 
-/***/ "./src/app/components/pages/views/admin/table.add.cpn.less":
-/*!*****************************************************************!*\
-  !*** ./src/app/components/pages/views/admin/table.add.cpn.less ***!
-  \*****************************************************************/
+/***/ "./src/app/components/pages/views/admin/table.edit.cpn.less":
+/*!******************************************************************!*\
+  !*** ./src/app/components/pages/views/admin/table.edit.cpn.less ***!
+  \******************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = ""
+module.exports = "div.column {\n  display: inline-block;\n  width: 40%;\n}\n"
 
 /***/ }),
 
-/***/ "./src/app/components/pages/views/admin/table.add.cpn.ts":
-/*!***************************************************************!*\
-  !*** ./src/app/components/pages/views/admin/table.add.cpn.ts ***!
-  \***************************************************************/
-/*! exports provided: PagesViewAdminTableAddComponent */
+/***/ "./src/app/components/pages/views/admin/table.edit.cpn.ts":
+/*!****************************************************************!*\
+  !*** ./src/app/components/pages/views/admin/table.edit.cpn.ts ***!
+  \****************************************************************/
+/*! exports provided: PagesViewAdminTableEditComponent */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "PagesViewAdminTableAddComponent", function() { return PagesViewAdminTableAddComponent; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "PagesViewAdminTableEditComponent", function() { return PagesViewAdminTableEditComponent; });
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
 /* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/router */ "./node_modules/@angular/router/fesm5/router.js");
-/* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/common/http */ "./node_modules/@angular/common/fesm5/http.js");
-/* harmony import */ var _view_abs__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../view.abs */ "./src/app/components/pages/view.abs.ts");
-/* harmony import */ var _dto_table_dto__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../../dto/table.dto */ "./src/app/dto/table.dto.ts");
-/* harmony import */ var _services_translator_service__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../../../services/translator.service */ "./src/app/services/translator.service.ts");
-/* harmony import */ var _services_state_service__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../../../services/state.service */ "./src/app/services/state.service.ts");
+/* harmony import */ var _view_abs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../view.abs */ "./src/app/components/pages/view.abs.ts");
+/* harmony import */ var _services_state_service__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../../services/state.service */ "./src/app/services/state.service.ts");
 var __extends = (undefined && undefined.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
         ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
@@ -793,58 +1046,38 @@ var __metadata = (undefined && undefined.__metadata) || function (k, v) {
 
 
 
-
-
-
-/** Ajout d'une table */
-var PagesViewAdminTableAddComponent = /** @class */ (function (_super) {
-    __extends(PagesViewAdminTableAddComponent, _super);
-    function PagesViewAdminTableAddComponent(translator, state, router, ar, http) {
+/** Edition d'une table */
+var PagesViewAdminTableEditComponent = /** @class */ (function (_super) {
+    __extends(PagesViewAdminTableEditComponent, _super);
+    function PagesViewAdminTableEditComponent(state, router, ar) {
         var _this = _super.call(this, false, state, router, ar) || this;
-        _this.translator = translator;
         _this.state = state;
         _this.router = router;
         _this.ar = ar;
-        _this.http = http;
-        _this.table = new _dto_table_dto__WEBPACK_IMPORTED_MODULE_4__["TableDTO"]();
-        _this.loading = false;
-        ar.params.subscribe(function (params) {
+        _this.ar.params.subscribe(function (params) {
             // onInit broken
-            _this.translator
-                .getLang()
+            _this.state
+                .getTables()
                 .subscribe(function (data) {
-                console.log(data);
-                _this.lang = data;
+                if (params["table"]) {
+                    _this.table = data.filter(function (t) { return t.id == params["table"]; })[0];
+                }
             });
         });
         return _this;
     }
-    /** Ajout */
-    PagesViewAdminTableAddComponent.prototype.add = function () {
-        var _this = this;
-        this.loading = true;
-        this.http
-            .post("tables/add", this.table)
-            .subscribe(function (data) {
-            _this.loading = false;
-            _this.state.publishTables(data);
-            _this.router.navigate(["/view", _this.view.id]);
-        });
-    };
-    PagesViewAdminTableAddComponent = __decorate([
+    PagesViewAdminTableEditComponent = __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"])({
-            selector: 'pages-view-admin-table-add',
-            template: __webpack_require__(/*! ./table.add.cpn.html */ "./src/app/components/pages/views/admin/table.add.cpn.html"),
-            styles: [__webpack_require__(/*! ./table.add.cpn.less */ "./src/app/components/pages/views/admin/table.add.cpn.less")]
+            selector: 'pages-view-admin-table-edit',
+            template: __webpack_require__(/*! ./table.edit.cpn.html */ "./src/app/components/pages/views/admin/table.edit.cpn.html"),
+            styles: [__webpack_require__(/*! ./table.edit.cpn.less */ "./src/app/components/pages/views/admin/table.edit.cpn.less")]
         }),
-        __metadata("design:paramtypes", [_services_translator_service__WEBPACK_IMPORTED_MODULE_5__["TranslatorService"],
-            _services_state_service__WEBPACK_IMPORTED_MODULE_6__["StateService"],
+        __metadata("design:paramtypes", [_services_state_service__WEBPACK_IMPORTED_MODULE_3__["StateService"],
             _angular_router__WEBPACK_IMPORTED_MODULE_1__["Router"],
-            _angular_router__WEBPACK_IMPORTED_MODULE_1__["ActivatedRoute"],
-            _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpClient"]])
-    ], PagesViewAdminTableAddComponent);
-    return PagesViewAdminTableAddComponent;
-}(_view_abs__WEBPACK_IMPORTED_MODULE_3__["PagesViewAbstractComponent"]));
+            _angular_router__WEBPACK_IMPORTED_MODULE_1__["ActivatedRoute"]])
+    ], PagesViewAdminTableEditComponent);
+    return PagesViewAdminTableEditComponent;
+}(_view_abs__WEBPACK_IMPORTED_MODULE_2__["PagesViewAbstractComponent"]));
 
 
 
@@ -905,6 +1138,27 @@ var BundleDataDTO = /** @class */ (function () {
 
 /***/ }),
 
+/***/ "./src/app/dto/entity.dto.ts":
+/*!***********************************!*\
+  !*** ./src/app/dto/entity.dto.ts ***!
+  \***********************************/
+/*! exports provided: EntityDTO */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EntityDTO", function() { return EntityDTO; });
+var EntityDTO = /** @class */ (function () {
+    function EntityDTO() {
+        this.id = "00000000-0000-0000-0000-000000000000";
+    }
+    return EntityDTO;
+}());
+
+
+
+/***/ }),
+
 /***/ "./src/app/dto/persisted.dto.ts":
 /*!**************************************!*\
   !*** ./src/app/dto/persisted.dto.ts ***!
@@ -937,7 +1191,7 @@ var PersistedDTO = /** @class */ (function () {
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "TableDTO", function() { return TableDTO; });
 /* harmony import */ var _bundle_dto__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./bundle.dto */ "./src/app/dto/bundle.dto.ts");
-/* harmony import */ var _persisted_dto__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./persisted.dto */ "./src/app/dto/persisted.dto.ts");
+/* harmony import */ var _entity_dto__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./entity.dto */ "./src/app/dto/entity.dto.ts");
 var __extends = (undefined && undefined.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
         ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
@@ -959,7 +1213,7 @@ var TableDTO = /** @class */ (function (_super) {
         return _this;
     }
     return TableDTO;
-}(_persisted_dto__WEBPACK_IMPORTED_MODULE_1__["PersistedDTO"]));
+}(_entity_dto__WEBPACK_IMPORTED_MODULE_1__["EntityDTO"]));
 
 
 
@@ -991,6 +1245,63 @@ var UserConfigurationDTO = /** @class */ (function () {
     }
     return UserConfigurationDTO;
 }());
+
+
+
+/***/ }),
+
+/***/ "./src/app/dto/view.dto.ts":
+/*!*********************************!*\
+  !*** ./src/app/dto/view.dto.ts ***!
+  \*********************************/
+/*! exports provided: ViewDTO, AbstractViewDTO, AdminViewDTO */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ViewDTO", function() { return ViewDTO; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "AbstractViewDTO", function() { return AbstractViewDTO; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "AdminViewDTO", function() { return AdminViewDTO; });
+/* harmony import */ var _persisted_dto__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./persisted.dto */ "./src/app/dto/persisted.dto.ts");
+/* harmony import */ var _entity_dto__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./entity.dto */ "./src/app/dto/entity.dto.ts");
+var __extends = (undefined && undefined.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+
+
+var ViewDTO = /** @class */ (function (_super) {
+    __extends(ViewDTO, _super);
+    function ViewDTO() {
+        var _this = _super !== null && _super.apply(this, arguments) || this;
+        _this.label = null;
+        _this.model = null;
+        return _this;
+    }
+    return ViewDTO;
+}(_entity_dto__WEBPACK_IMPORTED_MODULE_1__["EntityDTO"]));
+
+var AbstractViewDTO = /** @class */ (function (_super) {
+    __extends(AbstractViewDTO, _super);
+    function AbstractViewDTO() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    return AbstractViewDTO;
+}(_persisted_dto__WEBPACK_IMPORTED_MODULE_0__["PersistedDTO"]));
+
+var AdminViewDTO = /** @class */ (function (_super) {
+    __extends(AdminViewDTO, _super);
+    function AdminViewDTO() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    return AdminViewDTO;
+}(AbstractViewDTO));
 
 
 
@@ -1097,7 +1408,6 @@ var LoaderInterceptor = /** @class */ (function () {
         return next
             .handle(request)
             .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_2__["map"])(function (data) {
-            console.log("loader");
             console.log(data);
             if (data.type == 0) {
                 /* Dafuq */
@@ -1163,15 +1473,11 @@ var ReferencesInterceptor = /** @class */ (function () {
         return next
             .handle(request)
             .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_2__["map"])(function (data) {
-            console.log("references");
-            console.log(data);
             if (data instanceof _angular_common_http__WEBPACK_IMPORTED_MODULE_0__["HttpResponse"]) {
                 var typed = data;
                 if (typed.body != null) {
                     _this.register(typed.body);
                     _this.attach(typed.body);
-                    console.log("typed");
-                    console.log(typed);
                     _this.index = {};
                 }
             }
@@ -1512,6 +1818,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
 /* harmony import */ var rxjs_operators__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! rxjs/operators */ "./node_modules/rxjs/_esm5/operators/index.js");
 /* harmony import */ var _authentication_service__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./authentication.service */ "./src/app/services/authentication.service.ts");
+/* harmony import */ var _dto_bundle_dto__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../dto/bundle.dto */ "./src/app/dto/bundle.dto.ts");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -1521,6 +1828,7 @@ var __decorate = (undefined && undefined.__decorate) || function (decorators, ta
 var __metadata = (undefined && undefined.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+
 
 
 
@@ -1545,6 +1853,16 @@ var TranslatorService = /** @class */ (function () {
         }));
     };
     /**
+     *  Retourne un lot de traduction neuf porteur d'un élément correspondant à la langue
+     *  de l'utilisateur.
+     *  @param text Texte affecté.
+     */
+    TranslatorService.prototype.getNewBundle = function (text) {
+        var result = new _dto_bundle_dto__WEBPACK_IMPORTED_MODULE_3__["BundleDTO"]();
+        result.data[this.lang] = text;
+        return result;
+    };
+    /**
      * Retourne la traduction appropriée pour un lot de traductions.
      * @param bundle Lot de traductions
      */
@@ -1561,6 +1879,98 @@ var TranslatorService = /** @class */ (function () {
         __metadata("design:paramtypes", [_authentication_service__WEBPACK_IMPORTED_MODULE_2__["AuthenticationService"]])
     ], TranslatorService);
     return TranslatorService;
+}());
+
+
+
+/***/ }),
+
+/***/ "./src/app/services/validators.service.ts":
+/*!************************************************!*\
+  !*** ./src/app/services/validators.service.ts ***!
+  \************************************************/
+/*! exports provided: ValidatorsService */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ValidatorsService", function() { return ValidatorsService; });
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
+/* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/common/http */ "./node_modules/@angular/common/fesm5/http.js");
+/* harmony import */ var rxjs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! rxjs */ "./node_modules/rxjs/_esm5/index.js");
+/* harmony import */ var rxjs_operators__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! rxjs/operators */ "./node_modules/rxjs/_esm5/operators/index.js");
+var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (undefined && undefined.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+
+
+/** Services de validation */
+var ValidatorsService = /** @class */ (function () {
+    function ValidatorsService(http) {
+        this.http = http;
+    }
+    /**
+     * Fonction de validation d'une valeur via un service retournant un
+     * booléen.
+     * @param prefix Préfixe de l'URL appelée (concaténée avec la valeur).
+     */
+    ValidatorsService.prototype.check = function (prefix) {
+        var _this = this;
+        return function (control) {
+            return Object(rxjs__WEBPACK_IMPORTED_MODULE_2__["timer"])(200)
+                .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["switchMap"])(function (data) {
+                return _this.http
+                    .get(prefix + control.value)
+                    .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["map"])(function (data) {
+                    return data ? null : ["Check failed"];
+                }));
+            }));
+        };
+    };
+    ValidatorsService = __decorate([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Injectable"])({
+            providedIn: 'root'
+        }),
+        __metadata("design:paramtypes", [_angular_common_http__WEBPACK_IMPORTED_MODULE_1__["HttpClient"]])
+    ], ValidatorsService);
+    return ValidatorsService;
+}());
+
+
+
+/***/ }),
+
+/***/ "./src/app/utils/string.utils.ts":
+/*!***************************************!*\
+  !*** ./src/app/utils/string.utils.ts ***!
+  \***************************************/
+/*! exports provided: StringUtils */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "StringUtils", function() { return StringUtils; });
+var StringUtils = /** @class */ (function () {
+    function StringUtils() {
+    }
+    /**
+     * Retraite une chaîne de caractère pour en faire un code pseudo-SQL correct.
+     * @param value Valeur traitée.
+     */
+    StringUtils.StringToCode = function (value) {
+        return value
+            .replace(new RegExp("[^a-zA-Z0-9]+", "g"), "_")
+            .toLowerCase();
+    };
+    return StringUtils;
 }());
 
 

@@ -10,6 +10,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="ui\src\app\components\formulars\admin\edit.abs.ts" />
     <None Remove="ui\src\app\components\pages.view.abstract.cpn.ts" />
     <None Remove="ui\src\app\dto\authentication.session.dto.ts" />
     <None Remove="ui\src\app\dto\bundle.dto.ts" />
@@ -28,6 +29,8 @@
     <None Remove="ui\src\app\services\authentication.service.ts" />
     <None Remove="ui\src\app\services\state.service.ts" />
     <None Remove="ui\src\app\services\translator.service.ts" />
+    <None Remove="ui\src\app\services\validators.service.ts" />
+    <None Remove="ui\src\app\utils\string.utils.ts" />
   </ItemGroup>
 
   <ItemGroup>
@@ -48,6 +51,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <TypeScriptCompile Include="ui\src\app\components\formulars\admin\edit.abs.ts" />
     <TypeScriptCompile Include="ui\src\app\components\pages\view.abs.ts" />
     <TypeScriptCompile Include="ui\src\app\dto\authentication.session.dto.ts" />
     <TypeScriptCompile Include="ui\src\app\dto\bundle.dto.ts" />
@@ -66,6 +70,8 @@
     <TypeScriptCompile Include="ui\src\app\services\authentication.service.ts" />
     <TypeScriptCompile Include="ui\src\app\services\state.service.ts" />
     <TypeScriptCompile Include="ui\src\app\services\translator.service.ts" />
+    <TypeScriptCompile Include="ui\src\app\services\validators.service.ts" />
+    <TypeScriptCompile Include="ui\src\app\utils\string.utils.ts" />
   </ItemGroup>
 
   <ProjectExtensions><VisualStudio><UserProperties /></VisualStudio></ProjectExtensions>

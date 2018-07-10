@@ -1,4 +1,4 @@
-﻿namespace Baraka.API.Internals.Attributes
+﻿namespace Baraka.API.Internals.Attributes.Mvc
 {
     using System;
     using System.Collections.Generic;

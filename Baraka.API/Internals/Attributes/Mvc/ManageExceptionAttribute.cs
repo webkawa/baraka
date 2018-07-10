@@ -1,4 +1,4 @@
-﻿namespace Baraka.API.Internals.Attributes
+﻿namespace Baraka.API.Internals.Attributes.Mvc
 {
     using System;
     using System.Collections.Generic;
@@ -16,7 +16,7 @@
     /// <summary>
     ///     Filtre de gestion des exceptions.
     /// </summary>
-    public class ManageExceptionAttribute : ExceptionFilterAttribute
+    public class ManageException : ExceptionFilterAttribute
     {
         /// <summary>
         ///     <see cref="ExceptionFilterAttribute.OnException(ExceptionContext)" />
