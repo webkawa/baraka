@@ -1,0 +1,21 @@
+<form class="form-group" [formGroup]="form" (submit)="submit()">
+  <div>
+    <label>Nom</label>
+    <input type="text"
+           class="form-control"
+           formControlName="label" />
+    <p *ngIf="label.invalid && label.dirty">Wtf is this shit ?</p>
+  </div>
+  <div>
+    <label>Code</label>
+    <input type="text"
+           class="form-control"
+           formControlName="code" />
+    <p *ngIf="code.invalid && code.dirty">Wut ?</p>
+  </div>
+  <div>
+    <input type="submit"
+           value="Ajouter"
+           [disabled]="form.invalid" />
+  </div>
+</form>

@@ -7,7 +7,7 @@
 
     using Baraka.API.DAO;
     using Baraka.API.DTO.Persisted;
-    using Baraka.API.DTO.Persisted.Configurations;
+    using Baraka.API.DTO.Persisted.Users;
     using Baraka.API.DTO.Persisted.Shared;
     using Baraka.API.DTO.Persisted.Views;
     using Baraka.API.Entities;
@@ -16,6 +16,8 @@
     using Microsoft.AspNetCore.Mvc;
     using NHibernate;
     using NLog;
+    using Baraka.API.DTO.Persisted.Tables;
+    using Baraka.API.DTO.Persisted.Fields;
 
     /// <summary>
     ///     Services liées à l'initialisation de l'application.
@@ -44,78 +46,61 @@
         {
             if (session.QueryOver<User>().RowCount() == 0)
             {
-                User user = userDAO.Insert("kawa", "kawa", "guillaume.zavan@gmail.com", new UserConfigurationDTO()
+                User user = userDAO.Insert(new User()
                 {
-                    Culture = Langage.FRA
+                    Login = "kawa",
+                    Password = "kawa",
+                    Email = "guillaume.zavan@gmail.com",
+                    Configuration = new UserConfigurationDTO()
                 });
 
-                Table table = tableDAO.Insert(
-                    new BundleDTO()
+                Table table = tableDAO.Insert(new Table()
+                {
+                    Label = new BundleDTO(Langage.FRA, "Contact"),
+                    Code = "contacts",
+                    Configuration = new TableConfigurationDTO()
                     {
-                        Data = new Dictionary<Langage, string>()
-                        {
-                        {
-                            Langage.FRA, "Contact"
-                        }
-                        }
-                    },
-                    "contacts");
+                        Archived = false
+                    }
+                });
 
-                Field field_lastname = fieldDAO.Insert(
-                    new BundleDTO()
+                Field field_lastname = fieldDAO.Insert(new Field()
+                {
+                    Label = new BundleDTO(Langage.FRA, "Nom"),
+                    Code = "lastname",
+                    Configuration = new StringFieldConfigurationDTO()
                     {
-                        Data = new Dictionary<Langage, string>()
-                        {
-                        {
-                            Langage.FRA, "Nom"
-                        }
-                        }
                     },
-                    "lastname",
-                    table);
+                    Table = table
+                });
 
-                Field field_firstname = fieldDAO.Insert(
-                    new BundleDTO()
+                Field field_firstname = fieldDAO.Insert(new Field()
+                {
+                    Label = new BundleDTO(Langage.FRA, "Prénom"),
+                    Code = "firstname",
+                    Configuration = new StringFieldConfigurationDTO()
                     {
-                        Data = new Dictionary<Langage, string>()
-                        {
-                        {
-                            Langage.FRA, "Prénom"
-                        }
-                        }
                     },
-                    "firstname",
-                    table);
+                    Table = table
+                });
 
-                View admin_view = viewDAO.Insert(
-                    new BundleDTO()
-                    {
-                        Data = new Dictionary<Langage, string>()
-                        {
-                        {
-                            Langage.FRA, "Administration"
-                        }
-                        }
-                    },
-                    new AdminViewDTO()
+                View admin_view = viewDAO.Insert(new View()
+                {
+                    Label = new BundleDTO(Langage.FRA, "Administration"),
+                    Configuration = new AdminViewConfigurationDTO()
                     {
 
-                    });
+                    }
+                });
 
-                View list_view = viewDAO.Insert(
-                    new BundleDTO()
-                    {
-                        Data = new Dictionary<Langage, string>()
-                        {
-                        {
-                            Langage.FRA, "Mode liste"
-                        }
-                        }
-                    },
-                    new ListViewDTO()
+                View list_view = viewDAO.Insert(new View()
+                {
+                    Label = new BundleDTO(Langage.FRA, "Mode liste"),
+                    Configuration = new ListViewConfigurationDTO()
                     {
                         Table = table
-                    });
+                    }
+                });
             };
         }
 

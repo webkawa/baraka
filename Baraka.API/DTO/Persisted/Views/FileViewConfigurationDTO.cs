@@ -7,7 +7,7 @@
     /// <summary>
     ///     DTO descriptive d'une vue en mode fiche.
     /// </summary>
-    public class FileViewDTO : LocalizedViewDTO
+    public class FileViewConfigurationDTO : LocalizedViewConfigurationDTO
     {
     }
 }

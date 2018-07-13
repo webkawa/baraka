@@ -96,7 +96,7 @@
                     types(inner);
 
                     // Référencement
-                    GenericJsonTypeIndex.AddConfiguration<TProperty>(inner);
+                    GenericJsonTypeIndex.AddConfiguration<TKey, TProperty>(inner);
 
                     // Création de l'enveloppe
                     var wrapper = new GenericJsonTypeWrapper<TProperty, TKey>(inner);

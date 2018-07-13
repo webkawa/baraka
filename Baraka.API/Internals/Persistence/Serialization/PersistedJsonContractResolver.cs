@@ -12,20 +12,13 @@
     /// <summary>
     ///     Gestionnaire de contrats applicables aux DTO stockés en JSON.
     /// </summary>
-    public class PersistentJsonContractResolver : DefaultContractResolver
+    public class PersistedJsonContractResolver : DefaultContractResolver
     {
         /// <summary>
         ///     Nom de la propriété "Type".
         /// </summary>
-        private readonly string TYPE_PROPERTY_NAME = LambdaExtensions.GetPropertyName<GenericPersistedDTO>(e => e.Type);
+        internal const string TYPE_PROPERTY_NAME = "type";
 
-        /// <summary>
-        ///     Constructeur.
-        /// </summary>
-        public PersistentJsonContractResolver()
-        {
-        }
-        
         /// <summary>
         ///     <see cref="DefaultContractResolver.CreateProperty(MemberInfo, MemberSerialization)" />
         /// </summary>

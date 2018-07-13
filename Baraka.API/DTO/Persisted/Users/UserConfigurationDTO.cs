@@ -1,4 +1,4 @@
-﻿namespace Baraka.API.DTO.Persisted.Configurations
+﻿namespace Baraka.API.DTO.Persisted.Users
 {
     using System;
     using System.Collections.Generic;

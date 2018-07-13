@@ -7,7 +7,7 @@
     /// <summary>
     ///     Vue administrateur.
     /// </summary>
-    public class AdminViewDTO : AbstractViewDTO
+    public class AdminViewConfigurationDTO : AbstractViewConfigurationDTO
     {
     }
 }

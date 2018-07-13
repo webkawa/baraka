@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.ComponentModel.DataAnnotations;
     using System.Text;
     using Baraka.API.DTO.Persisted.Shared;
     using Baraka.API.DTO.Persisted.Views;
@@ -42,12 +43,14 @@
         /// <summary>
         ///     Libellé.
         /// </summary>
+        [Required]
         public virtual BundleDTO Label { get; set; }
 
         /// <summary>
-        ///     Modèle de la vue.
+        ///     Configuration de la vue.
         /// </summary>
-        public virtual AbstractViewDTO Model { get; set; }
+        [Required]
+        public virtual AbstractViewConfigurationDTO Configuration { get; set; }
     }
 
     /// <summary>
@@ -61,14 +64,14 @@
         public ViewMapping()
         {
             PropertyJsonFixed(e => e.Label);
-            PropertyJsonGeneric<AbstractViewDTO, ViewType>(
-                e => e.Model,
+            PropertyJsonGeneric<AbstractViewConfigurationDTO, ViewType>(
+                e => e.Configuration,
                 t =>
                 {
-                    t.AddType<AdminViewDTO>(ViewType.ADMIN);
-                    t.AddType<FileViewDTO>(ViewType.FILE);
-                    t.AddType<ListViewDTO>(ViewType.LIST);
-                    t.AddType<SqlViewDTO>(ViewType.SQL);
+                    t.AddType<AdminViewConfigurationDTO>(ViewType.ADMIN);
+                    t.AddType<FileViewConfigurationDTO>(ViewType.FILE);
+                    t.AddType<ListViewConfigurationDTO>(ViewType.LIST);
+                    t.AddType<SqlViewConfigurationDTO>(ViewType.SQL);
                 });
         }
     }

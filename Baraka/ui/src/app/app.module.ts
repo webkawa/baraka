@@ -16,11 +16,13 @@ import { RootInterceptor } from './internals/root.interceptor';
 import { TokenInterceptor } from './internals/token.interceptor';
 import { ReferencesInterceptor } from './internals/references.interceptor';
 import { PagesViewAdminTableEditComponent } from './components/pages/views/admin/table.edit.cpn';
-import { AdminTableEditFormular } from './components/formulars/admin/tables/table.edit.form';
+import { AdminTableAddFormular } from './components/formulars/admin/tables/table.add.form';
+import { AdminFieldAddFormular } from './components/formulars/admin/tables/field.add.form';
 
 @NgModule({
   declarations: [
-    AdminTableEditFormular,
+    AdminFieldAddFormular,
+    AdminTableAddFormular,
     LayoutPopinComponent,
     LayoutRootComponent,
     PageHomeComponent,
@@ -39,8 +41,8 @@ import { AdminTableEditFormular } from './components/formulars/admin/tables/tabl
       { path: 'login', component: PageLoginComponent },
       { path: 'view/:view', component: PageViewComponent },
       { path: 'view/:view/admin', component: PagesViewAdminComponent },
-      { path: 'view/:view/admin/tables/add', component: PagesViewAdminTableEditComponent },
-      { path: 'view/:view/admin/tables/edit/:table', component: PagesViewAdminTableEditComponent },
+      { path: 'view/:view/admin/model/:action', component: PagesViewAdminTableEditComponent },
+      { path: 'view/:view/admin/model/:action/:id', component: PagesViewAdminTableEditComponent },
       { path: '', redirectTo: '/home', pathMatch: 'full' }
     ])
   ],

@@ -10,7 +10,7 @@
     /// <summary>
     ///     DTO descripive d'une vue localisée - à savoir, rattachée à une table.
     /// </summary>
-    public abstract class LocalizedViewDTO : AbstractViewDTO
+    public abstract class LocalizedViewConfigurationDTO : AbstractViewConfigurationDTO
     {
         /// <summary>
         ///     Table de rattachement.

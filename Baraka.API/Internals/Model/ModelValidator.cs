@@ -19,18 +19,18 @@
         ///     Constructeur.
         /// </summary>
         /// <param name="arguments">Liste des arguments passés au validateur.</param>
-        public ModelValidator(params object[] arguments)
+        public ModelValidator(IDictionary<Type, object> arguments)
         {
             Parameters = new Dictionary<object, object>();
-            foreach (object arg in arguments)
+            foreach (KeyValuePair<Type, object> arg in arguments)
             {
-                if (Parameters.ContainsKey(arg.GetType()))
+                if (Parameters.ContainsKey(arg.Key))
                 {
-                    throw new InternalException("Duplicate of type '{0}' found in model validator", arg.GetType());
+                    throw new InternalException("Duplicate of type '{0}' found in model validator", arg.Key);
                 }
                 else
                 {
-                    Parameters.Add(arg.GetType(), arg);
+                    Parameters.Add(arg.Key, arg.Value);
                 }
             }
         }

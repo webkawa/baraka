@@ -1,6 +1,7 @@
 ﻿namespace Baraka.API.Internals.Attributes.Validators
 {
     using Baraka.API.DAO;
+    using NHibernate;
     using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
@@ -17,9 +18,10 @@
         /// </summary>
         protected override ValidationResult IsValid(object value, ValidationContext context)
         {
-            TableDAO dao = GetContextParameter<TableDAO>(context);
+            ISession session = GetContextParameter<ISession>(context);
+            TableDAO dao = new TableDAO(session);
             string typed = value as string;
-            return dao.IsCodeAvailable(typed) ? 
+            return dao.IsTableCodeAvailable(typed) ? 
                 ValidationResult.Success : 
                 new ValidationResult("Table code is unavailable");
         }

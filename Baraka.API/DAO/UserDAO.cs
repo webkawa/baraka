@@ -5,9 +5,10 @@
     using System.Text;
 
     using Baraka.API.DTO.Persisted;
-    using Baraka.API.DTO.Persisted.Configurations;
+    using Baraka.API.DTO.Persisted.Users;
     using Baraka.API.Entities;
     using Baraka.API.Extensions;
+    using Baraka.API.Internals.Model;
     using NHibernate;
 
     /// <summary>
@@ -26,20 +27,15 @@
         /// <summary>
         ///     Génère et retourne un utilisateur.
         /// </summary>
-        /// <param name="login">Login.</param>
-        /// <param name="password">Mot de passe non-encrypté.</param>
-        /// <param name="email">Adresse e-mail.</param>
-        /// <param name="configuration">Configuration.</param>
+        /// <param name="user">Utilisateur inséré avec mot de passe en clair.</param>
         /// <returns>Utilisateur créé.</returns>
-        public User Insert(string login, string password, string email, UserConfigurationDTO configuration)
+        public User Insert(User user)
         {
-            User user = new User()
-            {
-                Login = login,
-                Password = password.ToSHA256(),
-                Email = email,
-                Configuration = configuration
-            };
+            // Encryptage du mot de passe
+            user.Password = user.Password.ToSHA256();
+
+            // Insertion
+            GetValidator().Check(user);
             Session.Persist(user);
             return user;
         }

@@ -15,20 +15,12 @@
     ///     Convertisseur JSON adapté au stockage de références vers des entités persistentes
     ///     stockées en base de données.
     /// </summary>
-    public class PersistentJsonReferencesConverter : JsonConverter
+    public class PersistedJsonReferencesConverter : JsonConverter<IPersistedReferenceDTO>
     {
-        /// <summary>
-        ///     <see cref="JsonConverter.CanConvert(Type)" />
-        /// </summary>
-        public override bool CanConvert(Type objectType)
-        {
-            return typeof(IPersistedReferenceDTO).IsAssignableFrom(objectType);
-        }
-
         /// <summary>
         ///     <see cref="JsonConverter.ReadJson(JsonReader, Type, object, JsonSerializer)" />
         /// </summary>
-        public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
+        public override IPersistedReferenceDTO ReadJson(JsonReader reader, Type objectType, IPersistedReferenceDTO existingValue, bool hasExistingValue, JsonSerializer serializer)
         {
             IPersistedReferenceDTO instance = Activator.CreateInstance(objectType) as IPersistedReferenceDTO;
             instance.Id = Guid.Parse(reader.Value?.ToString() ?? Guid.Empty.ToString());
@@ -38,7 +30,7 @@
         /// <summary>
         ///     <see cref="JsonConverter.WriteJson(JsonWriter, object, JsonSerializer)" />
         /// </summary>
-        public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
+        public override void WriteJson(JsonWriter writer, IPersistedReferenceDTO value, JsonSerializer serializer)
         {
             writer.WriteValue((value as IPersistedReferenceDTO).Id);
         }

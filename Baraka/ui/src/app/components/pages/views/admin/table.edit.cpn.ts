@@ -7,7 +7,7 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { PagesViewAbstractComponent } from '../../view.abs';
-import { AdminViewDTO } from '../../../../dto/view.dto';
+import { AdminViewConfigurationDTO } from '../../../../dto/view.dto';
 import { TableDTO } from '../../../../dto/table.dto';
 import { TranslatorService } from '../../../../services/translator.service';
 import { StateService } from '../../../../services/state.service';
@@ -22,25 +22,42 @@ import { FieldDTO } from '../../../../dto/field.dto';
   templateUrl: './table.edit.cpn.html',
   styleUrls: ['./table.edit.cpn.less']
 })
-export class PagesViewAdminTableEditComponent extends PagesViewAbstractComponent<AdminViewDTO> {
+export class PagesViewAdminTableEditComponent extends PagesViewAbstractComponent<AdminViewConfigurationDTO> {
 
+  public action: string;
   public table: TableDTO;
   public field: FieldDTO;
   
   public constructor(
     protected state: StateService,
     protected router: Router,
-    protected ar: ActivatedRoute) {
+    protected ar: ActivatedRoute,
+    private translator: TranslatorService) {
 
     super(false, state, router, ar);
     
     this.ar.params.subscribe((params) => {
       // onInit broken
+      this.action = params["action"];
+
       this.state
         .getTables()
         .subscribe((data) => {
-          if (params["table"]) {
-            this.table = data.filter((t) => t.id == params["table"])[0];
+          switch (this.action) {
+            case "edit-table":
+            case "add-field":
+              this.table = data.filter((t) => t.id == params["id"])[0];
+              this.field = null;
+              break;
+          }
+        });
+
+      this.state
+        .getFields()
+        .subscribe((data) => {
+          if (this.action == "edit-field") {
+            this.field = data.filter((f) => f.id == params["id"])[0];
+            this.table = this.field.table;
           }
         });
     });

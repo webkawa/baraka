@@ -1,12 +1,12 @@
 import { ActivatedRoute, Router } from "@angular/router";
 
 import { StateService } from "../../services/state.service";
-import { AbstractViewDTO, ViewDTO } from "../../dto/view.dto";
+import { AbstractViewConfigurationDTO, ViewDTO } from "../../dto/view.dto";
 
 /** Vue abstraite */
-export abstract class PagesViewAbstractComponent<TView extends AbstractViewDTO> {
+export abstract class PagesViewAbstractComponent<TView extends AbstractViewConfigurationDTO> {
 
-  public views: ViewDTO<AbstractViewDTO>[];
+  public views: ViewDTO<AbstractViewConfigurationDTO>[];
   public view: ViewDTO<TView>;
 
   public constructor(
@@ -27,7 +27,7 @@ export abstract class PagesViewAbstractComponent<TView extends AbstractViewDTO> 
           /* Redirection */
           if (this.redirect) {
             this.router.navigate(
-              ["/view", this.view.id, this.view.model.type.toLowerCase()],
+              ["/view", this.view.id, this.view.configuration.type.toLowerCase()],
               {
                 skipLocationChange: true
               });

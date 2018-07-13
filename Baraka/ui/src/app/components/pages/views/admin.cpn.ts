@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { PagesViewAbstractComponent } from '../view.abs';
-import { AdminViewDTO } from '../../../dto/view.dto';
+import { AdminViewConfigurationDTO } from '../../../dto/view.dto';
 import { TableDTO } from '../../../dto/table.dto';
 import { TranslatorService } from '../../../services/translator.service';
 import { StateService } from '../../../services/state.service';
@@ -13,7 +13,7 @@ import { StateService } from '../../../services/state.service';
   templateUrl: './admin.cpn.html',
   styleUrls: ['./admin.cpn.less']
 })
-export class PagesViewAdminComponent extends PagesViewAbstractComponent<AdminViewDTO> {
+export class PagesViewAdminComponent extends PagesViewAbstractComponent<AdminViewConfigurationDTO> {
   
   public tables: TableDTO[];
 

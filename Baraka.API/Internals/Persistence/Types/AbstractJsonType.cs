@@ -30,7 +30,7 @@
         /// </summary>
         public AbstractJsonType()
         {
-            Settings = new PersistentJsonSerializerSettings(false);
+            Settings = new PersistedJsonSerializerSettings();
         }
 
         /// <summary>
@@ -63,7 +63,7 @@
         /// <summary>
         ///     Configuration du sérialisateur.
         /// </summary>
-        protected PersistentJsonSerializerSettings Settings { get; private set; }
+        protected PersistedJsonSerializerSettings Settings { get; private set; }
 
         /// <summary>
         ///     <see cref="IUserType.DeepCopy(object)" />

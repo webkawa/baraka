@@ -1,10 +1,10 @@
-<form class="form-group" [formGroup]="form" (submit)="addOrSave()">
+<form class="form-group" [formGroup]="form" (submit)="submit()">
   <div>
     <label>Nom</label>
     <input type="text"
            class="form-control"
-           formControlName="name" />
-    <p *ngIf="name.invalid && name.dirty">Wtf is this shit ?</p>
+           formControlName="label" />
+    <p *ngIf="label.invalid && label.dirty">Wtf is this shit ?</p>
   </div>
   <div>
     <label>Code</label>
@@ -13,7 +13,13 @@
            formControlName="code" />
     <p *ngIf="code.invalid && code.dirty">Wut ?</p>
   </div>
-  <div *ngIf="!persisted">
+  <div>
+    <label>Type</label>
+    <select>
+      <option>Dangz</option>
+    </select>
+  </div>
+  <div>
     <input type="submit"
            value="Ajouter"
            [disabled]="form.invalid" />

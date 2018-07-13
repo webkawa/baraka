@@ -8,28 +8,27 @@ import { map } from 'rxjs/operators';
 
 import { ValidatorsService } from '../../../../services/validators.service';
 import { StringUtils } from '../../../../utils/string.utils';
-import { TableDTO } from '../../../../dto/table.dto';
+import { TableDTO, TableConfigurationDTO } from '../../../../dto/table.dto';
 import { TranslatorService } from '../../../../services/translator.service';
 import { StateService } from '../../../../services/state.service';
-import { AdminEditAbstractFormular } from '../edit.abs';
-import { ViewDTO, AdminViewDTO } from '../../../../dto/view.dto';
+import { ViewDTO, AdminViewConfigurationDTO } from '../../../../dto/view.dto';
+import { PersitedAbstractFormular } from '../../persisted.abs';
 
-/** Formulaire d'ajout ou de modification simple d'une table */
+/** Formulaire d'ajout d'une table */
 @Component({
-  selector: 'admin-table-edit',
-  templateUrl: './table.edit.form.html',
-  styleUrls: ['./table.edit.form.less']
+  selector: 'admin-table-add',
+  templateUrl: './table.add.form.html',
+  styleUrls: ['./table.add.form.less']
 })
-export class AdminTableEditFormular extends AdminEditAbstractFormular<TableDTO> implements OnInit {
+export class AdminTableAddFormular extends PersitedAbstractFormular<TableDTO> implements OnInit {
 
   @Input()
-  public view: ViewDTO<AdminViewDTO>;
-  public tables: TableDTO[];
+  public view: ViewDTO<AdminViewConfigurationDTO>;
 
   public lang: string;
 
   public form: FormGroup;
-  public name: FormControl;
+  public label: FormControl;
   public code: FormControl;
 
   public constructor(
@@ -44,7 +43,7 @@ export class AdminTableEditFormular extends AdminEditAbstractFormular<TableDTO> 
 
   public ngOnInit(): void {
     /* Création du formulaire */
-    this.name = new FormControl('', [
+    this.label = new FormControl('', [
       Validators.required,
       Validators.minLength(3)]);
     this.code = new FormControl('', [
@@ -53,28 +52,55 @@ export class AdminTableEditFormular extends AdminEditAbstractFormular<TableDTO> 
       Validators.pattern(/^[a-z0-9_]+$/)
     ], [this.validators.check("tables/check-code?code=")]);
     this.form = new FormGroup({
-      name: this.name,
+      label: this.label,
       code: this.code
     });
 
-    /* Instanciation */
-    super.ngOnInit();
-
     /* Gestion du code */
-    this.name
+    this.label
       .valueChanges
       .subscribe((data) => {
         if (!this.persisted && this.code.pristine) {
-          let treated = StringUtils.StringToCode(this.name.value);
+          let treated = StringUtils.StringToCode(this.label.value);
           this.code.setValue(treated);
         }
       });
 
-    /* Gestion des tables */
-    this.state
-      .getTables()
-      .subscribe((data) => this.tables = data);
+    /* Instanciation */
+    super.ngOnInit();
   }
+
+  protected check(): boolean {
+    return this.form.valid;
+  }
+
+  protected provide(): TableDTO {
+    let result = this.persisted ? this.entity : new TableDTO();
+    result.label = this.translator.edit(result.label, this.label.value);
+    result.code = this.code.value;
+    result.configuration = new TableConfigurationDTO();
+    return result;
+  }
+
+  protected digest(): void {
+    this.label.setValue(this.translator.tr(this.entity.label));
+    this.code.setValue(this.code.value);
+  }
+
+  protected postAdd(): void {
+    this.state.publishTable(this.entity);
+    this.router.navigate(["/view", this.view.id, "admin", "model", "edit-table", this.entity.id]);
+  }
+
+  /*
+
+
+
+
+
+
+
+
 
   protected init(): TableDTO {
     if (this.persisted) {
@@ -103,5 +129,5 @@ export class AdminTableEditFormular extends AdminEditAbstractFormular<TableDTO> 
 
   protected postAll(): void {
     this.state.publishTables(this.tables);
-  }
+  }*/
 }

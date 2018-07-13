@@ -10,7 +10,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="ui\src\app\components\formulars\admin\edit.abs.ts" />
+    <None Remove="ui\src\app\components\formulars\persisted.abs.ts" />
     <None Remove="ui\src\app\components\pages.view.abstract.cpn.ts" />
     <None Remove="ui\src\app\dto\authentication.session.dto.ts" />
     <None Remove="ui\src\app\dto\bundle.dto.ts" />
@@ -51,7 +51,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <TypeScriptCompile Include="ui\src\app\components\formulars\admin\edit.abs.ts" />
+    <TypeScriptCompile Include="ui\src\app\components\formulars\persisted.abs.ts" />
     <TypeScriptCompile Include="ui\src\app\components\pages\view.abs.ts" />
     <TypeScriptCompile Include="ui\src\app\dto\authentication.session.dto.ts" />
     <TypeScriptCompile Include="ui\src\app\dto\bundle.dto.ts" />

@@ -5,9 +5,9 @@
     using System.Text;
 
     /// <summary>
-    ///     DTO descriptive d'une vue SQL.
+    ///     DTO descriptive d'une vue de type liste.
     /// </summary>
-    public class SqlViewDTO : AbstractViewDTO
+    public class ListViewConfigurationDTO : LocalizedViewConfigurationDTO
     {
     }
 }

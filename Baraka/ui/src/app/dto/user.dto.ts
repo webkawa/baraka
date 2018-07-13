@@ -5,5 +5,5 @@ export class UserDTO {
 }
 
 export class UserConfigurationDTO {
-  public culture: string = "";
+  public culture: string = "FRA";
 }

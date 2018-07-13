@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Runtime.Serialization.Formatters;
     using System.Security.Claims;
     using System.Text;
 
@@ -40,8 +41,13 @@
             builder.AddJsonFormatters(setup =>
             {
                 setup.PreserveReferencesHandling = PreserveReferencesHandling.Objects;
-                setup.Converters.Add(new PersistentJsonReferencesConverter());
-                setup.Converters.Add(new PersistentJsonCollectionsConverter());
+                /*setup.TypeNameHandling = TypeNameHandling.Auto;
+                setup.TypeNameAssemblyFormatHandling = TypeNameAssemblyFormatHandling.Simple;
+                setup.SerializationBinder = new PersistedJsonTypeBinderr();*/
+
+                setup.Converters.Add(new GenericPersistedJsonConverter());
+                setup.Converters.Add(new PersistedJsonReferencesConverter());
+                setup.Converters.Add(new PersistedJsonCollectionsConverter());
             });
             builder.AddCors();
             return new MvcBuilder(builder.Services, builder.PartManager);

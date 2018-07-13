@@ -40,6 +40,16 @@
         }
 
         /// <summary>
+        ///     Constructeur 
+        /// </summary>
+        /// <param name="lang"></param>
+        /// <param name="data"></param>
+        public BundleDTO(Langage lang, string data) : this()
+        {
+            Data.Add(lang, data);
+        }
+
+        /// <summary>
         ///     Liste des traductions.
         ///     Les éléments sont classés par code ISO-639-2.
         /// </summary>

@@ -38,17 +38,6 @@ export class TranslatorService {
   }
 
   /**
-   *  Retourne un lot de traduction neuf porteur d'un élément correspondant à la langue
-   *  de l'utilisateur.
-   *  @param text Texte affecté.
-   */
-  public getNewBundle(text: string): BundleDTO {
-    let result = new BundleDTO();
-    result.data[this.lang] = text;
-    return result;
-  }
-
-  /**
    * Retourne la traduction appropriée pour un lot de traductions.
    * @param bundle Lot de traductions
    */
@@ -59,4 +48,14 @@ export class TranslatorService {
     return this.translate(bundle);
   }
 
+  /**
+   * Modifie la valeur d'un lot de traductions correspondant à la culture de
+   * l'utilisateur courant.
+   * @param bundle Lot de traductions.
+   * @param value Valeur affectée.
+   */
+  public edit(bundle: BundleDTO, value: string): BundleDTO {
+    bundle.data[this.lang] = value;
+    return bundle;
+  }
 }

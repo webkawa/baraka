@@ -2,14 +2,30 @@
   <h2>Editer une table</h2>
   <div class="column">
     <h3>Table</h3>
-    <admin-table-edit [entity]="table" [view]="view"></admin-table-edit>
-    <h3>Champs</h3>
-    <ul *ngIf="table != null">
-      <li *ngFor="let f of table.fields"
-          (click)="field = f">{{ translator.translate(f.label) }}</li>
-    </ul>
+    <admin-table-add *ngIf="table == null" [view]="view"></admin-table-add>
+    <div *ngIf="table != null">
+      <h4>{{ translator.tr(table.label) }}</h4>
+      <p>{{ table.code }}</p>
+    </div>
+    <h3 *ngIf="table != null">Champs</h3>
+    <div *ngIf="table != null">
+      <p>
+        <span [routerLink]="['/view', view.id, 'admin', 'model', 'add-field', table.id]">Ajouter</span>
+      </p>
+      <admin-field-add *ngIf="action == 'add-field'" [view]="view" [table]="table"></admin-field-add>
+      <p *ngIf="table.fields.length == 0">Aucun champ référencé</p>
+      <ul>
+        <li *ngFor="let f of table.fields"
+            (click)="field = f">{{ translator.translate(f.label) }}</li>
+      </ul>
+    </div>
   </div>
   <div class="column">
-    <h3>Fu</h3>
+    <div *ngIf="table != null && field == null">
+      Modifier la table
+    </div>
+    <div *ngIf="table != null && field != null">
+      Modifier le champ
+    </div>
   </div>
 </div>

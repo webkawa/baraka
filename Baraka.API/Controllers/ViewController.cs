@@ -15,17 +15,28 @@
     public class ViewController
     {
         /// <summary>
+        ///     Constructeur.
+        /// </summary>
+        /// <param name="viewDAO">DAO des vues.</param>
+        public ViewController(ViewDAO viewDAO)
+        {
+            ViewDAO = viewDAO;
+        }
+
+        /// <summary>
+        ///     DAO des vues.
+        /// </summary>
+        private ViewDAO ViewDAO { get; set; }
+
+        /// <summary>
         ///     Retourne la liste des vues disponibles pour l'utilisateur connecté.
         /// </summary>
         /// <param name="holder">Porte-autorisations.</param>
-        /// <param name="viewDAO">DAO des vues.</param>
         /// <returns>Liste des vues disponibles pour l'utilisateur.</returns>
         [Route("/services/views/list")]
-        public IList<View> GetViewsForUser(
-            [FromServices] AuthenticationHolder holder,
-            [FromServices] ViewDAO viewDAO)
+        public IList<View> GetViewsForUser([FromServices] AuthenticationHolder holder)
         {
-            return viewDAO.GetViewByUser(holder.Current);
+            return ViewDAO.GetViewByUser(holder.Current);
         }
     }
 }

@@ -13,40 +13,69 @@
     public static class GenericJsonTypeIndex
     {
         /// <summary>
-        ///     Liste des configurations.
+        ///     Liste des configurations par type.
         /// </summary>
-        private static IDictionary<Type, IGenericJsonTypeConfiguration> Configurations { get; set; } = new Dictionary<Type, IGenericJsonTypeConfiguration>();
+        private static IDictionary<Type, IGenericJsonTypeConfiguration> TypeToConfigurations { get; set; } = new Dictionary<Type, IGenericJsonTypeConfiguration>();
+
+        /// <summary>
+        ///     Liste des configurations par clef.
+        /// </summary>
+        private static IDictionary<Type, IGenericJsonTypeConfiguration> KeyToConfiguration { get; set; } = new Dictionary<Type, IGenericJsonTypeConfiguration>();
+
+        /// <summary>
+        ///     Retourne la configuration rattachée à un type de clef.
+        /// </summary>
+        /// <param name="type">Type de clef recherché.</param>
+        /// <returns>Configuration correspondante.</returns>
+        public static IGenericJsonTypeConfiguration GetConfigurationByKey(Type type)
+        {
+            return FindForType(type, KeyToConfiguration);
+        }
 
         /// <summary>
         ///     Retourne la configuration rattachée à un type de DTO.
         /// </summary>
         /// <param name="type">Type de DTO recherché.</param>
         /// <returns>Configuration correspondante.</returns>
-        public static IGenericJsonTypeConfiguration GetConfiguration(Type type)
+        public static IGenericJsonTypeConfiguration GetConfigurationByType(Type type)
+        {
+            return FindForType(type, TypeToConfigurations);
+        }
+
+        /// <summary>
+        ///     Ajoute uen configuration dans l'index.
+        /// </summary>
+        /// <typeparam name="TKey">Type de clef.</typeparam>
+        /// <typeparam name="TBase">Type de base.</typeparam>
+        /// <param name="configuration">Configuration ajoutée.</param>
+        public static void AddConfiguration<TKey, TBase>(IGenericJsonTypeConfiguration configuration)
+            where TBase : IGenericPersistedDTO
+        {
+            KeyToConfiguration.Add(typeof(TKey), configuration);
+            TypeToConfigurations.Add(typeof(TBase), configuration);
+        }
+
+        /// <summary>
+        ///     Explore un dictionnaire à la recherche d'un type passé en paramètre ou de 
+        ///     ses types de base.
+        /// </summary>
+        /// <param name="type">Type exploré.</param>
+        /// <param name="source">Dictionnaire source.</param>
+        /// <returns>Configuration.</returns>
+        private static IGenericJsonTypeConfiguration FindForType(Type type, IDictionary<Type, IGenericJsonTypeConfiguration> source)
         {
             Type buff = type;
             while (buff != null)
             {
-                if (Configurations.ContainsKey(buff))
+                if (source.ContainsKey(buff))
                 {
-                    return Configurations[buff];
+                    return source[buff];
                 }
 
                 buff = buff.BaseType;
             }
 
             throw new InternalException("Unable to found persistent DTO configuration for type '{0}'", type);
-        }
-
-        /// <summary>
-        ///     Ajoute uen configuration dans l'index.
-        /// </summary>
-        /// <typeparam name="TBase">Type de base.</typeparam>
-        /// <param name="configuration">Configuration ajoutée.</param>
-        public static void AddConfiguration<TBase>(IGenericJsonTypeConfiguration configuration)
-            where TBase : IGenericPersistedDTO
-        {
-            Configurations.Add(typeof(TBase), configuration);
         }
     }
 }

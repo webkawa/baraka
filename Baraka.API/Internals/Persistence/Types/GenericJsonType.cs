@@ -110,7 +110,7 @@
                 if (Configuration.HasType(value.GetType()))
                 {
                     // Récupération des objets
-                    string key = Configuration.NameByType(value.GetType());
+                    string key = Configuration.UnsafeGetNameByType(value.GetType());
 
                     // Création du paramètre type
                     var typeParameter = cmd.CreateParameter();

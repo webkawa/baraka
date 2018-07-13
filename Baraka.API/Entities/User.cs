@@ -6,7 +6,7 @@
     using System.Text;
 
     using Baraka.API.DTO.Persisted;
-    using Baraka.API.DTO.Persisted.Configurations;
+    using Baraka.API.DTO.Persisted.Users;
     using Baraka.API.Internals.Persistence;
     using Baraka.API.Internals.Persistence.Types;
     using Newtonsoft.Json;

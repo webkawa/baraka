@@ -7,6 +7,7 @@
 
     using Baraka.API.DTO.Persisted;
     using Baraka.API.DTO.Persisted.Shared;
+    using Baraka.API.DTO.Persisted.Tables;
     using Baraka.API.Internals.Attributes.Validators;
     using Baraka.API.Internals.Persistence.Types;
 
@@ -39,6 +40,12 @@
         public virtual string Code { get; set; }
 
         /// <summary>
+        ///     Configuration.
+        /// </summary>
+        [Required]
+        public virtual TableConfigurationDTO Configuration { get; set; }
+
+        /// <summary>
         ///     Liste des champs.
         /// </summary>
         public virtual ISet<Field> Fields { get; set; }
@@ -56,6 +63,7 @@
         {
             PropertyJsonFixed(e => e.Label);
             Property(e => e.Code);
+            PropertyJsonFixed(e => e.Configuration);
             OneToMany(e => e.Fields);
         }
     }

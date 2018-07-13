@@ -2,10 +2,13 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
     using System.Text;
 
+    using Baraka.API.DTO.Persisted.Fields;
     using Baraka.API.DTO.Persisted.Shared;
     using Baraka.API.Entities;
+    using Baraka.API.Internals.Model;
     using NHibernate;
 
     /// <summary>
@@ -22,22 +25,15 @@
         }
 
         /// <summary>
-        ///     Insère un champ dans la base de données.
+        ///     Insère un champ dans la base.
         /// </summary>
-        /// <param name="label">Libellé du champ.</param>
-        /// <param name="code">Code d'accès.</param>
-        /// <param name="table">Table rattachée.</param>
-        /// <returns>Champ généré.</returns>
-        public Field Insert(BundleDTO label, string code, Table table)
+        /// <param name="field">Champ à insérer.</param>
+        /// <returns>Champ inséré.</returns>
+        public Field Insert(Field field)
         {
-            Field result = new Field()
-            {
-                Label = label,
-                Code = code,
-                Table = table
-            };
-            Session.Persist(result);
-            return result;
+            GetValidator().Check(field);
+            Session.Persist(field);
+            return field;
         }
     }
 }
