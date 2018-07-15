@@ -15,9 +15,9 @@
   <div [routerLink]="['model', 'add-table']">Ajouter</div>
   <ul>
     <li *ngFor="let table of tables">
-      <div>{{ table.Id }} {{ translator.tr(table.label) }}</div>
+      <div>{{ table.id }} {{ translator.tr(table.label) }}</div>
       <div>
-        <span>Editer</span>
+        <span [routerLink]="['model', 'edit-table', table.id]">Editer</span>
         <span>Supprimer</span>
       </div>
     </li>

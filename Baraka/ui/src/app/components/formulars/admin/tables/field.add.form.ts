@@ -13,7 +13,7 @@ import { TranslatorService } from '../../../../services/translator.service';
 import { StateService } from '../../../../services/state.service';
 import { ViewDTO, AdminViewConfigurationDTO } from '../../../../dto/view.dto';
 import { PersitedAbstractFormular } from '../../persisted.abs';
-import { FieldDTO, AbstractFieldConfigurationDTO } from '../../../../dto/field.dto';
+import { FieldDTO, AbstractFieldConfigurationDTO, StringFieldConfigurationDTO, BooleanFieldConfigurationDTO, DateFieldConfigurationDTO, NumericFieldConfigurationDTO, ReferenceFieldConfigurationDTO } from '../../../../dto/field.dto';
 
 /** Formulaire d'ajout d'un champ */
 @Component({
@@ -21,25 +21,26 @@ import { FieldDTO, AbstractFieldConfigurationDTO } from '../../../../dto/field.d
   templateUrl: './field.add.form.html',
   styleUrls: ['./field.add.form.less']
 })
-export class AdminFieldAddFormular extends PersitedAbstractFormular<FieldDTO> implements OnInit {
+export class AdminFieldAddFormular extends PersitedAbstractFormular<FieldDTO<AbstractFieldConfigurationDTO>> implements OnInit {
 
-  @Input()
-  public view: ViewDTO<AdminViewConfigurationDTO>;
   @Input()
   public table: TableDTO;
 
+  public tables: TableDTO[];
   public lang: string;
 
   public form: FormGroup;
   public label: FormControl;
   public code: FormControl;
   public type: FormControl;
+  public reference: FormControl;
 
   public constructor(
     public translator: TranslatorService,
     protected http: HttpClient,
     private state: StateService,
     private router: Router,
+    private ar: ActivatedRoute,
     private validators: ValidatorsService) {
 
     super(http, "fields");
@@ -55,11 +56,13 @@ export class AdminFieldAddFormular extends PersitedAbstractFormular<FieldDTO> im
       Validators.minLength(3),
       Validators.pattern(/^[a-z0-9_]+$/)
     ], [this.validators.check("fields/check-code?table=" + this.table.id + "&code=")]);
-    this.type = new FormControl('', []);
+    this.type = new FormControl('STRING', [Validators.required]);
+    this.reference = new FormControl('', []);
     this.form = new FormGroup({
       label: this.label,
       code: this.code,
-      type: this.type
+      type: this.type,
+      reference: this.reference
     });
 
     /* Gestion du code */
@@ -72,6 +75,11 @@ export class AdminFieldAddFormular extends PersitedAbstractFormular<FieldDTO> im
         }
       });
 
+    /* Surveillance des tables */
+    this.state
+      .getTables()
+      .subscribe((data) => this.tables = data);
+
     /* Instanciation */
     super.ngOnInit();
   }
@@ -80,62 +88,33 @@ export class AdminFieldAddFormular extends PersitedAbstractFormular<FieldDTO> im
     return this.form.valid;
   }
 
-  protected provide(): FieldDTO {
-    let result = this.persisted ? this.entity : new FieldDTO();
+  protected provide(): FieldDTO<AbstractFieldConfigurationDTO> {
+    let result = new FieldDTO();
     result.label = this.translator.edit(result.label, this.label.value);
     result.code = this.code.value;
-    result.configuration = new AbstractFieldConfigurationDTO();
-    result.table = this.table;
+    switch (this.type.value) {
+      case "STRING": result.configuration = new StringFieldConfigurationDTO(); break;
+      case "BOOLEAN": result.configuration = new BooleanFieldConfigurationDTO(); break;
+      case "DATE": result.configuration = new DateFieldConfigurationDTO(); break;
+      case "NUMERIC": result.configuration = new NumericFieldConfigurationDTO(); break;
+      case "REFERENCE": result.configuration = new ReferenceFieldConfigurationDTO(); break;
+    }
+    result.table.id = this.table.id;
     return result;
   }
 
   protected digest(): void {
     this.label.setValue(this.translator.tr(this.entity.label));
-    this.code.setValue(this.code.value);
+    this.code.setValue(this.entity.code);
+    this.type.setValue(this.entity.configuration.type == null ?
+      "STRING" :
+      this.entity.configuration.type);
   }
 
   protected postAdd(): void {
+    this.entity.table = this.table;
     this.table.fields.push(this.entity);
     this.state.publishTable(this.table);
-    this.router.navigate(["/view", this.view.id, "admin", "model", "edit-field", this.entity.id]);
+    this.router.navigate(["../../edit-field", this.entity.id], { relativeTo: this.ar });
   }
-
-  /*
-
-
-
-
-
-
-
-
-
-  protected init(): TableDTO {
-    if (this.persisted) {
-      this.name.setValue(this.translator.tr(this.entity.label));
-      this.code.setValue(this.entity.code);
-    }
-    return new TableDTO();
-  }
-
-  protected pre(): boolean {
-    if (this.form.valid) {
-      this.entity.code = this.code.value;
-      this.entity.label = this.translator.getNewBundle(this.name.value);
-      return true;
-    }
-    return false;
-  }
-
-  protected postAdd(): void {
-    this.tables.push(this.entity);
-    this.router.navigate(["/view", this.view.id, "admin", "tables", "edit", this.entity.id]);
-  }
-
-  protected postSave(): void {
-  }
-
-  protected postAll(): void {
-    this.state.publishTables(this.tables);
-  }*/
 }

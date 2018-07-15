@@ -15,8 +15,19 @@
   </div>
   <div>
     <label>Type</label>
-    <select>
-      <option>Dangz</option>
+    <select formControlName="type">
+      <option value="STRING">Chaîne de caractères</option>
+      <option value="BOOLEAN">Logique</option>
+      <option value="NUMERIC">Nombre</option>
+      <option value="DATE">Date</option>
+      <option value="REFERENCE">Liaison</option>
+    </select>
+  </div>
+  <div *ngIf="type.value == 'REFERENCE'">
+    <label>Destination</label>
+    <select formControlName="reference">
+      <option value="t.Id"
+              *ngFor="let t of tables">{{ translator.tr(t.label) }}</option>
     </select>
   </div>
   <div>

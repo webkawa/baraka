@@ -32,6 +32,9 @@
         public Field Insert(Field field)
         {
             GetValidator().Check(field);
+
+            field.Table.Fields.Add(field);
+
             Session.Persist(field);
             return field;
         }

@@ -5,7 +5,7 @@ import { map } from 'rxjs/operators'
 
 import { ViewDTO, AbstractViewConfigurationDTO } from '../dto/view.dto';
 import { TableDTO } from '../dto/table.dto';
-import { FieldDTO } from '../dto/field.dto';
+import { FieldDTO, AbstractFieldConfigurationDTO } from '../dto/field.dto';
 
 /** Service d'état */
 @Injectable({
@@ -38,10 +38,10 @@ export class StateService {
   }
 
   /** Retourne la liste des champs */
-  public getFields(): Observable<FieldDTO[]> {
+  public getFields(): Observable<FieldDTO<AbstractFieldConfigurationDTO>[]> {
     return this.tables
       .pipe(map((data) => {
-        let result: FieldDTO[] = [];
+        let result: FieldDTO<AbstractFieldConfigurationDTO>[] = [];
         for (let table of data) {
           for (let field of table.fields) {
             result.push(field);

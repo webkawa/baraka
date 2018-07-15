@@ -1,0 +1,28 @@
+<form class="form-group" [formGroup]="form" (submit)="submit()">
+  <h2>Editer la table</h2>
+  <div>
+    <label>Nom</label>
+    <input type="text"
+           class="form-control"
+           formControlName="label" />
+    <p *ngIf="label.invalid && label.dirty">Wtf is this shit ?</p>
+  </div>
+  <div>
+    <label>Code</label>
+    <input type="text"
+           class="form-control"
+           formControlName="code" />
+    <p *ngIf="code.invalid && code.dirty">Wut ?</p>
+  </div>
+  <div>
+    <label>Archivée</label>
+    <input type="checkbox"
+           class="form-control"
+           formControlName="archived" />
+  </div>
+  <div>
+    <input type="submit"
+           value="Modifier"
+           [disabled]="form.invalid" />
+  </div>
+</form>

@@ -18,11 +18,15 @@ import { ReferencesInterceptor } from './internals/references.interceptor';
 import { PagesViewAdminTableEditComponent } from './components/pages/views/admin/table.edit.cpn';
 import { AdminTableAddFormular } from './components/formulars/admin/tables/table.add.form';
 import { AdminFieldAddFormular } from './components/formulars/admin/tables/field.add.form';
+import { AdminTableEditFormular } from './components/formulars/admin/tables/table.edit.form';
+import { AdminFieldEditFormular } from './components/formulars/admin/tables/field.edit.form';
 
 @NgModule({
   declarations: [
     AdminFieldAddFormular,
+    AdminFieldEditFormular,
     AdminTableAddFormular,
+    AdminTableEditFormular,
     LayoutPopinComponent,
     LayoutRootComponent,
     PageHomeComponent,

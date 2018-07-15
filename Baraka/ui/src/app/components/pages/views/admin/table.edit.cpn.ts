@@ -14,7 +14,7 @@ import { StateService } from '../../../../services/state.service';
 import { BundleDTO } from '../../../../dto/bundle.dto';
 import { StringUtils } from '../../../../utils/string.utils';
 import { ValidatorsService } from '../../../../services/validators.service';
-import { FieldDTO } from '../../../../dto/field.dto';
+import { FieldDTO, AbstractFieldConfigurationDTO } from '../../../../dto/field.dto';
 
 /** Edition d'une table */
 @Component({
@@ -26,7 +26,7 @@ export class PagesViewAdminTableEditComponent extends PagesViewAbstractComponent
 
   public action: string;
   public table: TableDTO;
-  public field: FieldDTO;
+  public field: FieldDTO<AbstractFieldConfigurationDTO>;
   
   public constructor(
     protected state: StateService,

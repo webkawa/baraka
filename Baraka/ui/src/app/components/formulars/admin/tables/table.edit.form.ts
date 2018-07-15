@@ -16,25 +16,25 @@ import { PersitedAbstractFormular } from '../../persisted.abs';
 
 /** Formulaire d'ajout d'une table */
 @Component({
-  selector: 'admin-table-add',
-  templateUrl: './table.add.form.html',
-  styleUrls: ['./table.add.form.less']
+  selector: 'admin-table-edit',
+  templateUrl: './table.edit.form.html',
+  styleUrls: ['./table.edit.form.less']
 })
-export class AdminTableAddFormular extends PersitedAbstractFormular<TableDTO> implements OnInit {
-
+export class AdminTableEditFormular extends PersitedAbstractFormular<TableDTO> implements OnInit {
+  
   public lang: string;
 
   public form: FormGroup;
   public label: FormControl;
   public code: FormControl;
+  public archived: FormControl;
 
   public constructor(
     public translator: TranslatorService,
     protected http: HttpClient,
     private state: StateService,
     private router: Router,
-    private validators: ValidatorsService,
-    private ar: ActivatedRoute) {
+    private validators: ValidatorsService) {
 
     super(http, "tables");
   }
@@ -49,20 +49,12 @@ export class AdminTableAddFormular extends PersitedAbstractFormular<TableDTO> im
       Validators.minLength(3),
       Validators.pattern(/^[a-z0-9_]+$/)
     ], [this.validators.check("tables/check-code?code=")]);
+    this.archived = new FormControl('', []);
     this.form = new FormGroup({
       label: this.label,
-      code: this.code
+      code: this.code,
+      archived: this.archived
     });
-
-    /* Gestion du code */
-    this.label
-      .valueChanges
-      .subscribe((data) => {
-        if (!this.persisted && this.code.pristine) {
-          let treated = StringUtils.StringToCode(this.label.value);
-          this.code.setValue(treated);
-        }
-      });
 
     /* Instanciation */
     super.ngOnInit();
@@ -77,16 +69,18 @@ export class AdminTableAddFormular extends PersitedAbstractFormular<TableDTO> im
     result.label = this.translator.edit(result.label, this.label.value);
     result.code = this.code.value;
     result.configuration = new TableConfigurationDTO();
+    result.configuration.archived = this.archived.value;
     return result;
   }
 
   protected digest(): void {
     this.label.setValue(this.translator.tr(this.entity.label));
     this.code.setValue(this.entity.code);
+    this.archived.setValue(this.entity.configuration.archived);
   }
 
-  protected postAdd(): void {
+  protected postSave(): void {
+    this.entity.fields 
     this.state.publishTable(this.entity);
-    this.router.navigate(["../edit-table", this.entity.id], { relativeTo: this.ar });
   }
 }

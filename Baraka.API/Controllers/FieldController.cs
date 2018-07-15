@@ -22,7 +22,7 @@
         /// <param name="fieldDAO">DAO des champs.</param>
         public FieldController(FieldDAO fieldDAO)
         {
-            FieldDAO = FieldDAO;
+            FieldDAO = fieldDAO;
         }
 
         /// <summary>

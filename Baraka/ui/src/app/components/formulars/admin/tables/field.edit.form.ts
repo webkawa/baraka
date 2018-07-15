@@ -13,33 +13,41 @@ import { TranslatorService } from '../../../../services/translator.service';
 import { StateService } from '../../../../services/state.service';
 import { ViewDTO, AdminViewConfigurationDTO } from '../../../../dto/view.dto';
 import { PersitedAbstractFormular } from '../../persisted.abs';
+import { FieldDTO, AbstractFieldConfigurationDTO } from '../../../../dto/field.dto';
 
 /** Formulaire d'ajout d'une table */
 @Component({
-  selector: 'admin-table-add',
-  templateUrl: './table.add.form.html',
-  styleUrls: ['./table.add.form.less']
+  selector: 'admin-field-edit',
+  templateUrl: './field.edit.form.html',
+  styleUrls: ['./field.edit.form.less']
 })
-export class AdminTableAddFormular extends PersitedAbstractFormular<TableDTO> implements OnInit {
+export class AdminFieldEditFormular extends PersitedAbstractFormular<FieldDTO<AbstractFieldConfigurationDTO>> implements OnInit {
 
+  public table: TableDTO;
+  public tables: TableDTO[];
   public lang: string;
 
   public form: FormGroup;
   public label: FormControl;
   public code: FormControl;
+  public archived: FormControl;
+  public reference: FormControl;
 
   public constructor(
     public translator: TranslatorService,
     protected http: HttpClient,
     private state: StateService,
     private router: Router,
-    private validators: ValidatorsService,
-    private ar: ActivatedRoute) {
+    private ar: ActivatedRoute,
+    private validators: ValidatorsService) {
 
-    super(http, "tables");
+    super(http, "fields");
   }
 
   public ngOnInit(): void {
+    /* Gestion des références */
+    this.table = this.entity.table;
+
     /* Création du formulaire */
     this.label = new FormControl('', [
       Validators.required,
@@ -48,21 +56,20 @@ export class AdminTableAddFormular extends PersitedAbstractFormular<TableDTO> im
       Validators.required,
       Validators.minLength(3),
       Validators.pattern(/^[a-z0-9_]+$/)
-    ], [this.validators.check("tables/check-code?code=")]);
+    ], [this.validators.check("fields/check-code?table=" + this.table.id + "&code=")]);
+    this.archived = new FormControl('', []);
+    this.reference = new FormControl('', []);
     this.form = new FormGroup({
       label: this.label,
-      code: this.code
+      code: this.code,
+      archived: this.archived,
+      reference: this.reference
     });
 
-    /* Gestion du code */
-    this.label
-      .valueChanges
-      .subscribe((data) => {
-        if (!this.persisted && this.code.pristine) {
-          let treated = StringUtils.StringToCode(this.label.value);
-          this.code.setValue(treated);
-        }
-      });
+    /* Surveillance des tables */
+    this.state
+      .getTables()
+      .subscribe((data) => this.tables = data);
 
     /* Instanciation */
     super.ngOnInit();
@@ -72,21 +79,23 @@ export class AdminTableAddFormular extends PersitedAbstractFormular<TableDTO> im
     return this.form.valid;
   }
 
-  protected provide(): TableDTO {
-    let result = new TableDTO();
+  protected provide(): FieldDTO<AbstractFieldConfigurationDTO> {
+    let result = new FieldDTO();
     result.label = this.translator.edit(result.label, this.label.value);
     result.code = this.code.value;
-    result.configuration = new TableConfigurationDTO();
+    result.configuration = this.entity.configuration;
+    result.configuration.archived = this.archived.value;
+    result.table.id = this.table.id;
     return result;
   }
 
   protected digest(): void {
     this.label.setValue(this.translator.tr(this.entity.label));
     this.code.setValue(this.entity.code);
+    this.archived.setValue(this.entity.configuration.archived);
   }
 
-  protected postAdd(): void {
-    this.state.publishTable(this.entity);
-    this.router.navigate(["../edit-table", this.entity.id], { relativeTo: this.ar });
+  protected postSave(): void {
+    this.state.publishTable(this.table);
   }
 }
