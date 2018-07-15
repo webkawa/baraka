@@ -74,6 +74,31 @@ export class StateService {
     this.tables.next(this.tablesState);
   }
 
+  /**
+   * Publie (ajout ou mise à jour) un champ unitaire.
+   *  @param field Champ publié.
+   */
+  public publishField(field: FieldDTO<AbstractFieldConfigurationDTO>) {
+    if (field.table == null) {
+      throw new Error("Field has to be attached to a table in order to be published");
+    }
+
+    var table = this.tablesState.filter(e => e.id == field.table.id)[0];
+    var pre = table.fields.filter(e => e.id == field.id);
+
+    if (pre.length == 0) {
+      table.fields.push(field);
+      console.log("push");
+    } else {
+      let idx = table.fields.indexOf(pre[0]);
+      console.log(idx);
+      table.fields[idx] = field;
+      console.log("flipflop");
+      console.log(this.tablesState);
+    }
+    this.tables.next(this.tablesState);
+  }
+
   /** Charge l'état complet de l'application */
   public loadState(): Observable<any> {
     return forkJoin(

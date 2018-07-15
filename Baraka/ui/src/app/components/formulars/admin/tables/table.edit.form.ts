@@ -21,7 +21,9 @@ import { PersitedAbstractFormular } from '../../persisted.abs';
   styleUrls: ['./table.edit.form.less']
 })
 export class AdminTableEditFormular extends PersitedAbstractFormular<TableDTO> implements OnInit {
-  
+
+  @Input()
+  public table: TableDTO;
   public lang: string;
 
   public form: FormGroup;
@@ -41,23 +43,20 @@ export class AdminTableEditFormular extends PersitedAbstractFormular<TableDTO> i
 
   public ngOnInit(): void {
     /* Création du formulaire */
-    this.label = new FormControl('', [
+    this.label = new FormControl(this.translator.tr(this.table.label), [
       Validators.required,
       Validators.minLength(3)]);
-    this.code = new FormControl('', [
+    this.code = new FormControl(this.table.code, [
       Validators.required,
       Validators.minLength(3),
       Validators.pattern(/^[a-z0-9_]+$/)
     ], [this.validators.check("tables/check-code?code=")]);
-    this.archived = new FormControl('', []);
+    this.archived = new FormControl(this.table.configuration.archived, []);
     this.form = new FormGroup({
       label: this.label,
       code: this.code,
       archived: this.archived
     });
-
-    /* Instanciation */
-    super.ngOnInit();
   }
 
   protected check(): boolean {
@@ -66,6 +65,7 @@ export class AdminTableEditFormular extends PersitedAbstractFormular<TableDTO> i
 
   protected provide(): TableDTO {
     let result = new TableDTO();
+    result.id = this.table.id;
     result.label = this.translator.edit(result.label, this.label.value);
     result.code = this.code.value;
     result.configuration = new TableConfigurationDTO();
@@ -73,14 +73,8 @@ export class AdminTableEditFormular extends PersitedAbstractFormular<TableDTO> i
     return result;
   }
 
-  protected digest(): void {
-    this.label.setValue(this.translator.tr(this.entity.label));
-    this.code.setValue(this.entity.code);
-    this.archived.setValue(this.entity.configuration.archived);
-  }
-
-  protected postSave(): void {
-    this.entity.fields 
-    this.state.publishTable(this.entity);
+  protected digest(entity: TableDTO): void {
+    entity.fields = this.table.fields;
+    this.state.publishTable(entity);
   }
 }

@@ -63,9 +63,6 @@ export class AdminTableAddFormular extends PersitedAbstractFormular<TableDTO> im
           this.code.setValue(treated);
         }
       });
-
-    /* Instanciation */
-    super.ngOnInit();
   }
 
   protected check(): boolean {
@@ -80,13 +77,8 @@ export class AdminTableAddFormular extends PersitedAbstractFormular<TableDTO> im
     return result;
   }
 
-  protected digest(): void {
-    this.label.setValue(this.translator.tr(this.entity.label));
-    this.code.setValue(this.entity.code);
-  }
-
-  protected postAdd(): void {
-    this.state.publishTable(this.entity);
-    this.router.navigate(["../edit-table", this.entity.id], { relativeTo: this.ar });
+  protected digest(entity: TableDTO): void {
+    this.state.publishTable(entity);
+    this.router.navigate(["../edit-table", entity.id], { relativeTo: this.ar });
   }
 }

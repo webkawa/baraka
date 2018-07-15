@@ -79,9 +79,6 @@ export class AdminFieldAddFormular extends PersitedAbstractFormular<FieldDTO<Abs
     this.state
       .getTables()
       .subscribe((data) => this.tables = data);
-
-    /* Instanciation */
-    super.ngOnInit();
   }
 
   protected check(): boolean {
@@ -103,18 +100,11 @@ export class AdminFieldAddFormular extends PersitedAbstractFormular<FieldDTO<Abs
     return result;
   }
 
-  protected digest(): void {
-    this.label.setValue(this.translator.tr(this.entity.label));
-    this.code.setValue(this.entity.code);
-    this.type.setValue(this.entity.configuration.type == null ?
-      "STRING" :
-      this.entity.configuration.type);
-  }
+  protected digest(entity: FieldDTO<AbstractFieldConfigurationDTO>): void {
+    entity.table = this.table;
 
-  protected postAdd(): void {
-    this.entity.table = this.table;
-    this.table.fields.push(this.entity);
+    this.table.fields.push(entity);
     this.state.publishTable(this.table);
-    this.router.navigate(["../../edit-field", this.entity.id], { relativeTo: this.ar });
+    this.router.navigate(["../../edit-field", entity.id], { relativeTo: this.ar });
   }
 }

@@ -13,43 +13,43 @@ import { map } from "rxjs/operators";
 })
 export class ReferencesInterceptor implements HttpInterceptor {
 
-  private index: {};
-
-  public constructor() {
-    this.index = {};
-  }
 
   public intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     return next
       .handle(request)
       .pipe(map((data) => {
-        if (data instanceof HttpResponse) {
-          let typed = <HttpResponse<any>>data;
-          if (typed.body != null) {
-            this.register(typed.body);
-            this.attach(typed.body);
-            this.index = {};
+        try {
+          if (data instanceof HttpResponse) {
+            let typed = <HttpResponse<any>>data;
+            let index = {};
+            if (typed.body != null) {
+              this.register(index, typed.body);
+              this.attach(index, typed.body);
+            }
           }
+          return data;
+        } catch (ex) {
+          throw new Error("References construction failed...");
         }
-        return data;
       }));
   }
 
   /**
    * Enregistre les identifiants d'un objet et de ses enfants.
+   * @param index Index.
    * @param object Objet référencé.
    */
-  private register(object: any): void {
+  private register(index: any, object: any): void {
     if (object["$ref"] == null) {
-      if (this.index[object["$id"]] == null) {
-        // Enregistrement
-        this.index[object.$id] = object;
+      // Enregistrement
+      if (object["$id"] != null) {
+        index[object["$id"]] = object;
       }
 
       // Traitement des enfants
       Object.keys(object).forEach((key) => {
-        if (typeof object[key] === "object") {
-          this.register(object[key]);
+        if (typeof object[key] === "object" && object[key] != null) {
+          this.register(index, object[key]);
         }
       });
     }
@@ -57,14 +57,15 @@ export class ReferencesInterceptor implements HttpInterceptor {
 
   /**
    *  Rattache les références avec les instances réelles.
+   *  @param index Index.
    *  @param object Objet rattaché.
    */
-  private attach(object: any): any {
+  private attach(index: any, object: any): any {
     if (object["$ref"] == null) {
       // Traitement des enfants
       Object.keys(object).forEach((key) => {
-        if (typeof object[key] === "object") {
-          let buffer = this.attach(object[key]);
+        if (typeof object[key] === "object" && object[key] != null) {
+          let buffer = this.attach(index, object[key]);
           if (buffer != null) {
             object[key] = buffer;
           }
@@ -72,7 +73,7 @@ export class ReferencesInterceptor implements HttpInterceptor {
       });
       return null;
     } else {
-      return this.index[object["$ref"]];
+      return index[object["$ref"]];
     }
   }
 }

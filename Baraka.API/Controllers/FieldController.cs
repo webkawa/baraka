@@ -34,13 +34,24 @@
         ///     Ajoute un champ rattaché à une table.
         /// </summary>
         /// <param name="field">Champ rajouté.</param>
-        /// <param name="fieldDAO">DAO des champs.</param>
         /// <returns>Champ rajouté.</returns>
         [Transactional]
         [Route("services/fields/add")]
         public Field AddField([FromBody] Field field)
         {
             return FieldDAO.Insert(field);
+        }
+
+        /// <summary>
+        ///     Met à jour un champ rattaché à une table.
+        /// </summary>
+        /// <param name="field">Champ rajouté.</param>
+        /// <returns>Champ rajouté.</returns>
+        [Transactional]
+        [Route("services/fields/update")]
+        public Field UpdateField([FromBody] Field field)
+        {
+            return FieldDAO.Update(field);
         }
 
         /// <summary>

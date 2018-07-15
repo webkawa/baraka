@@ -1,7 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { NgModule } from '@angular/core';
+import { NgModule, ErrorHandler } from '@angular/core';
 import { RouterModule, Routes } from "@angular/router"
 
 import { LayoutPopinComponent } from './components/layout/popin.cpn';
@@ -20,6 +20,7 @@ import { AdminTableAddFormular } from './components/formulars/admin/tables/table
 import { AdminFieldAddFormular } from './components/formulars/admin/tables/field.add.form';
 import { AdminTableEditFormular } from './components/formulars/admin/tables/table.edit.form';
 import { AdminFieldEditFormular } from './components/formulars/admin/tables/field.edit.form';
+import { ExceptionsHandler } from './internals/exceptions.handler';
 
 @NgModule({
   declarations: [
@@ -70,6 +71,9 @@ import { AdminFieldEditFormular } from './components/formulars/admin/tables/fiel
     provide: HTTP_INTERCEPTORS,
     useClass: ReferencesInterceptor,
     multi: true
+  }, {
+    provide: ErrorHandler,
+    useClass: ExceptionsHandler
   }],
   bootstrap: [LayoutRootComponent]
 })

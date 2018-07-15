@@ -32,11 +32,19 @@
         public Field Insert(Field field)
         {
             GetValidator().Check(field);
-
-            field.Table.Fields.Add(field);
-
             Session.Persist(field);
             return field;
+        }
+
+        /// <summary>
+        ///     Réalise la mise à jour d'un champ à partir d'un objet détaché.
+        /// </summary>
+        /// <param name="field">Objet détaché.</param>
+        /// <returns>Objet mis à jour.</returns>
+        public Field Update(Field field)
+        {
+            GetValidator().Check(field);
+            return Session.Merge(field);
         }
     }
 }

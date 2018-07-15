@@ -27,9 +27,9 @@
     </div>
   </div>
   <div class="column" *ngIf="action == 'edit-table'">
-    <admin-table-edit [entity]="table"></admin-table-edit>
+    <admin-table-edit [table]="table"></admin-table-edit>
   </div>
   <div class="column" *ngIf="action == 'edit-field'">
-    <admin-field-edit [entity]="field"></admin-field-edit>
+    <admin-field-edit [field]="field"></admin-field-edit>
   </div>
 </div>

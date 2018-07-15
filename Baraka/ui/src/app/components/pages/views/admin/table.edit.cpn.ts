@@ -56,7 +56,10 @@ export class PagesViewAdminTableEditComponent extends PagesViewAbstractComponent
         .getFields()
         .subscribe((data) => {
           if (this.action == "edit-field") {
+            console.log(data);
+            console.log(params["id"]);
             this.field = data.filter((f) => f.id == params["id"])[0];
+            console.log(this.field);
             this.table = this.field.table;
           }
         });

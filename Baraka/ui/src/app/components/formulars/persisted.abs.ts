@@ -13,36 +13,15 @@ import { BehaviorSubject } from "rxjs";
  *  Par défaut, la classe réalise un premier appel au serveur (via la méthode 'submit()')
  *  en mode d'insertion et les suivants en mode de mise à jour. La classe fille peut toutefois
  *  forcer le comportement de chaque appel. */
-export abstract class PersitedAbstractFormular<TEntity extends EntityDTO> implements OnInit {
-
+export abstract class PersitedAbstractFormular<TEntity extends EntityDTO> {
 
   public persisted: boolean;
-
-  /*
-  private attribute: TEntity;
-  private subject: BehaviorSubject<TEntity>;
-  
-  @Input()
-  protected set entity(entity: TEntity) {
-    this.persisted = entity != null;
-    this.attribute = entity;
-    this.subject.next(entity);
-  };
-  protected get entity(): TEntity {
-    return this.attribute;
-  }*/
 
   public constructor(
     protected http: HttpClient,
     private prefix: string) {
-  }
 
-  public ngOnInit(): void {
-    this.subject.subscribe((data) => {
-      if (data != null) {
-        this.digest();
-      }
-    });
+    this.persisted = false;
   }
 
   /** Réalise une action d'ajout. */
@@ -62,23 +41,18 @@ export abstract class PersitedAbstractFormular<TEntity extends EntityDTO> implem
 
   /** Indique si la synchronisation peut avoir lieu. */
   protected abstract check(): boolean;
-
-  /** Génère et retourne une instance neuve de l'entité correspondant au contenu du
-   *  formulaire. */
-
-  /** Génère et retourne une instance neuve de l'entité portée par le formulaire alimentée
-   *  de manière à ce que son contenu reflête le contenu attendu, niveau serveur, par les
-   *  services d'insertion ou de mise à jour. */
+  
+  /** Génère et retourne une instance de l'entité portée par le formulaire reflétant le contenu
+   *  attendu côté serveur pour permettre insertion ou mise à jour. */
   protected abstract provide(): TEntity;
   
-  /** Intègre les changements    */
-  protected abstract digest(): void;
-
-  /** Actions consécutives à l'ajout. */
-  protected postAdd(): void { }
-
-  /** Actions consécutives à la mise à jour. */
-  protected postSave(): void { }
+  /**
+   *  Intègre une instance de l'entité renvoyée par le serveur à la suite d'une insertion ou
+   *  d'une mise à jour.
+   *  @param entity Entité retournée par le serveur.
+   *  @param add Action réalisée (ajout ou mise à jour).
+   */
+  protected abstract digest(entity: TEntity, add: boolean): void;
 
   /**
    * Synchronise l'entité avec le serveur.
@@ -86,26 +60,14 @@ export abstract class PersitedAbstractFormular<TEntity extends EntityDTO> implem
    */
   private sync(add: boolean): void {
     if (this.check()) {
-      if (this.persisted == add) {
-        throw new Error("Invalid state");
-      }
-
       let action = add ? "add" : "update";
       let instance = this.provide();
-
-      if (!add) {
-        instance.id = this.entity.id;
-      }
-
+      
       this.http
         .post<TEntity>(this.prefix + "/" + action, instance)
         .subscribe((data) => {
-          this.entity = data;
-          if (add) {
-            this.postAdd();
-          } else {
-            this.postSave();
-          }
+          this.persisted = false;
+          this.digest(data, add);
         });
     }
   }

@@ -1,5 +1,5 @@
-<form class="form-group" [formGroup]="form" (submit)="submit()">
-  <h2>Editer le champ {{ entity.id }}</h2>
+<form class="form-group" [formGroup]="form" (submit)="save()">
+  <h2>Editer le champ {{ field.id }}</h2>
   <div>
     <label>Nom</label>
     <input type="text"

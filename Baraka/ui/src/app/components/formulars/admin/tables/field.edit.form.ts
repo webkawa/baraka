@@ -1,4 +1,4 @@
-import { Component, OnInit, Inject, Input } from '@angular/core';
+import { Component, OnInit, Inject, Input, OnChanges } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { FormGroup, FormControl, Validators, FormBuilder, AsyncValidatorFn, AbstractControl, ValidationErrors } from '@angular/forms';
@@ -23,7 +23,18 @@ import { FieldDTO, AbstractFieldConfigurationDTO } from '../../../../dto/field.d
 })
 export class AdminFieldEditFormular extends PersitedAbstractFormular<FieldDTO<AbstractFieldConfigurationDTO>> implements OnInit {
 
+  @Input()
+  public set field(field: FieldDTO<AbstractFieldConfigurationDTO>) {
+    this._field = field;
+    if (this.form != null && this.field != null) {
+      this.refresh();
+    }
+  };
+  public get field(): FieldDTO<AbstractFieldConfigurationDTO> {
+    return this._field;
+  };
   public table: TableDTO;
+
   public tables: TableDTO[];
   public lang: string;
 
@@ -32,6 +43,8 @@ export class AdminFieldEditFormular extends PersitedAbstractFormular<FieldDTO<Ab
   public code: FormControl;
   public archived: FormControl;
   public reference: FormControl;
+
+  private _field: FieldDTO<AbstractFieldConfigurationDTO>;
 
   public constructor(
     public translator: TranslatorService,
@@ -46,18 +59,18 @@ export class AdminFieldEditFormular extends PersitedAbstractFormular<FieldDTO<Ab
 
   public ngOnInit(): void {
     /* Gestion des références */
-    this.table = this.entity.table;
+    this.table = this.field.table;
 
     /* Création du formulaire */
-    this.label = new FormControl('', [
+    this.label = new FormControl(this.translator.tr(this.field.label), [
       Validators.required,
       Validators.minLength(3)]);
-    this.code = new FormControl('', [
+    this.code = new FormControl(this.field.code, [
       Validators.required,
       Validators.minLength(3),
       Validators.pattern(/^[a-z0-9_]+$/)
     ], [this.validators.check("fields/check-code?table=" + this.table.id + "&code=")]);
-    this.archived = new FormControl('', []);
+    this.archived = new FormControl(this.field.configuration.archived, []);
     this.reference = new FormControl('', []);
     this.form = new FormGroup({
       label: this.label,
@@ -70,9 +83,6 @@ export class AdminFieldEditFormular extends PersitedAbstractFormular<FieldDTO<Ab
     this.state
       .getTables()
       .subscribe((data) => this.tables = data);
-
-    /* Instanciation */
-    super.ngOnInit();
   }
 
   protected check(): boolean {
@@ -81,21 +91,26 @@ export class AdminFieldEditFormular extends PersitedAbstractFormular<FieldDTO<Ab
 
   protected provide(): FieldDTO<AbstractFieldConfigurationDTO> {
     let result = new FieldDTO();
+    result.id = this.field.id;
     result.label = this.translator.edit(result.label, this.label.value);
     result.code = this.code.value;
-    result.configuration = this.entity.configuration;
+    result.configuration = this.field.configuration;
     result.configuration.archived = this.archived.value;
     result.table.id = this.table.id;
     return result;
   }
 
-  protected digest(): void {
-    this.label.setValue(this.translator.tr(this.entity.label));
-    this.code.setValue(this.entity.code);
-    this.archived.setValue(this.entity.configuration.archived);
+  protected digest(entity: FieldDTO<AbstractFieldConfigurationDTO>): void {
+    entity.table = this.table;
+    this.state.publishField(entity);
   }
 
-  protected postSave(): void {
-    this.state.publishTable(this.table);
+  /** Rafraichit le contenu du formulaire. */
+  private refresh(): void {
+    if (this.form != null && this.field != null) {
+      this.label.setValue(this.translator.tr(this.field.label));
+      this.code.setValue(this.field.code);
+      this.archived.setValue(this.field.configuration.archived);
+    }
   }
 }

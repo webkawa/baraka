@@ -54,12 +54,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_formulars_admin_tables_field_add_form__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! ./components/formulars/admin/tables/field.add.form */ "./src/app/components/formulars/admin/tables/field.add.form.ts");
 /* harmony import */ var _components_formulars_admin_tables_table_edit_form__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! ./components/formulars/admin/tables/table.edit.form */ "./src/app/components/formulars/admin/tables/table.edit.form.ts");
 /* harmony import */ var _components_formulars_admin_tables_field_edit_form__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! ./components/formulars/admin/tables/field.edit.form */ "./src/app/components/formulars/admin/tables/field.edit.form.ts");
+/* harmony import */ var _internals_exceptions_handler__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(/*! ./internals/exceptions.handler */ "./src/app/internals/exceptions.handler.ts");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
+
 
 
 
@@ -134,6 +136,9 @@ var AppModule = /** @class */ (function () {
                     provide: _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HTTP_INTERCEPTORS"],
                     useClass: _internals_references_interceptor__WEBPACK_IMPORTED_MODULE_15__["ReferencesInterceptor"],
                     multi: true
+                }, {
+                    provide: _angular_core__WEBPACK_IMPORTED_MODULE_3__["ErrorHandler"],
+                    useClass: _internals_exceptions_handler__WEBPACK_IMPORTED_MODULE_21__["ExceptionsHandler"]
                 }],
             bootstrap: [_components_layout_root_cpn__WEBPACK_IMPORTED_MODULE_6__["LayoutRootComponent"]]
         })
@@ -264,8 +269,6 @@ var AdminFieldAddFormular = /** @class */ (function (_super) {
         this.state
             .getTables()
             .subscribe(function (data) { return _this.tables = data; });
-        /* Instanciation */
-        _super.prototype.ngOnInit.call(this);
     };
     AdminFieldAddFormular.prototype.check = function () {
         return this.form.valid;
@@ -294,18 +297,11 @@ var AdminFieldAddFormular = /** @class */ (function (_super) {
         result.table.id = this.table.id;
         return result;
     };
-    AdminFieldAddFormular.prototype.digest = function () {
-        this.label.setValue(this.translator.tr(this.entity.label));
-        this.code.setValue(this.entity.code);
-        this.type.setValue(this.entity.configuration.type == null ?
-            "STRING" :
-            this.entity.configuration.type);
-    };
-    AdminFieldAddFormular.prototype.postAdd = function () {
-        this.entity.table = this.table;
-        this.table.fields.push(this.entity);
+    AdminFieldAddFormular.prototype.digest = function (entity) {
+        entity.table = this.table;
+        this.table.fields.push(entity);
         this.state.publishTable(this.table);
-        this.router.navigate(["../../edit-field", this.entity.id], { relativeTo: this.ar });
+        this.router.navigate(["../../edit-field", entity.id], { relativeTo: this.ar });
     };
     __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Input"])(),
@@ -338,7 +334,7 @@ var AdminFieldAddFormular = /** @class */ (function (_super) {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<form class=\"form-group\" [formGroup]=\"form\" (submit)=\"submit()\">\r\n  <h2>Editer le champ {{ entity.id }}</h2>\r\n  <div>\r\n    <label>Nom</label>\r\n    <input type=\"text\"\r\n           class=\"form-control\"\r\n           formControlName=\"label\" />\r\n    <p *ngIf=\"label.invalid && label.dirty\">Wtf is this shit ?</p>\r\n  </div>\r\n  <div>\r\n    <label>Code</label>\r\n    <input type=\"text\"\r\n           class=\"form-control\"\r\n           formControlName=\"code\" />\r\n    <p *ngIf=\"code.invalid && code.dirty\">Wut ?</p>\r\n  </div>\r\n  <div>\r\n    <label>Archivée</label>\r\n    <input type=\"checkbox\"\r\n           class=\"form-control\"\r\n           formControlName=\"archived\" />\r\n  </div>\r\n  <div>\r\n    <input type=\"submit\"\r\n           value=\"Modifier\"\r\n           [disabled]=\"form.invalid\" />\r\n  </div>\r\n</form>\r\n"
+module.exports = "<form class=\"form-group\" [formGroup]=\"form\" (submit)=\"save()\">\r\n  <h2>Editer le champ {{ field.id }}</h2>\r\n  <div>\r\n    <label>Nom</label>\r\n    <input type=\"text\"\r\n           class=\"form-control\"\r\n           formControlName=\"label\" />\r\n    <p *ngIf=\"label.invalid && label.dirty\">Wtf is this shit ?</p>\r\n  </div>\r\n  <div>\r\n    <label>Code</label>\r\n    <input type=\"text\"\r\n           class=\"form-control\"\r\n           formControlName=\"code\" />\r\n    <p *ngIf=\"code.invalid && code.dirty\">Wut ?</p>\r\n  </div>\r\n  <div>\r\n    <label>Archivée</label>\r\n    <input type=\"checkbox\"\r\n           class=\"form-control\"\r\n           formControlName=\"archived\" />\r\n  </div>\r\n  <div>\r\n    <input type=\"submit\"\r\n           value=\"Modifier\"\r\n           [disabled]=\"form.invalid\" />\r\n  </div>\r\n</form>\r\n"
 
 /***/ }),
 
@@ -413,21 +409,36 @@ var AdminFieldEditFormular = /** @class */ (function (_super) {
         _this.validators = validators;
         return _this;
     }
+    Object.defineProperty(AdminFieldEditFormular.prototype, "field", {
+        get: function () {
+            return this._field;
+        },
+        set: function (field) {
+            this._field = field;
+            if (this.form != null && this.field != null) {
+                this.refresh();
+            }
+        },
+        enumerable: true,
+        configurable: true
+    });
+    ;
+    ;
     AdminFieldEditFormular.prototype.ngOnInit = function () {
         var _this = this;
         /* Gestion des références */
-        this.table = this.entity.table;
+        this.table = this.field.table;
         /* Création du formulaire */
-        this.label = new _angular_forms__WEBPACK_IMPORTED_MODULE_3__["FormControl"]('', [
+        this.label = new _angular_forms__WEBPACK_IMPORTED_MODULE_3__["FormControl"](this.translator.tr(this.field.label), [
             _angular_forms__WEBPACK_IMPORTED_MODULE_3__["Validators"].required,
             _angular_forms__WEBPACK_IMPORTED_MODULE_3__["Validators"].minLength(3)
         ]);
-        this.code = new _angular_forms__WEBPACK_IMPORTED_MODULE_3__["FormControl"]('', [
+        this.code = new _angular_forms__WEBPACK_IMPORTED_MODULE_3__["FormControl"](this.field.code, [
             _angular_forms__WEBPACK_IMPORTED_MODULE_3__["Validators"].required,
             _angular_forms__WEBPACK_IMPORTED_MODULE_3__["Validators"].minLength(3),
             _angular_forms__WEBPACK_IMPORTED_MODULE_3__["Validators"].pattern(/^[a-z0-9_]+$/)
         ], [this.validators.check("fields/check-code?table=" + this.table.id + "&code=")]);
-        this.archived = new _angular_forms__WEBPACK_IMPORTED_MODULE_3__["FormControl"]('', []);
+        this.archived = new _angular_forms__WEBPACK_IMPORTED_MODULE_3__["FormControl"](this.field.configuration.archived, []);
         this.reference = new _angular_forms__WEBPACK_IMPORTED_MODULE_3__["FormControl"]('', []);
         this.form = new _angular_forms__WEBPACK_IMPORTED_MODULE_3__["FormGroup"]({
             label: this.label,
@@ -439,29 +450,37 @@ var AdminFieldEditFormular = /** @class */ (function (_super) {
         this.state
             .getTables()
             .subscribe(function (data) { return _this.tables = data; });
-        /* Instanciation */
-        _super.prototype.ngOnInit.call(this);
     };
     AdminFieldEditFormular.prototype.check = function () {
         return this.form.valid;
     };
     AdminFieldEditFormular.prototype.provide = function () {
         var result = new _dto_field_dto__WEBPACK_IMPORTED_MODULE_8__["FieldDTO"]();
+        result.id = this.field.id;
         result.label = this.translator.edit(result.label, this.label.value);
         result.code = this.code.value;
-        result.configuration = this.entity.configuration;
+        result.configuration = this.field.configuration;
         result.configuration.archived = this.archived.value;
         result.table.id = this.table.id;
         return result;
     };
-    AdminFieldEditFormular.prototype.digest = function () {
-        this.label.setValue(this.translator.tr(this.entity.label));
-        this.code.setValue(this.entity.code);
-        this.archived.setValue(this.entity.configuration.archived);
+    AdminFieldEditFormular.prototype.digest = function (entity) {
+        entity.table = this.table;
+        this.state.publishField(entity);
     };
-    AdminFieldEditFormular.prototype.postSave = function () {
-        this.state.publishTable(this.table);
+    /** Rafraichit le contenu du formulaire. */
+    AdminFieldEditFormular.prototype.refresh = function () {
+        if (this.form != null && this.field != null) {
+            this.label.setValue(this.translator.tr(this.field.label));
+            this.code.setValue(this.field.code);
+            this.archived.setValue(this.field.configuration.archived);
+        }
     };
+    __decorate([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Input"])(),
+        __metadata("design:type", _dto_field_dto__WEBPACK_IMPORTED_MODULE_8__["FieldDTO"]),
+        __metadata("design:paramtypes", [_dto_field_dto__WEBPACK_IMPORTED_MODULE_8__["FieldDTO"]])
+    ], AdminFieldEditFormular.prototype, "field", null);
     AdminFieldEditFormular = __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"])({
             selector: 'admin-field-edit',
@@ -489,7 +508,7 @@ var AdminFieldEditFormular = /** @class */ (function (_super) {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<form class=\"form-group\" [formGroup]=\"form\" (submit)=\"submit()\">\r\n  <div>\r\n    <label>Nom</label>\r\n    <input type=\"text\"\r\n           class=\"form-control\"\r\n           formControlName=\"label\" />\r\n    <p *ngIf=\"label.invalid && label.dirty\">Wtf is this shit ?</p>\r\n  </div>\r\n  <div>\r\n    <label>Code</label>\r\n    <input type=\"text\"\r\n           class=\"form-control\"\r\n           formControlName=\"code\" />\r\n    <p *ngIf=\"code.invalid && code.dirty\">Wut ?</p>\r\n  </div>\r\n  <div>\r\n    <input type=\"submit\"\r\n           value=\"Ajouter\"\r\n           [disabled]=\"form.invalid\" />\r\n  </div>\r\n</form>\r\n"
+module.exports = "<form class=\"form-group\" [formGroup]=\"form\" (submit)=\"add()\">\r\n  <div>\r\n    <label>Nom</label>\r\n    <input type=\"text\"\r\n           class=\"form-control\"\r\n           formControlName=\"label\" />\r\n    <p *ngIf=\"label.invalid && label.dirty\">Wtf is this shit ?</p>\r\n  </div>\r\n  <div>\r\n    <label>Code</label>\r\n    <input type=\"text\"\r\n           class=\"form-control\"\r\n           formControlName=\"code\" />\r\n    <p *ngIf=\"code.invalid && code.dirty\">Wut ?</p>\r\n  </div>\r\n  <div>\r\n    <input type=\"submit\"\r\n           value=\"Ajouter\"\r\n           [disabled]=\"form.invalid\" />\r\n  </div>\r\n</form>\r\n"
 
 /***/ }),
 
@@ -591,8 +610,6 @@ var AdminTableAddFormular = /** @class */ (function (_super) {
                 _this.code.setValue(treated);
             }
         });
-        /* Instanciation */
-        _super.prototype.ngOnInit.call(this);
     };
     AdminTableAddFormular.prototype.check = function () {
         return this.form.valid;
@@ -604,13 +621,9 @@ var AdminTableAddFormular = /** @class */ (function (_super) {
         result.configuration = new _dto_table_dto__WEBPACK_IMPORTED_MODULE_6__["TableConfigurationDTO"]();
         return result;
     };
-    AdminTableAddFormular.prototype.digest = function () {
-        this.label.setValue(this.translator.tr(this.entity.label));
-        this.code.setValue(this.entity.code);
-    };
-    AdminTableAddFormular.prototype.postAdd = function () {
-        this.state.publishTable(this.entity);
-        this.router.navigate(["../edit-table", this.entity.id], { relativeTo: this.ar });
+    AdminTableAddFormular.prototype.digest = function (entity) {
+        this.state.publishTable(entity);
+        this.router.navigate(["../edit-table", entity.id], { relativeTo: this.ar });
     };
     AdminTableAddFormular = __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"])({
@@ -639,7 +652,7 @@ var AdminTableAddFormular = /** @class */ (function (_super) {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<form class=\"form-group\" [formGroup]=\"form\" (submit)=\"submit()\">\r\n  <h2>Editer la table</h2>\r\n  <div>\r\n    <label>Nom</label>\r\n    <input type=\"text\"\r\n           class=\"form-control\"\r\n           formControlName=\"label\" />\r\n    <p *ngIf=\"label.invalid && label.dirty\">Wtf is this shit ?</p>\r\n  </div>\r\n  <div>\r\n    <label>Code</label>\r\n    <input type=\"text\"\r\n           class=\"form-control\"\r\n           formControlName=\"code\" />\r\n    <p *ngIf=\"code.invalid && code.dirty\">Wut ?</p>\r\n  </div>\r\n  <div>\r\n    <label>Archivée</label>\r\n    <input type=\"checkbox\"\r\n           class=\"form-control\"\r\n           formControlName=\"archived\" />\r\n  </div>\r\n  <div>\r\n    <input type=\"submit\"\r\n           value=\"Modifier\"\r\n           [disabled]=\"form.invalid\" />\r\n  </div>\r\n</form>\r\n"
+module.exports = "<form class=\"form-group\" [formGroup]=\"form\" (submit)=\"save()\">\r\n  <h2>Editer la table</h2>\r\n  <div>\r\n    <label>Nom</label>\r\n    <input type=\"text\"\r\n           class=\"form-control\"\r\n           formControlName=\"label\" />\r\n    <p *ngIf=\"label.invalid && label.dirty\">Wtf is this shit ?</p>\r\n  </div>\r\n  <div>\r\n    <label>Code</label>\r\n    <input type=\"text\"\r\n           class=\"form-control\"\r\n           formControlName=\"code\" />\r\n    <p *ngIf=\"code.invalid && code.dirty\">Wut ?</p>\r\n  </div>\r\n  <div>\r\n    <label>Archivée</label>\r\n    <input type=\"checkbox\"\r\n           class=\"form-control\"\r\n           formControlName=\"archived\" />\r\n  </div>\r\n  <div>\r\n    <input type=\"submit\"\r\n           value=\"Modifier\"\r\n           [disabled]=\"form.invalid\" />\r\n  </div>\r\n</form>\r\n"
 
 /***/ }),
 
@@ -715,43 +728,42 @@ var AdminTableEditFormular = /** @class */ (function (_super) {
     }
     AdminTableEditFormular.prototype.ngOnInit = function () {
         /* Création du formulaire */
-        this.label = new _angular_forms__WEBPACK_IMPORTED_MODULE_3__["FormControl"]('', [
+        this.label = new _angular_forms__WEBPACK_IMPORTED_MODULE_3__["FormControl"](this.translator.tr(this.table.label), [
             _angular_forms__WEBPACK_IMPORTED_MODULE_3__["Validators"].required,
             _angular_forms__WEBPACK_IMPORTED_MODULE_3__["Validators"].minLength(3)
         ]);
-        this.code = new _angular_forms__WEBPACK_IMPORTED_MODULE_3__["FormControl"]('', [
+        this.code = new _angular_forms__WEBPACK_IMPORTED_MODULE_3__["FormControl"](this.table.code, [
             _angular_forms__WEBPACK_IMPORTED_MODULE_3__["Validators"].required,
             _angular_forms__WEBPACK_IMPORTED_MODULE_3__["Validators"].minLength(3),
             _angular_forms__WEBPACK_IMPORTED_MODULE_3__["Validators"].pattern(/^[a-z0-9_]+$/)
         ], [this.validators.check("tables/check-code?code=")]);
-        this.archived = new _angular_forms__WEBPACK_IMPORTED_MODULE_3__["FormControl"]('', []);
+        this.archived = new _angular_forms__WEBPACK_IMPORTED_MODULE_3__["FormControl"](this.table.configuration.archived, []);
         this.form = new _angular_forms__WEBPACK_IMPORTED_MODULE_3__["FormGroup"]({
             label: this.label,
             code: this.code,
             archived: this.archived
         });
-        /* Instanciation */
-        _super.prototype.ngOnInit.call(this);
     };
     AdminTableEditFormular.prototype.check = function () {
         return this.form.valid;
     };
     AdminTableEditFormular.prototype.provide = function () {
         var result = new _dto_table_dto__WEBPACK_IMPORTED_MODULE_5__["TableDTO"]();
+        result.id = this.table.id;
         result.label = this.translator.edit(result.label, this.label.value);
         result.code = this.code.value;
         result.configuration = new _dto_table_dto__WEBPACK_IMPORTED_MODULE_5__["TableConfigurationDTO"]();
         result.configuration.archived = this.archived.value;
         return result;
     };
-    AdminTableEditFormular.prototype.digest = function () {
-        this.label.setValue(this.translator.tr(this.entity.label));
-        this.code.setValue(this.entity.code);
-        this.archived.setValue(this.entity.configuration.archived);
+    AdminTableEditFormular.prototype.digest = function (entity) {
+        entity.fields = this.table.fields;
+        this.state.publishTable(entity);
     };
-    AdminTableEditFormular.prototype.postSave = function () {
-        this.state.publishTable(this.entity);
-    };
+    __decorate([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Input"])(),
+        __metadata("design:type", _dto_table_dto__WEBPACK_IMPORTED_MODULE_5__["TableDTO"])
+    ], AdminTableEditFormular.prototype, "table", void 0);
     AdminTableEditFormular = __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"])({
             selector: 'admin-table-edit',
@@ -781,55 +793,20 @@ var AdminTableEditFormular = /** @class */ (function (_super) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "PersitedAbstractFormular", function() { return PersitedAbstractFormular; });
-/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
-/* harmony import */ var rxjs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! rxjs */ "./node_modules/rxjs/_esm5/index.js");
-var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var __metadata = (undefined && undefined.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-
-
 /** Classe abstraite descriptive d'un formulaire permettant l'ajout et/ou la mise à jour
  *  d'une entité persitante en base.
- *  L'objet embarque une copie de l'entitée persistée qui peut être nulle (dans le cas
- *  d'un ajout) ou définie (dans le cas d'une mise à jour). Les classes descendantes
- *  doivent implémenter les méthodes permettant la définition d'une entité vierge ou
- *  sur la base des directives de saisie et peuvent également définir des actions
- *  complémentaires.
- *  Les URL d'ajout et de mise à jour sont structurées de la manière suivante :
- *  {prefix}/[add|update] */
+ *  Le composant permet de réaliser des appels au serveur sur la base de deux modes :
+ *  insertion (à l'URL '{prefix}/add') et mise à jour ('{prefix}/update'). Le préfixe
+ *  utilisé est fixé directement par les classes héritantes.
+ *  Par défaut, la classe réalise un premier appel au serveur (via la méthode 'submit()')
+ *  en mode d'insertion et les suivants en mode de mise à jour. La classe fille peut toutefois
+ *  forcer le comportement de chaque appel. */
 var PersitedAbstractFormular = /** @class */ (function () {
     function PersitedAbstractFormular(http, prefix) {
         this.http = http;
         this.prefix = prefix;
-        this.subject = new rxjs__WEBPACK_IMPORTED_MODULE_1__["BehaviorSubject"](null);
+        this.persisted = false;
     }
-    Object.defineProperty(PersitedAbstractFormular.prototype, "entity", {
-        get: function () {
-            return this.attribute;
-        },
-        set: function (entity) {
-            this.persisted = entity != null;
-            this.attribute = entity;
-            this.subject.next(entity);
-        },
-        enumerable: true,
-        configurable: true
-    });
-    ;
-    PersitedAbstractFormular.prototype.ngOnInit = function () {
-        var _this = this;
-        this.subject.subscribe(function (data) {
-            if (data != null) {
-                _this.digest();
-            }
-        });
-    };
     /** Réalise une action d'ajout. */
     PersitedAbstractFormular.prototype.add = function () {
         this.sync(true);
@@ -842,10 +819,6 @@ var PersitedAbstractFormular = /** @class */ (function () {
     PersitedAbstractFormular.prototype.submit = function () {
         this.sync(!this.persisted);
     };
-    /** Actions consécutives à l'ajout. */
-    PersitedAbstractFormular.prototype.postAdd = function () { };
-    /** Actions consécutives à la mise à jour. */
-    PersitedAbstractFormular.prototype.postSave = function () { };
     /**
      * Synchronise l'entité avec le serveur.
      * @param add true pour réaliser un ajout, false sinon.
@@ -853,32 +826,16 @@ var PersitedAbstractFormular = /** @class */ (function () {
     PersitedAbstractFormular.prototype.sync = function (add) {
         var _this = this;
         if (this.check()) {
-            if (this.persisted == add) {
-                throw new Error("Invalid state");
-            }
             var action = add ? "add" : "update";
             var instance = this.provide();
-            if (!add) {
-                instance.id = this.entity.id;
-            }
             this.http
                 .post(this.prefix + "/" + action, instance)
                 .subscribe(function (data) {
-                _this.entity = data;
-                if (add) {
-                    _this.postAdd();
-                }
-                else {
-                    _this.postSave();
-                }
+                _this.persisted = false;
+                _this.digest(data, add);
             });
         }
     };
-    __decorate([
-        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Input"])(),
-        __metadata("design:type", Object),
-        __metadata("design:paramtypes", [Object])
-    ], PersitedAbstractFormular.prototype, "entity", null);
     return PersitedAbstractFormular;
 }());
 
@@ -1491,7 +1448,7 @@ var PagesViewAdminComponent = /** @class */ (function (_super) {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div>\r\n  <h2>Table</h2>\r\n  <div class=\"column\">\r\n    <div *ngIf=\"action == 'add-table'\">\r\n      <h3>Créer une table</h3>\r\n      <admin-table-add></admin-table-add>\r\n    </div>\r\n    <div *ngIf=\"action != 'add-table'\">\r\n      <h3 [routerLink]=\"['../../edit-table', table.id]\">Modifier une table</h3>\r\n      <div>\r\n        <h4>{{ translator.tr(table.label) }}</h4>\r\n        <p>{{ table.code }}</p>\r\n      </div>\r\n      <h3>Champs</h3>\r\n      <div>\r\n        <p>\r\n          <span [routerLink]=\"['../../add-field', table.id]\">Ajouter</span>\r\n        </p>\r\n        <admin-field-add *ngIf=\"action == 'add-field'\" [table]=\"table\"></admin-field-add>\r\n        <p *ngIf=\"table.fields.length == 0\">Aucun champ référencé</p>\r\n        <ul *ngIf=\"table.fields.length > 0\">\r\n          <li *ngFor=\"let f of table.fields\"\r\n              [routerLink]=\"['../../edit-field', f.id]\"\r\n              (click)=\"field = f\">{{ translator.translate(f.label) }} de type {{ f.configuration.type }}</li>\r\n        </ul>\r\n      </div>\r\n    </div>\r\n  </div>\r\n  <div class=\"column\" *ngIf=\"action == 'edit-table'\">\r\n    <admin-table-edit [entity]=\"table\"></admin-table-edit>\r\n  </div>\r\n  <div class=\"column\" *ngIf=\"action == 'edit-field'\">\r\n    <admin-field-edit [entity]=\"field\"></admin-field-edit>\r\n  </div>\r\n</div>\r\n"
+module.exports = "<div>\r\n  <h2>Table</h2>\r\n  <div class=\"column\">\r\n    <div *ngIf=\"action == 'add-table'\">\r\n      <h3>Créer une table</h3>\r\n      <admin-table-add></admin-table-add>\r\n    </div>\r\n    <div *ngIf=\"action != 'add-table'\">\r\n      <h3 [routerLink]=\"['../../edit-table', table.id]\">Modifier une table</h3>\r\n      <div>\r\n        <h4>{{ translator.tr(table.label) }}</h4>\r\n        <p>{{ table.code }}</p>\r\n      </div>\r\n      <h3>Champs</h3>\r\n      <div>\r\n        <p>\r\n          <span [routerLink]=\"['../../add-field', table.id]\">Ajouter</span>\r\n        </p>\r\n        <admin-field-add *ngIf=\"action == 'add-field'\" [table]=\"table\"></admin-field-add>\r\n        <p *ngIf=\"table.fields.length == 0\">Aucun champ référencé</p>\r\n        <ul *ngIf=\"table.fields.length > 0\">\r\n          <li *ngFor=\"let f of table.fields\"\r\n              [routerLink]=\"['../../edit-field', f.id]\"\r\n              (click)=\"field = f\">{{ translator.translate(f.label) }} de type {{ f.configuration.type }}</li>\r\n        </ul>\r\n      </div>\r\n    </div>\r\n  </div>\r\n  <div class=\"column\" *ngIf=\"action == 'edit-table'\">\r\n    <admin-table-edit [table]=\"table\"></admin-table-edit>\r\n  </div>\r\n  <div class=\"column\" *ngIf=\"action == 'edit-field'\">\r\n    <admin-field-edit [field]=\"field\"></admin-field-edit>\r\n  </div>\r\n</div>\r\n"
 
 /***/ }),
 
@@ -1572,7 +1529,10 @@ var PagesViewAdminTableEditComponent = /** @class */ (function (_super) {
                 .getFields()
                 .subscribe(function (data) {
                 if (_this.action == "edit-field") {
+                    console.log(data);
+                    console.log(params["id"]);
                     _this.field = data.filter(function (f) { return f.id == params["id"]; })[0];
+                    console.log(_this.field);
                     _this.table = _this.field.table;
                 }
             });
@@ -1887,6 +1847,44 @@ var UserConfigurationDTO = /** @class */ (function () {
 
 /***/ }),
 
+/***/ "./src/app/internals/exceptions.handler.ts":
+/*!*************************************************!*\
+  !*** ./src/app/internals/exceptions.handler.ts ***!
+  \*************************************************/
+/*! exports provided: ExceptionsHandler */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ExceptionsHandler", function() { return ExceptionsHandler; });
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
+var __extends = (undefined && undefined.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+
+var ExceptionsHandler = /** @class */ (function (_super) {
+    __extends(ExceptionsHandler, _super);
+    function ExceptionsHandler() {
+        return _super.call(this) || this;
+    }
+    ExceptionsHandler.prototype.handleError = function (error) {
+        console.log(error);
+        alert("Ouch !");
+    };
+    return ExceptionsHandler;
+}(_angular_core__WEBPACK_IMPORTED_MODULE_0__["ErrorHandler"]));
+
+
+
+/***/ }),
+
 /***/ "./src/app/internals/exceptions.interceptor.ts":
 /*!*****************************************************!*\
   !*** ./src/app/internals/exceptions.interceptor.ts ***!
@@ -2036,63 +2034,66 @@ var __decorate = (undefined && undefined.__decorate) || function (decorators, ta
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
-var __metadata = (undefined && undefined.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
 
 
 
 /** Gestion de l'indicateur de chargement */
 var ReferencesInterceptor = /** @class */ (function () {
     function ReferencesInterceptor() {
-        this.index = {};
     }
     ReferencesInterceptor.prototype.intercept = function (request, next) {
         var _this = this;
         return next
             .handle(request)
             .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_2__["map"])(function (data) {
-            if (data instanceof _angular_common_http__WEBPACK_IMPORTED_MODULE_0__["HttpResponse"]) {
-                var typed = data;
-                if (typed.body != null) {
-                    _this.register(typed.body);
-                    _this.attach(typed.body);
-                    _this.index = {};
+            try {
+                if (data instanceof _angular_common_http__WEBPACK_IMPORTED_MODULE_0__["HttpResponse"]) {
+                    var typed = data;
+                    var index = {};
+                    if (typed.body != null) {
+                        _this.register(index, typed.body);
+                        _this.attach(index, typed.body);
+                    }
                 }
+                return data;
             }
-            return data;
+            catch (ex) {
+                throw new Error("References construction failed...");
+            }
         }));
     };
     /**
      * Enregistre les identifiants d'un objet et de ses enfants.
+     * @param index Index.
      * @param object Objet référencé.
      */
-    ReferencesInterceptor.prototype.register = function (object) {
+    ReferencesInterceptor.prototype.register = function (index, object) {
         var _this = this;
         if (object["$ref"] == null) {
-            if (this.index[object["$id"]] == null) {
-                // Enregistrement
-                this.index[object.$id] = object;
+            // Enregistrement
+            if (object["$id"] != null) {
+                index[object["$id"]] = object;
             }
             // Traitement des enfants
             Object.keys(object).forEach(function (key) {
-                if (typeof object[key] === "object") {
-                    _this.register(object[key]);
+                if (typeof object[key] === "object" && object[key] != null) {
+                    _this.register(index, object[key]);
                 }
             });
         }
     };
     /**
      *  Rattache les références avec les instances réelles.
+     *  @param index Index.
      *  @param object Objet rattaché.
      */
-    ReferencesInterceptor.prototype.attach = function (object) {
+    ReferencesInterceptor.prototype.attach = function (index, object) {
         var _this = this;
         if (object["$ref"] == null) {
             // Traitement des enfants
             Object.keys(object).forEach(function (key) {
-                if (typeof object[key] === "object") {
-                    var buffer = _this.attach(object[key]);
+                if (typeof object[key] === "object" && object[key] != null) {
+                    var buffer = _this.attach(index, object[key]);
                     if (buffer != null) {
                         object[key] = buffer;
                     }
@@ -2101,14 +2102,13 @@ var ReferencesInterceptor = /** @class */ (function () {
             return null;
         }
         else {
-            return this.index[object["$ref"]];
+            return index[object["$ref"]];
         }
     };
     ReferencesInterceptor = __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Injectable"])({
             providedIn: 'root'
-        }),
-        __metadata("design:paramtypes", [])
+        })
     ], ReferencesInterceptor);
     return ReferencesInterceptor;
 }());
@@ -2376,6 +2376,29 @@ var StateService = /** @class */ (function () {
         else {
             var idx = this.tablesState.indexOf(pre[0]);
             this.tablesState[idx] = table;
+        }
+        this.tables.next(this.tablesState);
+    };
+    /**
+     * Publie (ajout ou mise à jour) un champ unitaire.
+     *  @param field Champ publié.
+     */
+    StateService.prototype.publishField = function (field) {
+        if (field.table == null) {
+            throw new Error("Field has to be attached to a table in order to be published");
+        }
+        var table = this.tablesState.filter(function (e) { return e.id == field.table.id; })[0];
+        var pre = table.fields.filter(function (e) { return e.id == field.id; });
+        if (pre.length == 0) {
+            table.fields.push(field);
+            console.log("push");
+        }
+        else {
+            var idx = table.fields.indexOf(pre[0]);
+            console.log(idx);
+            table.fields[idx] = field;
+            console.log("flipflop");
+            console.log(this.tablesState);
         }
         this.tables.next(this.tablesState);
     };

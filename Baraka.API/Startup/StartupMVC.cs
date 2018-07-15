@@ -41,10 +41,8 @@
             builder.AddJsonFormatters(setup =>
             {
                 setup.PreserveReferencesHandling = PreserveReferencesHandling.Objects;
-                /*setup.TypeNameHandling = TypeNameHandling.Auto;
-                setup.TypeNameAssemblyFormatHandling = TypeNameAssemblyFormatHandling.Simple;
-                setup.SerializationBinder = new PersistedJsonTypeBinderr();*/
 
+                setup.Converters.Add(new ProxyConverter());
                 setup.Converters.Add(new GenericPersistedJsonConverter());
                 setup.Converters.Add(new PersistedJsonReferencesConverter());
                 setup.Converters.Add(new PersistedJsonCollectionsConverter());
