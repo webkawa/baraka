@@ -88,6 +88,7 @@ export class AdminFieldEditFormular extends PersitedAbstractFormular<FieldDTO<Ab
   }
 
   protected check(): boolean {
+    this.form.updateValueAndValidity();
     return this.form.valid;
   }
 
@@ -110,9 +111,12 @@ export class AdminFieldEditFormular extends PersitedAbstractFormular<FieldDTO<Ab
   /** Rafraichit le contenu du formulaire. */
   private refresh(): void {
     if (this.form != null && this.field != null) {
+      this.code.setAsyncValidators([this.validators.check("fields/check-code?table=" + this.table.id + "&code=", this.field.code)]);
+
       this.label.setValue(this.translator.tr(this.field.label));
       this.code.setValue(this.field.code);
       this.archived.setValue(this.field.configuration.archived);
+      this.form.updateValueAndValidity();
     }
   }
 }

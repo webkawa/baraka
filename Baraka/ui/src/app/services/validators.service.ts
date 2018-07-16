@@ -23,18 +23,25 @@ export class ValidatorsService {
    */
   public check(prefix: string, init: string = null): AsyncValidatorFn {
     return (control: AbstractControl): Observable<ValidationErrors | null> => {
-      return timer(500)
-        .pipe(switchMap((data) => {
-          if (init != null && control.value == init) {
-            return Observable.create(null);
-          } else {
-            return this.http
-              .get<boolean>(prefix + control.value)
-              .pipe(map((data) => {
-                return data ? null : ["Check failed"];
-              }));
-          }
-        }));
+      try {
+
+        if (init != null && control.value == init) {
+          console.log("go through !");
+          return from([null]);
+        } else {
+          return timer(250)
+            .pipe(switchMap((data) => {
+              return this.http
+                .get<boolean>(prefix + control.value)
+                .pipe(map((data) => {
+                  return data ? null : ["Check failed"];
+                }));
+            }));
+        }
+      }
+      catch (ex) {
+        throw new Error("Error validating code...");
+      }
     };
   }
 }

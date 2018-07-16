@@ -428,12 +428,35 @@ var AdminFieldEditFormular = /** @class */ (function (_super) {
         var _this = this;
         /* Gestion des références */
         this.table = this.field.table;
+        /* Création du formulaire */
+        this.label = new _angular_forms__WEBPACK_IMPORTED_MODULE_3__["FormControl"](this.translator.tr(this.field.label), [
+            _angular_forms__WEBPACK_IMPORTED_MODULE_3__["Validators"].required,
+            _angular_forms__WEBPACK_IMPORTED_MODULE_3__["Validators"].minLength(3)
+        ]);
+        this.code = new _angular_forms__WEBPACK_IMPORTED_MODULE_3__["FormControl"](this.field.code, [
+            _angular_forms__WEBPACK_IMPORTED_MODULE_3__["Validators"].required,
+            _angular_forms__WEBPACK_IMPORTED_MODULE_3__["Validators"].minLength(3),
+            _angular_forms__WEBPACK_IMPORTED_MODULE_3__["Validators"].pattern(/^[a-z0-9_]+$/)
+        ], [
+            this.validators.check("fields/check-code?table=" + this.table.id + "&code=", this.field.code)
+        ]);
+        this.archived = new _angular_forms__WEBPACK_IMPORTED_MODULE_3__["FormControl"](this.field.configuration.archived, []);
+        this.reference = new _angular_forms__WEBPACK_IMPORTED_MODULE_3__["FormControl"]('', []);
+        this.form = new _angular_forms__WEBPACK_IMPORTED_MODULE_3__["FormGroup"]({
+            label: this.label,
+            code: this.code,
+            archived: this.archived,
+            reference: this.reference
+        });
         /* Surveillance des tables */
         this.state
             .getTables()
             .subscribe(function (data) { return _this.tables = data; });
     };
     AdminFieldEditFormular.prototype.check = function () {
+        this.form.updateValueAndValidity();
+        console.log("STATUS : ");
+        console.log(this.form);
         return this.form.valid;
     };
     AdminFieldEditFormular.prototype.provide = function () {
@@ -452,27 +475,13 @@ var AdminFieldEditFormular = /** @class */ (function (_super) {
     };
     /** Rafraichit le contenu du formulaire. */
     AdminFieldEditFormular.prototype.refresh = function () {
-        if (this.field != null) {
-            /* Re-création du formulaire */
-            this.label = new _angular_forms__WEBPACK_IMPORTED_MODULE_3__["FormControl"](this.translator.tr(this.field.label), [
-                _angular_forms__WEBPACK_IMPORTED_MODULE_3__["Validators"].required,
-                _angular_forms__WEBPACK_IMPORTED_MODULE_3__["Validators"].minLength(3)
-            ]);
-            this.code = new _angular_forms__WEBPACK_IMPORTED_MODULE_3__["FormControl"](this.field.code, [
-                _angular_forms__WEBPACK_IMPORTED_MODULE_3__["Validators"].required,
-                _angular_forms__WEBPACK_IMPORTED_MODULE_3__["Validators"].minLength(3),
-                _angular_forms__WEBPACK_IMPORTED_MODULE_3__["Validators"].pattern(/^[a-z0-9_]+$/)
-            ], [
-                this.validators.check("fields/check-code?table=" + this.table.id + "&code=", this.field.code)
-            ]);
-            this.archived = new _angular_forms__WEBPACK_IMPORTED_MODULE_3__["FormControl"](this.field.configuration.archived, []);
-            this.reference = new _angular_forms__WEBPACK_IMPORTED_MODULE_3__["FormControl"]('', []);
-            this.form = new _angular_forms__WEBPACK_IMPORTED_MODULE_3__["FormGroup"]({
-                label: this.label,
-                code: this.code,
-                archived: this.archived,
-                reference: this.reference
-            });
+        if (this.form != null && this.field != null) {
+            console.log("PATCH:" + this.field.code);
+            this.code.setAsyncValidators([this.validators.check("fields/check-code?table=" + this.table.id + "&code=", this.field.code)]);
+            this.label.setValue(this.translator.tr(this.field.label));
+            this.code.setValue(this.field.code);
+            this.archived.setValue(this.field.configuration.archived);
+            this.form.updateValueAndValidity();
         }
     };
     __decorate([
@@ -826,12 +835,9 @@ var PersitedAbstractFormular = /** @class */ (function () {
      */
     PersitedAbstractFormular.prototype.sync = function (add) {
         var _this = this;
-        console.log("fu ?");
         if (this.check()) {
-            console.log("fufu?");
             var action = add ? "add" : "update";
             var instance = this.provide();
-            console.log(instance);
             this.http
                 .post(this.prefix + "/" + action, instance)
                 .subscribe(function (data) {
@@ -2566,19 +2572,42 @@ var ValidatorsService = /** @class */ (function () {
         var _this = this;
         if (init === void 0) { init = null; }
         return function (control) {
-            return Object(rxjs__WEBPACK_IMPORTED_MODULE_2__["timer"])(500)
-                .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["switchMap"])(function (data) {
+            try {
                 if (init != null && control.value == init) {
-                    return rxjs__WEBPACK_IMPORTED_MODULE_2__["Observable"].create(null);
+                    console.log("go through !");
+                    return Object(rxjs__WEBPACK_IMPORTED_MODULE_2__["from"])([null]);
                 }
                 else {
-                    return _this.http
-                        .get(prefix + control.value)
-                        .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["map"])(function (data) {
-                        return data ? null : ["Check failed"];
+                    console.log("check...");
+                    return Object(rxjs__WEBPACK_IMPORTED_MODULE_2__["timer"])(250)
+                        .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["switchMap"])(function (data) {
+                        return _this.http
+                            .get(prefix + control.value)
+                            .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["map"])(function (data) {
+                            console.log(data);
+                            return data ? null : ["Check failed"];
+                        }));
                     }));
                 }
-            }));
+            }
+            catch (ex) {
+                throw new Error("Error validating code...");
+            }
+            /*
+            return timer(250)
+              .pipe(switchMap((data) => {
+                if (init != null && control.value == init) {
+                  console.log("go through !");
+                  return Observable.create(null);
+                } else {
+                  console.log("check...");
+                  return this.http
+                    .get<boolean>(prefix + control.value)
+                    .pipe(map((data) => {
+                      return data ? null : ["Check failed"];
+                    }));
+                }
+              }));*/
         };
     };
     ValidatorsService = __decorate([
