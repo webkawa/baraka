@@ -20,20 +20,18 @@ export class PageLoginComponent {
     private state: StateService,
     private router: Router,
     private ar: ActivatedRoute) {
-
-    this.ar.params.subscribe((params) => {
-      // onInit broken
-      this.authentication
-        .getCredentials()
-        .subscribe((data) => {
-          if (data.connected) {
-            this.state
-              .loadState()
-              .subscribe((data) => {
-                this.router.navigate(["home"]);
-              });
-          }
-        });
-    });
+    
+    // onInit broken
+    this.authentication
+      .getCredentials()
+      .subscribe((data) => {
+        if (data.connected) {
+          this.state
+            .loadState()
+            .subscribe((data) => {
+              this.router.navigate(["home"]);
+            });
+        }
+      });
   }
 }

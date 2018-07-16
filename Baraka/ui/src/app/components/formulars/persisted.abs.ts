@@ -59,10 +59,13 @@ export abstract class PersitedAbstractFormular<TEntity extends EntityDTO> {
    * @param add true pour réaliser un ajout, false sinon.
    */
   private sync(add: boolean): void {
+    console.log("fu ?");
     if (this.check()) {
+      console.log("fufu?");
       let action = add ? "add" : "update";
       let instance = this.provide();
-      
+
+      console.log(instance);
       this.http
         .post<TEntity>(this.prefix + "/" + action, instance)
         .subscribe((data) => {

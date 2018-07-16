@@ -50,7 +50,9 @@ export class AdminTableEditFormular extends PersitedAbstractFormular<TableDTO> i
       Validators.required,
       Validators.minLength(3),
       Validators.pattern(/^[a-z0-9_]+$/)
-    ], [this.validators.check("tables/check-code?code=")]);
+    ], [
+        this.validators.check("tables/check-code?code=", this.table.code)
+    ]);
     this.archived = new FormControl(this.table.configuration.archived, []);
     this.form = new FormGroup({
       label: this.label,

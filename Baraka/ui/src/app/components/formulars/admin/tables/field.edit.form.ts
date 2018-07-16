@@ -69,7 +69,9 @@ export class AdminFieldEditFormular extends PersitedAbstractFormular<FieldDTO<Ab
       Validators.required,
       Validators.minLength(3),
       Validators.pattern(/^[a-z0-9_]+$/)
-    ], [this.validators.check("fields/check-code?table=" + this.table.id + "&code=")]);
+    ], [
+        this.validators.check("fields/check-code?table=" + this.table.id + "&code=", this.field.code)
+      ]);
     this.archived = new FormControl(this.field.configuration.archived, []);
     this.reference = new FormControl('', []);
     this.form = new FormGroup({

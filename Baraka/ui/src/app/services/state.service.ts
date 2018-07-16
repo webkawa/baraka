@@ -13,33 +13,33 @@ import { FieldDTO, AbstractFieldConfigurationDTO } from '../dto/field.dto';
 })
 export class StateService {
 
-  private views: Subject<ViewDTO<AbstractViewConfigurationDTO>[]>
+  private viewsSubject: Subject<ViewDTO<AbstractViewConfigurationDTO>[]>
   private viewsState: ViewDTO<AbstractViewConfigurationDTO>[];
-  private tables: Subject<TableDTO[]>
+  private tablesSubject: Subject<TableDTO[]>
   private tablesState: TableDTO[];
 
   constructor(
     public http: HttpClient) {
 
-    this.views = new BehaviorSubject([]);
+    this.viewsSubject = new BehaviorSubject([]);
     this.viewsState = [];
-    this.tables = new BehaviorSubject([]);
+    this.tablesSubject = new BehaviorSubject([]);
     this.tablesState = [];
   }
 
   /** Retourne la liste des vues */
   public getViews(): Observable<ViewDTO<AbstractViewConfigurationDTO>[]> {
-    return this.views.asObservable();
+    return this.viewsSubject.asObservable();
   }
 
   /** Retourne la liste des tables */
   public getTables(): Observable<TableDTO[]> {
-    return this.tables.asObservable();
+    return this.tablesSubject.asObservable();
   }
 
   /** Retourne la liste des champs */
   public getFields(): Observable<FieldDTO<AbstractFieldConfigurationDTO>[]> {
-    return this.tables
+    return this.tablesSubject
       .pipe(map((data) => {
         let result: FieldDTO<AbstractFieldConfigurationDTO>[] = [];
         for (let table of data) {
@@ -56,7 +56,7 @@ export class StateService {
    * @param tables Tables publiées.
    */
   public publishTables(tables: TableDTO[]): void {
-    this.tables.next(tables);
+    this.tablesSubject.next(tables);
   }
 
   /**
@@ -71,7 +71,7 @@ export class StateService {
       let idx = this.tablesState.indexOf(pre[0]);
       this.tablesState[idx] = table;
     }
-    this.tables.next(this.tablesState);
+    this.tablesSubject.next(this.tablesState);
   }
 
   /**
@@ -88,15 +88,11 @@ export class StateService {
 
     if (pre.length == 0) {
       table.fields.push(field);
-      console.log("push");
     } else {
       let idx = table.fields.indexOf(pre[0]);
-      console.log(idx);
       table.fields[idx] = field;
-      console.log("flipflop");
-      console.log(this.tablesState);
     }
-    this.tables.next(this.tablesState);
+    this.tablesSubject.next(this.tablesState);
   }
 
   /** Charge l'état complet de l'application */
@@ -112,7 +108,7 @@ export class StateService {
       .get<ViewDTO<AbstractViewConfigurationDTO>[]>("views/list")
       .pipe(map((data) => {
         this.viewsState = data;
-        this.views.next(data);
+        this.viewsSubject.next(data);
         return data;
       }));
   }
@@ -123,7 +119,7 @@ export class StateService {
       .get<TableDTO[]>("tables/list")
       .pipe(map((data) => {
         this.tablesState = data;
-        this.tables.next(data);
+        this.tablesSubject.next(data);
         return data;
       }));
   }

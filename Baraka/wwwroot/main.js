@@ -428,24 +428,6 @@ var AdminFieldEditFormular = /** @class */ (function (_super) {
         var _this = this;
         /* Gestion des références */
         this.table = this.field.table;
-        /* Création du formulaire */
-        this.label = new _angular_forms__WEBPACK_IMPORTED_MODULE_3__["FormControl"](this.translator.tr(this.field.label), [
-            _angular_forms__WEBPACK_IMPORTED_MODULE_3__["Validators"].required,
-            _angular_forms__WEBPACK_IMPORTED_MODULE_3__["Validators"].minLength(3)
-        ]);
-        this.code = new _angular_forms__WEBPACK_IMPORTED_MODULE_3__["FormControl"](this.field.code, [
-            _angular_forms__WEBPACK_IMPORTED_MODULE_3__["Validators"].required,
-            _angular_forms__WEBPACK_IMPORTED_MODULE_3__["Validators"].minLength(3),
-            _angular_forms__WEBPACK_IMPORTED_MODULE_3__["Validators"].pattern(/^[a-z0-9_]+$/)
-        ], [this.validators.check("fields/check-code?table=" + this.table.id + "&code=")]);
-        this.archived = new _angular_forms__WEBPACK_IMPORTED_MODULE_3__["FormControl"](this.field.configuration.archived, []);
-        this.reference = new _angular_forms__WEBPACK_IMPORTED_MODULE_3__["FormControl"]('', []);
-        this.form = new _angular_forms__WEBPACK_IMPORTED_MODULE_3__["FormGroup"]({
-            label: this.label,
-            code: this.code,
-            archived: this.archived,
-            reference: this.reference
-        });
         /* Surveillance des tables */
         this.state
             .getTables()
@@ -470,10 +452,27 @@ var AdminFieldEditFormular = /** @class */ (function (_super) {
     };
     /** Rafraichit le contenu du formulaire. */
     AdminFieldEditFormular.prototype.refresh = function () {
-        if (this.form != null && this.field != null) {
-            this.label.setValue(this.translator.tr(this.field.label));
-            this.code.setValue(this.field.code);
-            this.archived.setValue(this.field.configuration.archived);
+        if (this.field != null) {
+            /* Re-création du formulaire */
+            this.label = new _angular_forms__WEBPACK_IMPORTED_MODULE_3__["FormControl"](this.translator.tr(this.field.label), [
+                _angular_forms__WEBPACK_IMPORTED_MODULE_3__["Validators"].required,
+                _angular_forms__WEBPACK_IMPORTED_MODULE_3__["Validators"].minLength(3)
+            ]);
+            this.code = new _angular_forms__WEBPACK_IMPORTED_MODULE_3__["FormControl"](this.field.code, [
+                _angular_forms__WEBPACK_IMPORTED_MODULE_3__["Validators"].required,
+                _angular_forms__WEBPACK_IMPORTED_MODULE_3__["Validators"].minLength(3),
+                _angular_forms__WEBPACK_IMPORTED_MODULE_3__["Validators"].pattern(/^[a-z0-9_]+$/)
+            ], [
+                this.validators.check("fields/check-code?table=" + this.table.id + "&code=", this.field.code)
+            ]);
+            this.archived = new _angular_forms__WEBPACK_IMPORTED_MODULE_3__["FormControl"](this.field.configuration.archived, []);
+            this.reference = new _angular_forms__WEBPACK_IMPORTED_MODULE_3__["FormControl"]('', []);
+            this.form = new _angular_forms__WEBPACK_IMPORTED_MODULE_3__["FormGroup"]({
+                label: this.label,
+                code: this.code,
+                archived: this.archived,
+                reference: this.reference
+            });
         }
     };
     __decorate([
@@ -736,7 +735,9 @@ var AdminTableEditFormular = /** @class */ (function (_super) {
             _angular_forms__WEBPACK_IMPORTED_MODULE_3__["Validators"].required,
             _angular_forms__WEBPACK_IMPORTED_MODULE_3__["Validators"].minLength(3),
             _angular_forms__WEBPACK_IMPORTED_MODULE_3__["Validators"].pattern(/^[a-z0-9_]+$/)
-        ], [this.validators.check("tables/check-code?code=")]);
+        ], [
+            this.validators.check("tables/check-code?code=", this.table.code)
+        ]);
         this.archived = new _angular_forms__WEBPACK_IMPORTED_MODULE_3__["FormControl"](this.table.configuration.archived, []);
         this.form = new _angular_forms__WEBPACK_IMPORTED_MODULE_3__["FormGroup"]({
             label: this.label,
@@ -825,9 +826,12 @@ var PersitedAbstractFormular = /** @class */ (function () {
      */
     PersitedAbstractFormular.prototype.sync = function (add) {
         var _this = this;
+        console.log("fu ?");
         if (this.check()) {
+            console.log("fufu?");
             var action = add ? "add" : "update";
             var instance = this.provide();
+            console.log(instance);
             this.http
                 .post(this.prefix + "/" + action, instance)
                 .subscribe(function (data) {
@@ -1094,13 +1098,11 @@ var PageHomeComponent = /** @class */ (function () {
         this.translator = translator;
         this.ar = ar;
         this.views = [];
-        this.ar.params.subscribe(function (params) {
-            // onInit broken
-            _this.state
-                .getViews()
-                .subscribe(function (views) {
-                _this.views = views;
-            });
+        // onInit broken
+        this.state
+            .getViews()
+            .subscribe(function (views) {
+            _this.views = views;
         });
     }
     PageHomeComponent = __decorate([
@@ -1179,19 +1181,17 @@ var PageLoginComponent = /** @class */ (function () {
         this.state = state;
         this.router = router;
         this.ar = ar;
-        this.ar.params.subscribe(function (params) {
-            // onInit broken
-            _this.authentication
-                .getCredentials()
-                .subscribe(function (data) {
-                if (data.connected) {
-                    _this.state
-                        .loadState()
-                        .subscribe(function (data) {
-                        _this.router.navigate(["home"]);
-                    });
-                }
-            });
+        // onInit broken
+        this.authentication
+            .getCredentials()
+            .subscribe(function (data) {
+            if (data.connected) {
+                _this.state
+                    .loadState()
+                    .subscribe(function (data) {
+                    _this.router.navigate(["home"]);
+                });
+            }
         });
     }
     PageLoginComponent = __decorate([
@@ -1222,6 +1222,8 @@ var PageLoginComponent = /** @class */ (function () {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "PagesViewAbstractComponent", function() { return PagesViewAbstractComponent; });
+/* harmony import */ var rxjs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! rxjs */ "./node_modules/rxjs/_esm5/index.js");
+
 /** Vue abstraite */
 var PagesViewAbstractComponent = /** @class */ (function () {
     function PagesViewAbstractComponent(redirect, state, router, ar) {
@@ -1230,22 +1232,39 @@ var PagesViewAbstractComponent = /** @class */ (function () {
         this.state = state;
         this.router = router;
         this.ar = ar;
-        this.ar.params.subscribe(function (params) {
-            // onInit broken
-            _this.state
-                .getViews()
-                .subscribe(function (views) {
-                /* Récupération de la vue */
-                _this.views = views;
-                _this.view = views.filter(function (v) { return v.id == params["view"]; })[0];
-                /* Redirection */
-                if (_this.redirect) {
-                    _this.router.navigate(["/view", _this.view.id, _this.view.configuration.type.toLowerCase()], {
-                        skipLocationChange: true
-                    });
-                }
-            });
+        Object(rxjs__WEBPACK_IMPORTED_MODULE_0__["combineLatest"])(this.ar.params, this.state.getViews())
+            .subscribe(function (_a) {
+            var params = _a[0], views = _a[1];
+            /* Récupération de la vue */
+            _this.views = views;
+            _this.view = views.filter(function (v) { return v.id == params["view"]; })[0];
+            /* Redirection */
+            if (_this.redirect) {
+                _this.router.navigate(["/view", _this.view.id, _this.view.configuration.type.toLowerCase()], {
+                    skipLocationChange: true
+                });
+            }
         });
+        /*
+        this.ar.params.subscribe((params) => {
+          // onInit broken
+          this.state
+            .getViews()
+            .subscribe((views) => {
+              /* Récupération de la vue *
+              this.views = views;
+              this.view = <ViewDTO<TView>>views.filter((v) => v.id == params["view"])[0];
+    
+              /* Redirection *
+              if (this.redirect) {
+                this.router.navigate(
+                  ["/view", this.view.id, this.view.configuration.type.toLowerCase()],
+                  {
+                    skipLocationChange: true
+                  });
+              }
+            });
+        });*/
     }
     return PagesViewAbstractComponent;
 }());
@@ -1321,9 +1340,6 @@ var PageViewComponent = /** @class */ (function (_super) {
         _this.state = state;
         _this.router = router;
         _this.ar = ar;
-        _this.ar.params.subscribe(function (params) {
-            // onInit broken
-        });
         return _this;
     }
     PageViewComponent = __decorate([
@@ -1413,13 +1429,11 @@ var PagesViewAdminComponent = /** @class */ (function (_super) {
         _this.state = state;
         _this.router = router;
         _this.ar = ar;
-        _this.ar.params.subscribe(function (params) {
-            // onInit broken
-            _this.state
-                .getTables()
-                .subscribe(function (data) {
-                _this.tables = data;
-            });
+        // onInit broken
+        _this.state
+            .getTables()
+            .subscribe(function (data) {
+            _this.tables = data;
         });
         return _this;
     }
@@ -1475,9 +1489,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "PagesViewAdminTableEditComponent", function() { return PagesViewAdminTableEditComponent; });
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
 /* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/router */ "./node_modules/@angular/router/fesm5/router.js");
-/* harmony import */ var _view_abs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../view.abs */ "./src/app/components/pages/view.abs.ts");
-/* harmony import */ var _services_translator_service__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../../services/translator.service */ "./src/app/services/translator.service.ts");
-/* harmony import */ var _services_state_service__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../../services/state.service */ "./src/app/services/state.service.ts");
+/* harmony import */ var rxjs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! rxjs */ "./node_modules/rxjs/_esm5/index.js");
+/* harmony import */ var _view_abs__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../view.abs */ "./src/app/components/pages/view.abs.ts");
+/* harmony import */ var _services_translator_service__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../../services/translator.service */ "./src/app/services/translator.service.ts");
+/* harmony import */ var _services_state_service__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../../../services/state.service */ "./src/app/services/state.service.ts");
 var __extends = (undefined && undefined.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
         ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
@@ -1502,6 +1517,7 @@ var __metadata = (undefined && undefined.__metadata) || function (k, v) {
 
 
 
+
 /** Edition d'une table */
 var PagesViewAdminTableEditComponent = /** @class */ (function (_super) {
     __extends(PagesViewAdminTableEditComponent, _super);
@@ -1511,31 +1527,24 @@ var PagesViewAdminTableEditComponent = /** @class */ (function (_super) {
         _this.router = router;
         _this.ar = ar;
         _this.translator = translator;
+        // onInit broken
         _this.ar.params.subscribe(function (params) {
-            // onInit broken
             _this.action = params["action"];
-            _this.state
-                .getTables()
-                .subscribe(function (data) {
-                switch (_this.action) {
-                    case "edit-table":
-                    case "add-field":
-                        _this.table = data.filter(function (t) { return t.id == params["id"]; })[0];
-                        _this.field = null;
-                        break;
-                }
-            });
-            _this.state
-                .getFields()
-                .subscribe(function (data) {
-                if (_this.action == "edit-field") {
-                    console.log(data);
-                    console.log(params["id"]);
-                    _this.field = data.filter(function (f) { return f.id == params["id"]; })[0];
-                    console.log(_this.field);
+        });
+        Object(rxjs__WEBPACK_IMPORTED_MODULE_2__["combineLatest"])(_this.ar.params, _this.state.getTables(), _this.state.getFields())
+            .subscribe(function (_a) {
+            var params = _a[0], tables = _a[1], fields = _a[2];
+            switch (params["action"]) {
+                case "edit-table":
+                case "add-field":
+                    _this.table = tables.filter(function (t) { return t.id == params["id"]; })[0];
+                    _this.field = null;
+                    break;
+                case "edit-field":
+                    _this.field = fields.filter(function (f) { return f.id == params["id"]; })[0];
                     _this.table = _this.field.table;
-                }
-            });
+                    break;
+            }
         });
         return _this;
     }
@@ -1545,13 +1554,13 @@ var PagesViewAdminTableEditComponent = /** @class */ (function (_super) {
             template: __webpack_require__(/*! ./table.edit.cpn.html */ "./src/app/components/pages/views/admin/table.edit.cpn.html"),
             styles: [__webpack_require__(/*! ./table.edit.cpn.less */ "./src/app/components/pages/views/admin/table.edit.cpn.less")]
         }),
-        __metadata("design:paramtypes", [_services_state_service__WEBPACK_IMPORTED_MODULE_4__["StateService"],
+        __metadata("design:paramtypes", [_services_state_service__WEBPACK_IMPORTED_MODULE_5__["StateService"],
             _angular_router__WEBPACK_IMPORTED_MODULE_1__["Router"],
             _angular_router__WEBPACK_IMPORTED_MODULE_1__["ActivatedRoute"],
-            _services_translator_service__WEBPACK_IMPORTED_MODULE_3__["TranslatorService"]])
+            _services_translator_service__WEBPACK_IMPORTED_MODULE_4__["TranslatorService"]])
     ], PagesViewAdminTableEditComponent);
     return PagesViewAdminTableEditComponent;
-}(_view_abs__WEBPACK_IMPORTED_MODULE_2__["PagesViewAbstractComponent"]));
+}(_view_abs__WEBPACK_IMPORTED_MODULE_3__["PagesViewAbstractComponent"]));
 
 
 
@@ -2329,22 +2338,22 @@ var __metadata = (undefined && undefined.__metadata) || function (k, v) {
 var StateService = /** @class */ (function () {
     function StateService(http) {
         this.http = http;
-        this.views = new rxjs__WEBPACK_IMPORTED_MODULE_2__["BehaviorSubject"]([]);
+        this.viewsSubject = new rxjs__WEBPACK_IMPORTED_MODULE_2__["BehaviorSubject"]([]);
         this.viewsState = [];
-        this.tables = new rxjs__WEBPACK_IMPORTED_MODULE_2__["BehaviorSubject"]([]);
+        this.tablesSubject = new rxjs__WEBPACK_IMPORTED_MODULE_2__["BehaviorSubject"]([]);
         this.tablesState = [];
     }
     /** Retourne la liste des vues */
     StateService.prototype.getViews = function () {
-        return this.views.asObservable();
+        return this.viewsSubject.asObservable();
     };
     /** Retourne la liste des tables */
     StateService.prototype.getTables = function () {
-        return this.tables.asObservable();
+        return this.tablesSubject.asObservable();
     };
     /** Retourne la liste des champs */
     StateService.prototype.getFields = function () {
-        return this.tables
+        return this.tablesSubject
             .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["map"])(function (data) {
             var result = [];
             for (var _i = 0, data_1 = data; _i < data_1.length; _i++) {
@@ -2362,7 +2371,7 @@ var StateService = /** @class */ (function () {
      * @param tables Tables publiées.
      */
     StateService.prototype.publishTables = function (tables) {
-        this.tables.next(tables);
+        this.tablesSubject.next(tables);
     };
     /**
      * Publie (ajout ou mise à jour) une table unitaire.
@@ -2377,7 +2386,7 @@ var StateService = /** @class */ (function () {
             var idx = this.tablesState.indexOf(pre[0]);
             this.tablesState[idx] = table;
         }
-        this.tables.next(this.tablesState);
+        this.tablesSubject.next(this.tablesState);
     };
     /**
      * Publie (ajout ou mise à jour) un champ unitaire.
@@ -2391,16 +2400,12 @@ var StateService = /** @class */ (function () {
         var pre = table.fields.filter(function (e) { return e.id == field.id; });
         if (pre.length == 0) {
             table.fields.push(field);
-            console.log("push");
         }
         else {
             var idx = table.fields.indexOf(pre[0]);
-            console.log(idx);
             table.fields[idx] = field;
-            console.log("flipflop");
-            console.log(this.tablesState);
         }
-        this.tables.next(this.tablesState);
+        this.tablesSubject.next(this.tablesState);
     };
     /** Charge l'état complet de l'application */
     StateService.prototype.loadState = function () {
@@ -2413,7 +2418,7 @@ var StateService = /** @class */ (function () {
             .get("views/list")
             .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["map"])(function (data) {
             _this.viewsState = data;
-            _this.views.next(data);
+            _this.viewsSubject.next(data);
             return data;
         }));
     };
@@ -2424,7 +2429,7 @@ var StateService = /** @class */ (function () {
             .get("tables/list")
             .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["map"])(function (data) {
             _this.tablesState = data;
-            _this.tables.next(data);
+            _this.tablesSubject.next(data);
             return data;
         }));
     };
@@ -2555,17 +2560,24 @@ var ValidatorsService = /** @class */ (function () {
      * Fonction de validation d'une valeur via un service retournant un
      * booléen.
      * @param prefix Préfixe de l'URL appelée (concaténée avec la valeur).
+     * @param init Valeur initiale.
      */
-    ValidatorsService.prototype.check = function (prefix) {
+    ValidatorsService.prototype.check = function (prefix, init) {
         var _this = this;
+        if (init === void 0) { init = null; }
         return function (control) {
-            return Object(rxjs__WEBPACK_IMPORTED_MODULE_2__["timer"])(200)
+            return Object(rxjs__WEBPACK_IMPORTED_MODULE_2__["timer"])(500)
                 .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["switchMap"])(function (data) {
-                return _this.http
-                    .get(prefix + control.value)
-                    .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["map"])(function (data) {
-                    return data ? null : ["Check failed"];
-                }));
+                if (init != null && control.value == init) {
+                    return rxjs__WEBPACK_IMPORTED_MODULE_2__["Observable"].create(null);
+                }
+                else {
+                    return _this.http
+                        .get(prefix + control.value)
+                        .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["map"])(function (data) {
+                        return data ? null : ["Check failed"];
+                    }));
+                }
             }));
         };
     };

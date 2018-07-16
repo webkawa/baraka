@@ -14,7 +14,7 @@ import { StateService } from '../../../services/state.service';
   styleUrls: ['./admin.cpn.less']
 })
 export class PagesViewAdminComponent extends PagesViewAbstractComponent<AdminViewConfigurationDTO> {
-  
+
   public tables: TableDTO[];
 
   public constructor(
@@ -25,14 +25,12 @@ export class PagesViewAdminComponent extends PagesViewAbstractComponent<AdminVie
 
     super(false, state, router, ar);
 
-    this.ar.params.subscribe((params) => {
-      // onInit broken
-      this.state
-        .getTables()
-        .subscribe((data) => {
-          this.tables = data;
-        });
-    });
+    // onInit broken
+    this.state
+      .getTables()
+      .subscribe((data) => {
+        this.tables = data;
+      });
   }
 
 }

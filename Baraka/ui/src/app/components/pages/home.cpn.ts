@@ -26,13 +26,11 @@ export class PageHomeComponent {
 
     this.views = [];
 
-    this.ar.params.subscribe((params) => {
-      // onInit broken
-      this.state
-        .getViews()
-        .subscribe((views) => {
-          this.views = views;
-        });
-    })
+    // onInit broken
+    this.state
+      .getViews()
+      .subscribe((views) => {
+        this.views = views;
+      });
   }
 }

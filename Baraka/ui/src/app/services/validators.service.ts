@@ -3,7 +3,7 @@ import { HttpClient } from "@angular/common/http";
 import { AsyncValidatorFn, AbstractControl, ValidationErrors } from "@angular/forms";
 
 import { Observable, timer, from, Subject } from "rxjs";
-import { debounce, distinctUntilChanged, map, delay, switchMap } from "rxjs/operators";
+import { debounce, distinctUntilChanged, map, delay, switchMap, combineLatest, first } from "rxjs/operators";
 
 /** Services de validation */
 @Injectable({
@@ -19,16 +19,21 @@ export class ValidatorsService {
    * Fonction de validation d'une valeur via un service retournant un
    * booléen.
    * @param prefix Préfixe de l'URL appelée (concaténée avec la valeur).
+   * @param init Valeur initiale.
    */
-  public check(prefix: string): AsyncValidatorFn {
+  public check(prefix: string, init: string = null): AsyncValidatorFn {
     return (control: AbstractControl): Observable<ValidationErrors | null> => {
-      return timer(200)
+      return timer(500)
         .pipe(switchMap((data) => {
-          return this.http
-            .get<boolean>(prefix + control.value)
-            .pipe(map((data) => {
-              return data ? null : ["Check failed"];
-            }));
+          if (init != null && control.value == init) {
+            return Observable.create(null);
+          } else {
+            return this.http
+              .get<boolean>(prefix + control.value)
+              .pipe(map((data) => {
+                return data ? null : ["Check failed"];
+              }));
+          }
         }));
     };
   }

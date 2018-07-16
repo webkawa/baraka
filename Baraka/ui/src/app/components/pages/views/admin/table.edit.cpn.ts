@@ -3,8 +3,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { FormGroup, FormControl, Validators, FormBuilder, AsyncValidatorFn, AbstractControl, ValidationErrors } from '@angular/forms';
 
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { Observable, combineLatest } from 'rxjs';
+import { map  } from 'rxjs/operators';
 
 import { PagesViewAbstractComponent } from '../../view.abs';
 import { AdminViewConfigurationDTO } from '../../../../dto/view.dto';
@@ -27,7 +27,7 @@ export class PagesViewAdminTableEditComponent extends PagesViewAbstractComponent
   public action: string;
   public table: TableDTO;
   public field: FieldDTO<AbstractFieldConfigurationDTO>;
-  
+
   public constructor(
     protected state: StateService,
     protected router: Router,
@@ -35,34 +35,25 @@ export class PagesViewAdminTableEditComponent extends PagesViewAbstractComponent
     private translator: TranslatorService) {
 
     super(false, state, router, ar);
-    
+
+    // onInit broken
     this.ar.params.subscribe((params) => {
-      // onInit broken
       this.action = params["action"];
-
-      this.state
-        .getTables()
-        .subscribe((data) => {
-          switch (this.action) {
-            case "edit-table":
-            case "add-field":
-              this.table = data.filter((t) => t.id == params["id"])[0];
-              this.field = null;
-              break;
-          }
-        });
-
-      this.state
-        .getFields()
-        .subscribe((data) => {
-          if (this.action == "edit-field") {
-            console.log(data);
-            console.log(params["id"]);
-            this.field = data.filter((f) => f.id == params["id"])[0];
-            console.log(this.field);
-            this.table = this.field.table;
-          }
-        });
     });
+
+    combineLatest(this.ar.params, this.state.getTables(), this.state.getFields())
+      .subscribe(([params, tables, fields]) => {
+        switch (params["action"]) {
+          case "edit-table":
+          case "add-field":
+            this.table = tables.filter((t) => t.id == params["id"])[0];
+            this.field = null;
+            break;
+          case "edit-field":
+            this.field = fields.filter((f) => f.id == params["id"])[0];
+            this.table = this.field.table;
+            break;
+        }
+      });
   }
 }
