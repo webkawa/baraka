@@ -16,6 +16,9 @@
     using NHibernate;
     using System.Linq;
     using Baraka.API.Internals.Model;
+    using Remotion.Linq;
+    using Remotion.Linq.Clauses;
+    using Remotion.Linq.Parsing;
 
     /// <summary>
     ///     Contrôleur des tables.

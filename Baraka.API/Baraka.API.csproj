@@ -30,4 +30,19 @@
     <Folder Include="Internals\Persistence\Interceptors\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Compile Update="Internals\Engine\Syntax\Specification\TSQLSpecification.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>TSQLSpecification.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Internals\Engine\Syntax\Specification\TSQLSpecification.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>TSQLSpecification.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+
 </Project>

@@ -45,6 +45,7 @@
             services.AddMvc();
             services.AddORM(Configuration);
             services.AddAuthentication();
+            services.AddEngine();
         }
         
         /// <summary>
