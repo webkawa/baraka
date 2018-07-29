@@ -7,15 +7,24 @@
     using Baraka.API.Internals.Engine.Syntax.Tokens;
 
     /// <summary>
+    ///     Interface des instructions.
+    /// </summary>
+    internal interface IInstruction
+    {
+    }
+
+    /// <summary>
     ///     Instruction.
     ///     Racine d'un arbre syntaxique SQL représentatif d'une requête
     ///     ou fragment de requête.
     /// </summary>
-    internal abstract class AbstractInstruction
+    /// <typeparam name="TRoot">Type du noeud racine.</typeparam>
+    internal abstract class AbstractInstruction<TRoot> : IInstruction
+        where TRoot : AbstractToken
     {
         /// <summary>
-        ///     Chaîne constituant l'instruction.
+        ///     Noeud racine.
         /// </summary>
-        internal ChainToken Root { get; set; }
+        internal TRoot Root { get; set; }
     }
 }

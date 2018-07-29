@@ -1,4 +1,4 @@
-﻿-- Syntax for SQL Server and Azure SQL Database  
+﻿-- Syntax for SQL Server and Azure SQL Databaze  
 
 [ WITH <common_table_expression> [ ,...n ] ]  
 INSERT   

@@ -18,6 +18,7 @@
     using NLog;
     using Baraka.API.DTO.Persisted.Tables;
     using Baraka.API.DTO.Persisted.Fields;
+    using Baraka.API.Internals.Engine.Syntax.Factory;
 
     /// <summary>
     ///     Services liées à l'initialisation de l'application.
@@ -33,6 +34,7 @@
         /// <param name="tableDAO">DAO des tables.</param>
         /// <param name="fieldDAO">DAO des champs.</param>
         /// <param name="viewDAO">DAO des vues.</param>
+        /// <param name=""></param>
         [Public]
         [Transactional]
         [Route("/services/demo")]
@@ -42,7 +44,8 @@
             [FromServices] UserDAO userDAO,
             [FromServices] TableDAO tableDAO,
             [FromServices] FieldDAO fieldDAO,
-            [FromServices] ViewDAO viewDAO)
+            [FromServices] ViewDAO viewDAO,
+            [FromServices] SyntaxValidator validator)
         {
             if (session.QueryOver<User>().RowCount() == 0)
             {

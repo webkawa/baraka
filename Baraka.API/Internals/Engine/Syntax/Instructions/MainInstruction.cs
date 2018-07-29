@@ -13,7 +13,7 @@
     ///     Instruction correspondant à une requête SQL à part entière,
     ///     exploitable par l'utilisateur final.
     /// </summary>
-    internal class MainInstruction : AbstractInstruction
+    internal class MainInstruction : AbstractInstruction<ChainToken>
     {
         /// <summary>
         ///     Mot-clef ouvrant l'instruction.
@@ -22,7 +22,12 @@
         {
             get
             {
-                var result = Root.Children.First() as KeywordToken;
+                var result = Root
+                    .Children
+                    .Where(e => e is KeywordToken)
+                    .Cast<KeywordToken>()
+                    .First();
+
                 if (result == null)
                 {
                     throw new InternalException("Invalid first node for instruction");

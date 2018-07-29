@@ -10,5 +10,9 @@
     /// </summary>
     internal abstract class AbstractToken
     {
+        /// <summary>
+        ///     Spécification brute.
+        /// </summary>
+        internal string Source { get; set; }
     }
 }

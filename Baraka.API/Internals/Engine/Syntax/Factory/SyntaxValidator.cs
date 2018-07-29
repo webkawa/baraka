@@ -18,9 +18,7 @@
         ///     Expression régulière utilisée pour l'extraction des instructions
         ///     et sous-instructions.
         /// </summary>
-        private readonly Regex REGEX_SPLIT = new Regex(@"(\n*\-\-.*)*\n{2,}");
-
-        /// <summary>
+        private readonly Regex REGEX_SPLIT = new Regex("(\r\n){2,}");
 
         /// <summary>
         ///     Constructeur.
@@ -56,7 +54,15 @@
         public void Load(string raw)
         {
             string[] split = REGEX_SPLIT.Split(raw);
-            foreach (string sub in split.Select(e => e.Replace("\n", "").Trim()))
+            IList<string> transform = split
+                .Select(e => e.Replace("\n", ""))
+                .Select(e => e.Replace("\r", ""))
+                .Select(e => e.Trim())
+                .Where(e => !string.IsNullOrEmpty(e))
+                .Where(e => !e.StartsWith("--"))
+                .ToList();
+
+            foreach (string sub in transform)
             {
                 var inst = Factory.ProcessInstruction(sub);
                 if (inst is MainInstruction)

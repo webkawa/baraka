@@ -18,18 +18,18 @@
         /// <summary>
         ///     Constructeur.
         /// </summary>
-        /// <param name="regex">Expression régulière.</param>
+        /// <param name="evaluator">Fonction d'évaluation.</param>
         /// <param name="builder">Générateur.</param>
-        public AbstractSyntaxPattern(string regex, Func<string, TBuild> builder)
+        public AbstractSyntaxPattern(Func<string, bool> evaluator, Func<string, TBuild> builder)
         {
-            Regex = new Regex(regex);
+            Evaluate = evaluator;
             Build = builder;
         }
 
         /// <summary>
         ///     Expression régulière.
         /// </summary>
-        internal Regex Regex { get; private set; }
+        internal Func<string, bool> Evaluate { get; private set; }
 
         /// <summary>
         ///     Générateur de noeud adapté à une valeur trouvée.
@@ -40,14 +40,14 @@
     /// <summary>
     ///     Modèle syntaxique applicable à une instruction SQL.
     /// </summary>
-    internal class InstructionSyntaxPattern : AbstractSyntaxPattern<AbstractInstruction>
+    internal class InstructionSyntaxPattern : AbstractSyntaxPattern<IInstruction>
     {
         /// <summary>
         ///     Constructeur.
         /// </summary>
-        /// <param name="regex">Expression régulière.</param>
+        /// <param name="evaluator">Fonction d'évaluation.</param>
         /// <param name="builder">Générateur.</param>
-        public InstructionSyntaxPattern(string regex, Func<string, AbstractInstruction> builder) : base(regex, builder)
+        public InstructionSyntaxPattern(Func<string, bool> evaluator, Func<string, IInstruction> builder) : base(evaluator, builder)
         {
         }
     }
@@ -60,9 +60,9 @@
         /// <summary>
         ///     Constructeur.
         /// </summary>
-        /// <param name="regex">Expression régulière.</param>
+        /// <param name="evaluator">Fonction d'évaluation.</param>
         /// <param name="builder">Générateur.</param>
-        public TokenSyntaxPattern(string regex, Func<string, AbstractToken> builder) : base(regex, builder)
+        public TokenSyntaxPattern(Func<string, bool> evaluator, Func<string, AbstractToken> builder) : base(evaluator, builder)
         {
         }
     }

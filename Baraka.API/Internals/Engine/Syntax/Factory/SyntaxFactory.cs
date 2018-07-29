@@ -27,6 +27,7 @@
             AddInstructionPattern();
 
             TokenPatterns = new HashSet<TokenSyntaxPattern>();
+            AddRepetitivePattern();
             AddFacultivePattern();
             AddMandatoryPattern();
             AddParenthesisPattern();
@@ -34,6 +35,7 @@
             AddKeywordsPattern();
             AddReferencesPattern();
             AddExpressionsPattern();
+            AddChainPattern();
         }
         
         /// <summary>
@@ -58,9 +60,11 @@
         {
             foreach (TokenSyntaxPattern pattern in TokenPatterns)
             {
-                if (pattern.Regex.IsMatch(raw))
+                if (pattern.Evaluate(raw))
                 {
-                    return pattern.Build(raw);
+                    var build = pattern.Build(raw);
+                    build.Source = raw;
+                    return build;
                 }
             }
 
@@ -91,11 +95,11 @@
         /// </summary>
         /// <param name="raw">Chaîne brute.</param>
         /// <returns>Instruction.</returns>
-        internal AbstractInstruction ProcessInstruction(string raw)
+        internal IInstruction ProcessInstruction(string raw)
         {
             foreach (InstructionSyntaxPattern pattern in InstructionsPatterns)
             {
-                if (pattern.Regex.IsMatch(raw))
+                if (pattern.Evaluate(raw))
                 {
                     return pattern.Build(raw);
                 }
@@ -103,17 +107,41 @@
 
             throw new InternalException("Syntax factory failed to process raw instruction '{0}'", raw);
         }
+
+        /// <summary>
+        ///     Indique si une chaîne de caractère représente un ensemble encadré par deux
+        ///     caractères-clef.
+        /// </summary>
+        /// <param name="value">Valeur évaluée.</param>
+        /// <param name="begin">Caractère de départ.</param>
+        /// <param name="end">Caractère de fin.</param>
+        /// <returns>true si la chaîne de caractère est encadrée, false sinon.</returns>
+        private static bool IsDelimitedBy(string value, char begin, char end)
+        {
+            if (value.StartsWith(begin) && value.EndsWith(end))
+            {
+                int buff = 0;
+                for (int i = 0; i < value.Length; i++)
+                {
+                    if (value[i] == begin) buff++;
+                    if (value[i] == end) buff--;
+                    if (buff == 0) return i == value.Length - 1;
+                }
+            }
+
+            return false;
+        }
         
         /// <summary>
         ///     Référence un modèle de spécification applicable à une instruction SQL
         ///     dans la liste supportée par la fabrique.
         /// </summary>
-        /// <param name="regex">Expression régulière.</param>
+        /// <param name="evaluator">Fonction d'évaluation.</param>
         /// <param name="builder">Générateur.</param>
         /// <returns>Modèle de spécification généré.</returns>
-        private InstructionSyntaxPattern SaveInstructionPattern(string regex, Func<string, AbstractInstruction> builder)
+        private InstructionSyntaxPattern SaveInstructionPattern(Func<string, bool> evaluator, Func<string, IInstruction> builder)
         {
-            var result = new InstructionSyntaxPattern(regex, builder);
+            var result = new InstructionSyntaxPattern(evaluator, builder);
             InstructionsPatterns.Add(result);
             return result;
         }
@@ -124,7 +152,7 @@
         /// <returns>Modèle de spécification généré.</returns>
         private void AddInstructionPattern()
         {
-            SaveInstructionPattern("*+", (value) =>
+            SaveInstructionPattern((value) => true, (value) =>
             {
                 return new MainInstruction()
                 {
@@ -138,13 +166,14 @@
         /// </summary>
         private void AddSubInstructionPattern()
         {
-            SaveInstructionPattern("<[a-z]+> *::=", (value) =>
+            var regex = new Regex("<[A-Za-z_ ]+> *::=");
+            SaveInstructionPattern((value) => regex.IsMatch(value), (value) =>
             {
                 var key = value.Substring(0, value.IndexOf("::=")).Replace("<", "").Replace(">", "").Trim();
                 var sub = value.Substring(value.IndexOf("::=") + 3);
                 return new SubInstruction()
                 {
-                    Root = ProcessToken<ChainToken>(sub.Trim()),
+                    Root = ProcessToken(sub.Trim()),
                     Key = key
                 };
             });
@@ -154,14 +183,31 @@
         ///     Ajoute un modèle de spécification applicable à un fragment dans la liste 
         ///     supportée par la fabrique.
         /// </summary>
-        /// <param name="regex">Expression régulière.</param>
+        /// <param name="evaluator">Fonction d'évaluation.</param>
         /// <param name="builder">Générateur.</param>
         /// <returns>Modèle de spécification généré.</returns>
-        private TokenSyntaxPattern SaveTokenPattern(string regex, Func<string, AbstractToken> builder)
+        private TokenSyntaxPattern SaveTokenPattern(Func<string, bool> evaluator, Func<string, AbstractToken> builder)
         {
-            var result = new TokenSyntaxPattern(regex, builder);
+            var result = new TokenSyntaxPattern(evaluator, builder);
             TokenPatterns.Add(result);
             return result;
+        }
+
+        /// <summary>
+        ///     Référence la modèle pour les noeuds de répétition.
+        /// </summary>
+        private void AddRepetitivePattern()
+        {
+            var regex = new Regex(@"^\[ *,?\.\.\.n *\]$");
+            SaveTokenPattern(
+                (value) => regex.IsMatch(value),
+                (value) =>
+                {
+                    return new RepetitiveToken()
+                    {
+                        Separator = value.Contains(",") ? true : false
+                    };
+                });
         }
 
         /// <summary>
@@ -169,15 +215,17 @@
         /// </summary>
         private void AddFacultivePattern()
         {
-            SaveTokenPattern(@"\[.+\]", (value) =>
-            {
-                string sub = value.Substring(1, value.Length - 2).Trim();
-                return new WrapperToken()
+            SaveTokenPattern(
+                (value) => IsDelimitedBy(value, '[', ']'), 
+                (value) =>
                 {
-                    Type = WrapperTokenType.FACULTATIVE,
-                    Inner = ProcessToken(sub)
-                };
-            });
+                    string sub = value.Substring(1, value.Length - 2).Trim();
+                    return new WrapperToken()
+                    {
+                        Type = WrapperTokenType.FACULTATIVE,
+                        Inner = ProcessToken(sub)
+                    };
+                });
         }
 
         /// <summary>
@@ -185,15 +233,17 @@
         /// </summary>
         private void AddMandatoryPattern()
         {
-            SaveTokenPattern(@"\{.+\}", (value) =>
-            {
-                string sub = value.Substring(1, value.Length - 2).Trim();
-                return new WrapperToken()
+            SaveTokenPattern(
+                (value) => IsDelimitedBy(value, '{', '}'),
+                (value) =>
                 {
-                    Type = WrapperTokenType.MANDATORY,
-                    Inner = ProcessToken(sub)
-                };
-            });
+                    string sub = value.Substring(1, value.Length - 2).Trim();
+                    return new WrapperToken()
+                    {
+                        Type = WrapperTokenType.MANDATORY,
+                        Inner = ProcessToken(sub)
+                    };
+                });
         }
 
         /// <summary>
@@ -201,15 +251,17 @@
         /// </summary>
         private void AddParenthesisPattern()
         {
-            SaveTokenPattern(@"\(.+\)", (value) =>
-            {
-                string sub = value.Substring(1, value.Length - 2).Trim();
-                return new WrapperToken()
+            SaveTokenPattern(
+                (value) => IsDelimitedBy(value, '(', ')'),
+                (value) =>
                 {
-                    Type = WrapperTokenType.PARENTHESIS,
-                    Inner = ProcessToken(sub)
-                };
-            });
+                    string sub = value.Substring(1, value.Length - 2).Trim();
+                    return new WrapperToken()
+                    {
+                        Type = WrapperTokenType.PARENTHESIS,
+                        Inner = ProcessToken(sub)
+                    };
+                });
         }
 
         /// <summary>
@@ -217,15 +269,75 @@
         /// </summary>
         private void AddSelectionPattern()
         {
-            SaveTokenPattern(@".+(\|.+)", (value) =>
-            {
-                string[] split = value.Split("|");
-                return new ChainToken()
+            SaveTokenPattern(
+                (value) =>
                 {
-                    Mode = ChainTokenMode.SELECT,
-                    Children = split.Select(e => ProcessToken(e.Trim())).ToList()
-                };
-            });
+                    int buff = 0;
+                    foreach (char c in value)
+                    {
+                        switch (c)
+                        {
+                            case '[':
+                            case '{':
+                            case '(':
+                                buff++;
+                                break;
+
+                            case ']':
+                            case '}':
+                            case ')':
+                                buff--;
+                                break;
+
+                            case '|':
+                                if (buff == 0) return true;
+                                break;
+
+                            default: break;
+                        }
+                    }
+
+                    return false;
+                },
+                (value) =>
+                {
+                    IList<string> split = new List<string>();
+                    string buff = string.Empty;
+                    int level = 0;
+                    foreach (char c in value)
+                    {
+                        buff += c;
+                        switch (c)
+                        {
+                            case '|':
+                                if (level == 0)
+                                {
+                                    split.Add(buff.Substring(0, buff.Length - 1));
+                                    buff = string.Empty;
+                                }
+                                break;
+
+                            case '[':
+                            case '{':
+                            case '(':
+                                level++;
+                                break;
+
+                            case ']':
+                            case '}':
+                            case ')':
+                                level--;
+                                break;
+                        }
+                    }
+                    split.Add(buff);
+
+                    return new ChainToken()
+                    {
+                        Mode = ChainTokenMode.SELECT,
+                        Children = split.Select(e => ProcessToken(e.Trim())).ToList()
+                    };
+                });
         }
 
         /// <summary>
@@ -233,7 +345,8 @@
         /// </summary>
         private void AddKeywordsPattern()
         {
-            SaveTokenPattern("[A-Z]+", (value) =>
+            var regex = new Regex(@"^([A-Z]+|;|\.)$");
+            SaveTokenPattern((value) => regex.IsMatch(value), (value) =>
             {
                 return new KeywordToken()
                 {
@@ -247,13 +360,13 @@
         /// </summary>
         private void AddReferencesPattern()
         {
-            SaveTokenPattern("<[a-z_]+>", (value) =>
+            var regex = new Regex("^<[A-Za-z_ ]+>$");
+            SaveTokenPattern((value) => regex.IsMatch(value), (value) =>
             {
                 string sub = value.Substring(1, value.Length - 2).Trim();
-                return new WrapperToken()
+                return new ReferenceToken()
                 {
-                    Type = WrapperTokenType.MANDATORY,
-                    Inner = ProcessToken(sub)
+                    Key = sub
                 };
             });
         }
@@ -263,7 +376,8 @@
         /// </summary>
         private void AddExpressionsPattern()
         {
-            SaveTokenPattern("[a-z_]+", (value) =>
+            var regex = new Regex("^[a-z_]+$");
+            SaveTokenPattern((value) => regex.IsMatch(value), (value) =>
             {
                 return new StatementToken()
                 {
@@ -277,38 +391,72 @@
         /// </summary>
         private void AddChainPattern()
         {
-            SaveTokenPattern("[.\n]+", (value) =>
+            var regex = new Regex(@"[.\w\r\n]+");
+            SaveTokenPattern((value) => regex.IsMatch(value), (value) =>
             {
                 // Division d'une chaîne en sous-enfants
                 IList<string> children = new List<string>();
                 string buff = string.Empty;
-                char? wait = null; // Caractère attendu pour cesser l'enregistrement
-                foreach (char c in value)
+
+                int frameLevel = 0;
+                char? frameStart = null;
+                char? frameEnd = null;
+
+                for (int i = 0; i < value.Length; i++)
                 {
-                    if (wait.HasValue)
+                    buff += value[i];
+                    if (frameEnd.HasValue)
                     {
-                        if (c == wait.Value)
+                        if (frameStart.HasValue && value[i] == frameStart.Value) frameLevel++;
+                        else if (value[i] == frameEnd.Value) frameLevel--;
+                        if (frameLevel == 0 || i == value.Length - 1)
                         {
-                            children.Add(buff);
-                            wait = null;
+                            frameStart = null;
+                            frameEnd = null;
+
+                            children.Add(buff.Trim());
                             buff = string.Empty;
-                        }
-                        else
-                        {
-                            buff += c;
                         }
                     }
                     else
                     {
-                        switch (c)
+                        switch (value[i])
                         {
                             case ' ':
                             case '\n':
-                                break; // Bypass
-                            case '[': wait = ']'; break;
-                            case '{': wait = '}'; break;
-                            case '(': wait = ')'; break;
-                            default: wait = ' '; break;
+                            case '\r':
+                                // Bypass
+                                break;
+
+                            case '.':
+                                children.Add(".");
+                                buff = string.Empty;
+                                break;
+
+                            case '[':
+                                frameStart = '[';
+                                frameEnd = ']';
+                                break;
+
+                            case '{':
+                                frameStart = '{';
+                                frameEnd = '}';
+                                break;
+
+                            case '(':
+                                frameStart = '(';
+                                frameEnd = ')';
+                                break;
+
+                            default:
+                                frameEnd = ' ';
+                                break;
+                        }
+
+                        if (frameEnd.HasValue)
+                        {
+                            frameLevel = 1;
+                            buff = string.Empty + value[i];
                         }
                     }
                 }
