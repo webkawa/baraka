@@ -34,11 +34,10 @@
                 })
                 .ConfigureLogging((hc, logging) =>
                 {
-                    logging
-                        .AddFilter((level) =>
-                        {
-                            return level > LogLevel.Trace;
-                        });
+                    logging.AddFilter((level) =>
+                    {
+                        return level > LogLevel.Trace;
+                    });
                 })
                 .UseStartup<Startup>()
                 .Build()

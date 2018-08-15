@@ -20,6 +20,12 @@
         ///     Gestions des logs.
         /// </summary>
         public LoggerConfiguration Logging { get; set; }
+
+        /// <summary>
+        ///     Moteur.
+        /// </summary>
+        public EngineConfiguration Engine { get; set; }
+
         /// <summary>
         ///     Liste des lots.
         /// </summary>

@@ -28,16 +28,11 @@
         /// <summary>
         ///     Type de la colonne SQL.
         /// </summary>
-        public override SqlType[] SqlTypes
+
+        public override SqlType[] SqlTypes => new SqlType[] 
         {
-            get
-            {
-                return new SqlType[]
-                {
-                    new SqlType(DbType.String)
-                };
-            }
-        }
+            new SqlType(DbType.String)
+        };
 
         /// <summary>
         ///     Lit une valeur dans la base de données et procède à sa conversion dans le DTO cible.

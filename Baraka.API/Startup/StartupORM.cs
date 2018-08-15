@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Data;
     using System.Linq;
     using System.Reflection;
     using System.Text;
@@ -87,7 +88,7 @@
                         })
                         .SetNamingStrategy(new NamingStrategy())
                         .AddMapping(hbm);
-
+                    
                     return pre.BuildSessionFactory();
                 })
                 .AddScoped((provider) =>
@@ -97,6 +98,10 @@
                 .AddScoped((provider) =>
                 {
                     return provider.GetService<ISessionFactory>().OpenStatelessSession();
+                })
+                .AddScoped<IDbConnection>((provider) =>
+                {
+                    return provider.GetService<IStatelessSession>().Connection;
                 })
                 .AddScoped((provider) => new FieldDAO(provider.GetService<ISession>()))
                 .AddScoped((provider) => new TableDAO(provider.GetService<ISession>()))

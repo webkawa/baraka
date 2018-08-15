@@ -75,13 +75,7 @@
         /// <summary>
         ///     Type des clefs.
         /// </summary>
-        public Type KeyType
-        {
-            get
-            {
-                return typeof(TKey);
-            }
-        }
+        public Type KeyType => typeof(TKey);
 
         /// <summary>
         ///     Indique si la configuration contient un clef.

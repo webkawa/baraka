@@ -3,15 +3,16 @@
     using System;
     using System.Collections.Generic;
     using System.Text;
+
     using Baraka.API.DTO.Http;
     using Baraka.API.DTO.Persisted.Shared;
     using Baraka.API.Exceptions;
     using Baraka.API.Internals.Configuration;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Mvc.Filters;
+    using Microsoft.Extensions.Logging;
     using Microsoft.Extensions.Options;
     using Newtonsoft.Json;
-    using NLog;
 
     /// <summary>
     ///     Filtre de gestion des exceptions.
@@ -31,16 +32,17 @@
                 .Value;
 
             /* Récupération du gestionnaire de logs */
-            ILogger logger = context
+            ILogger<ManageException> logger = (context
                 .HttpContext
                 .RequestServices
-                .GetService(typeof(ILogger)) as ILogger;
+                .GetService(typeof(ILoggerFactory)) as ILoggerFactory)
+                .CreateLogger<ManageException>();
 
             /* Affectation du code de réponse */
             context.HttpContext.Response.StatusCode = context.Exception is AuthenticationException ? 403 : 500;
 
             /* Ecriture dans les logs */
-            logger.Error(context.Exception, "The following error has been catched by the MVC error handler");
+            logger.LogError(context.Exception, "The following error has been catched by the MVC error handler");
 
             /* Récupération  du lot approprié */
             BundleId id = (context.Exception as ApiException)?.Display ?? BundleId.ERROR_UNKNOW;

@@ -43,18 +43,12 @@
         /// <summary>
         ///     Type SQL des colonnes utilisées.
         /// </summary>
-        public override SqlType[] SqlTypes
+        public override SqlType[] SqlTypes => new SqlType[]
         {
-            get
-            {
-                return new SqlType[]
-                {
-                    new SqlType(DbType.StringFixedLength, 32),
-                    new SqlType(DbType.String)
-                };
-            }
-        }
-        
+            new SqlType(DbType.StringFixedLength, 32),
+            new SqlType(DbType.String)
+        };
+
         /// <summary>
         ///     Configuration.
         /// </summary>

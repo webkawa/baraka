@@ -36,24 +36,12 @@
         /// <summary>
         ///     <see cref="IUserType.IsMutable" />
         /// </summary>
-        public bool IsMutable
-        {
-            get
-            {
-                return true;
-            }
-        }
+        public bool IsMutable => true;
 
         /// <summary>
         ///     <see cref="IUserType.ReturnedType" />
         /// </summary>
-        public Type ReturnedType
-        {
-            get
-            {
-                return typeof(TObject);
-            }
-        }
+        public Type ReturnedType => typeof(TObject);
 
         /// <summary>
         ///     <see cref="IUserType.SqlTypes" />

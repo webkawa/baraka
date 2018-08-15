@@ -25,13 +25,7 @@
         /// <summary>
         ///     <see cref="JsonConverter.CanRead" />
         /// </summary>
-        public override bool CanRead
-        {
-            get
-            {
-                return false;
-            }
-        }
+        public override bool CanRead => false;
 
         /// <summary>
         ///     <see cref="JsonConverter{T}.ReadJson(JsonReader, Type, T, bool, JsonSerializer)" />

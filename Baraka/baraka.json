@@ -8,5 +8,8 @@
     "folder": "D:\\Logs",
     "until": 15,
     "level": "TRACE"
+  },
+  "engine": {
+    "treatmentsTick": 100
   }
 }
