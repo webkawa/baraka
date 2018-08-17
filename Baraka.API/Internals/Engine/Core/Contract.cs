@@ -18,26 +18,40 @@
     {
         /// <summary>
         ///     Statut initial.
+        ///     Statut affecté à l'initialisation du contrat.
         /// </summary>
         INITIAL,
 
         /// <summary>
-        ///     En attente.
+        ///     Injecté.
+        ///     Statut affecté dès l'injection du contrat dans un gestionnaire
+        ///     adapté.
         /// </summary>
         INJECTED,
 
         /// <summary>
-        ///     En cours d'exécution.
+        ///     En cours.
+        ///     Statut affecté dès lors que le contrat est activement pris en
+        ///     charge par l'application.
         /// </summary>
         RUNNING,
 
         /// <summary>
+        ///     En attente.
+        ///     Statut affecté quand le contrat attend l'exécution d'un ou plusieurs
+        ///     sous-contrats.
+        /// </summary>
+        WAITING,
+
+        /// <summary>
         ///     En pause.
+        ///     Statut affecté dès mise en attente du contrat par l'application.
         /// </summary>
         PAUSED,
 
         /// <summary>
         ///     Finalisé.
+        ///     Statut affecté dès la finalisation du contrat.
         /// </summary>
         FINALIZED
     }
@@ -58,7 +72,7 @@
         FAILURE,
 
         /// <summary>
-        ///     Annulée.
+        ///     Annulation.
         /// </summary>
         CANCELED,
 
@@ -76,7 +90,7 @@
         /// <summary>
         ///     Moteur.
         /// </summary>
-        Engine Engine { get; }
+        IEngine Engine { get; }
 
         /// <summary>
         ///     Gestionnaire de logs.
@@ -139,6 +153,13 @@
         void Run();
 
         /// <summary>
+        ///     Place le contrat en attente d'un ensemble de contrats tiers.
+        /// </summary>
+        /// <param name="contracts">Contrats attendus.</param>
+        /// <returns>Liste des résultats.</returns>
+        IObservable<IEnumerable<ContractResult>> Wait(params IContract[] contracts);
+
+        /// <summary>
         ///     Passe le contrat au statut pause.
         /// </summary>
         void Pause();
@@ -161,7 +182,7 @@
         ///     Constructeur.
         /// </summary>
         /// <param name="engine">Moteur applicatif.</param>
-        public Contract(Engine engine)
+        public Contract(IEngine engine)
         {
             Engine = engine;
             Status = new BehaviorSubject<ContractStatus>(ContractStatus.INITIAL);
@@ -171,7 +192,7 @@
         /// <summary>
         ///     Moteur applicatif.
         /// </summary>
-        public Engine Engine { get; private set; }
+        public IEngine Engine { get; private set; }
 
         /// <summary>
         ///     Gestionnaire de logs.
@@ -263,6 +284,31 @@
         }
 
         /// <summary>
+        ///     <see cref="IContract.Wait(IContract[])" />
+        /// </summary>
+        public IObservable<IEnumerable<ContractResult>> Wait(params IContract[] contracts)
+        {
+            // Vérification de non-redondance
+            // Attention : si supprimé, nécessite la mise en oeuvre d'un contrôle de nature similaire !
+            if (contracts.Any(e => e.CurrentStatus != ContractStatus.INITIAL))
+            {
+                throw new EngineException("Wait dependencies can only be defined to contracts at initial status");
+            }
+
+            // Mise en attente effective
+            SwitchStatus(ContractStatus.WAITING);
+            return contracts
+                .Select(e => e.OnFinalized)
+                .Zip()
+                .Select((results) =>
+                {
+                    SwitchStatus(ContractStatus.RUNNING);
+                    return results;
+                })
+                .Take(1);
+        }
+
+        /// <summary>
         ///     <see cref="IContract.Pause()" />
         /// </summary>
         public void Pause()
@@ -304,11 +350,11 @@
                     break;
 
                 case ContractStatus.RUNNING:
-                    valid = CurrentStatus == ContractStatus.INJECTED || CurrentStatus == ContractStatus.PAUSED;
+                    valid = CurrentStatus == ContractStatus.INJECTED || CurrentStatus == ContractStatus.PAUSED || CurrentStatus == ContractStatus.WAITING;
                     break;
 
                 case ContractStatus.FINALIZED:
-                    valid = CurrentStatus == ContractStatus.RUNNING;
+                    valid = CurrentStatus == ContractStatus.RUNNING || CurrentStatus == ContractStatus.PAUSED;
                     break;
             }
 

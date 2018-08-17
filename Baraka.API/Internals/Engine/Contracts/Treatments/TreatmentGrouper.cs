@@ -1,9 +1,11 @@
 ﻿namespace Baraka.API.Internals.Engine.Contracts.Treatments
 {
-    using Microsoft.Extensions.Logging;
     using System;
     using System.Collections.Generic;
+    using System.Linq;
     using System.Text;
+
+    using Microsoft.Extensions.Logging;
 
     /// <summary>
     ///     Classe de groupage non-typée.
@@ -71,16 +73,15 @@
         {
             // Génération du traitement
             TGroup artifact = Assemble(group);
-            Treatment.Pause();
 
             // Souscription
-            artifact.OnFinalized.Subscribe((result) =>
+            Treatment.Wait(artifact).Subscribe((results) =>
             {
-                Treatment.Finalize(result);
+                Treatment.Finalize(results.Single());
             });
 
             // Injection
-            Treatment.Engine.ProcessManager.Inject(artifact.Initializer);
+            Treatment.Engine.TreatmentManager.Inject(artifact);
         }
 
         /// <summary>

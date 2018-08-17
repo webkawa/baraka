@@ -19,18 +19,13 @@
         /// <summary>
         ///     Charge initiale.
         /// </summary>
-        PlanStarter Starter { get; }
+        IPlanStarter Starter { get; }
 
         /// <summary>
         ///     Options.
         /// </summary>
-        PlanOptions Options { get; }
-
-        /// <summary>
-        ///     Cartographie du plan.
-        /// </summary>
-        PlanMap Map { get; }
-
+        IPlanOptions Options { get; }
+        
         /// <summary>
         ///     A la finalisation de tous les éléments contenus dans la
         ///     charge initiale.
@@ -65,12 +60,11 @@
         /// <param name="engine">Moteur applicatif.</param>
         /// <param name="starter">Charge initiale.</param>
         /// <param name="options">Options.</param>
-        public Plan(Engine engine, PlanStarter starter, PlanOptions options) : base(engine)
+        public Plan(IEngine engine, IPlanStarter starter, PlanOptions options) : base(engine)
         {
             Id = Guid.NewGuid();
             Starter = starter;
             Options = options;
-            Map = new PlanMap(this);
         }
 
         /// <summary>
@@ -81,22 +75,11 @@
         /// <summary>
         ///     Charge initiale.
         /// </summary>
-        public PlanStarter Starter { get; private set; }
+        public IPlanStarter Starter { get; private set; }
 
         /// <summary>
         ///     Options.
         /// </summary>
-        public PlanOptions Options { get; private set; }
-
-        /// <summary>
-        ///     Cartographie du plan.
-        /// </summary>
-        public PlanMap Map { get; private set; }
-
-        /// <summary>
-        ///     A la finalisation de tous les éléments contenus dans la
-        ///     charge initiale.
-        /// </summary>
-        public IObservable<IEnumerable<ContractResult>> OnStarterFinalized => Starter.OnAllFinalized;
+        public IPlanOptions Options { get; private set; }
     }
 }

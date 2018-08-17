@@ -27,7 +27,7 @@
         /// <summary>
         ///     Gestionnaire évènementiel.
         /// </summary>
-        EventManager EventManager { get; }
+        IEventManager EventManager { get; }
 
         /// <summary>
         ///     Gestionnaire d'instructions.
@@ -99,7 +99,7 @@
         /// <summary>
         ///     Gestionnaire évènementiel.
         /// </summary>
-        public EventManager EventManager { get; private set; }
+        public IEventManager EventManager { get; private set; }
 
         /// <summary>
         ///     Gestionnaire d'instructions.

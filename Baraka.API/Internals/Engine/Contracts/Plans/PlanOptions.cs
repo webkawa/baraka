@@ -28,16 +28,22 @@
     /// <summary>
     ///     Options appliquées à un plan d'exécution.
     /// </summary>
-    internal class PlanOptions
+    internal interface IPlanOptions
     {
         /// <summary>
         ///     Priorité du plan.
         /// </summary>
-        internal PlanPriority Priority { get; set; }
+        PlanPriority Priority { get; }
+    }
 
+    /// <summary>
+    ///     Options appliquées à un plan d'exécution.
+    /// </summary>
+    internal class PlanOptions : IPlanOptions
+    {
         /// <summary>
-        ///     Transaction unique.
+        ///     Priorité du plan.
         /// </summary>
-        internal bool Transactional { get; set; }
+        public PlanPriority Priority { get; set; }
     }
 }

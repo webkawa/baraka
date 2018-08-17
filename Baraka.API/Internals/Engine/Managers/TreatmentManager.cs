@@ -28,7 +28,7 @@
         /// </summary>
         /// <param name="engine">Moteur applicatif.</param>
         /// <param name="rulers">Liste des décisionnaires.</param>
-        public TreatmentManager(Engine engine, IEnumerable<ITreatmentRuler> rulers) : base(engine)
+        public TreatmentManager(IEngine engine, IEnumerable<ITreatmentRuler> rulers) : base(engine)
         {
             Rulers = new HashSet<ITreatmentRuler>(rulers);
             Buffer = new Dictionary<ITreatmentGrouper, ITreatmentGroup>();
@@ -67,14 +67,10 @@
         /// <param name="treatment">Traitement exécuté.</param>
         internal void Launch(ITreatment treatment)
         {
-            // Marquage
-            treatment.Run();
-
-            // Attente d'exécution de l'initialisateur
-            var init = treatment.Initializer;
-            init.OnResultChange.Subscribe((result) =>
+            // Mise en attente
+            treatment.Wait(treatment.Initializer).Subscribe((results) =>
             {
-                treatment.Finalize(result);
+                treatment.Finalize(results.Single());
             });
 
             // Injection

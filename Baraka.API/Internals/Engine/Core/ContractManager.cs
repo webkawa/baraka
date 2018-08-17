@@ -53,8 +53,7 @@
         ///     Injecte un contrat dans le gestionnaire pour prise en charge.
         /// </summary>
         /// <param name="contract">Contrat injecté.</param>
-        /// <param name="causes">Liste des contrats à l'origine du contrat courant.</param>
-        void Inject(TContract contract, params IContract[] causes);
+        void Inject(TContract contract);
     }
 
     /// <summary>
@@ -118,23 +117,8 @@
         ///     Injecte un contrat dans le gestionnaire pour prise en charge.
         /// </summary>
         /// <param name="contract">Contrat injecté.</param>
-        /// <param name="causes">Liste des contrats à l'origine du contrat courant.</param>
-        public void Inject(TContract contract, params IContract[] causes)
+        public void Inject(TContract contract)
         {
-            // Mise à jour des plans
-            if (causes == null || causes.Length == 0)
-            {
-                var plan = contract as IPlan;
-                if (plan == null)
-                {
-                    throw new EngineException("Injection without causes is only allowed for plan contracts");
-                }
-            }
-            else foreach (IContract cause in causes)
-            {
-                Engine.PlanManager.Attach(contract, cause);
-            }
-
             // Intégration
             contract.OnStatusChange.Subscribe((value) =>
             {

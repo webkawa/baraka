@@ -12,7 +12,21 @@
     ///     niveau de la base de données et susceptible de déclencher des traitements 
     ///     complémentaires.
     /// </summary>
-    internal class Event : Contract
+    internal interface IEvent : IContract
     {
+    }
+
+    /// <summary>
+    ///     Evènement.
+    /// </summary>
+    internal class Event : Contract, IEvent
+    {
+        /// <summary>
+        ///     Constructeur.
+        /// </summary>
+        /// <param name="engine">Moteur d'origine.</param>
+        public Event(IEngine engine) : base(engine)
+        {
+        }
     }
 }
