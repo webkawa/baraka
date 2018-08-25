@@ -15,6 +15,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Remove="Internals\Engine\Contracts\Treatments\TreatmentGroup.cs" />
+    <Compile Remove="Internals\Engine\Contracts\Treatments\TreatmentGrouper.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.3.0" />
     <PackageReference Include="Microsoft.AspNetCore" Version="2.1.1" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.1.1" />

@@ -15,7 +15,7 @@
         /// <summary>
         ///     Clef de groupage.
         /// </summary>
-        ITreatmentGrouper Grouper { get; }
+        IContractGrouper Grouper { get; }
 
         /// <summary>
         ///     Processus initial.
@@ -66,6 +66,6 @@
         /// <summary>
         ///     Clef de groupage.
         /// </summary>
-        public abstract ITreatmentGrouper Grouper { get; }
+        public abstract IContractGrouper Grouper { get; }
     }
 }

@@ -17,13 +17,13 @@
         /// </summary>
         public CountRuler()
         {
-            Counts = new Dictionary<ITreatmentGrouper, int>();
+            Counts = new Dictionary<IContractGrouper, int>();
         }
 
         /// <summary>
         ///     Etat des décomptes.
         /// </summary>
-        private IDictionary<ITreatmentGrouper, int> Counts { get; set; }
+        private IDictionary<IContractGrouper, int> Counts { get; set; }
 
         /// <summary>
         ///     Valide le traitement sous réserve que le décompte soit inférieur au 

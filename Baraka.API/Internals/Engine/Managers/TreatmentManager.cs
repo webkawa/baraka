@@ -31,7 +31,7 @@
         public TreatmentManager(IEngine engine, IEnumerable<ITreatmentRuler> rulers) : base(engine)
         {
             Rulers = new HashSet<ITreatmentRuler>(rulers);
-            Buffer = new Dictionary<ITreatmentGrouper, ITreatmentGroup>();
+            Buffer = new Dictionary<IContractGrouper, IContractGroup>();
 
             OnContractInjected
                 .Where((treatment) =>
@@ -55,7 +55,7 @@
                     }
                     else
                     {
-                        var group = new TreatmentGroup(this, contract);
+                        var group = new ContractGroup(this, contract);
                         Buffer.Add(grouper, group);
                     }
                 });
@@ -87,6 +87,6 @@
         ///     Dictionnaire utilisé pour stocker les traitements en attente de
         ///     groupage.
         /// </summary>
-        private IDictionary<ITreatmentGrouper, ITreatmentGroup> Buffer { get; set; }
+        private IDictionary<IContractGrouper, IContractGroup> Buffer { get; set; }
     }
 }

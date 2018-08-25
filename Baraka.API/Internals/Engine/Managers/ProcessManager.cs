@@ -21,11 +21,10 @@
         /// <param name="engine">Moteur applicatif.</param>
         public ProcessManager(Engine engine) : base(engine)
         {
+            OnContractInjected.Subscribe((process) =>
+            {
+                process.Launch();
+            });
         }
-
-        /// <summary>
-        ///     Liste des processus ouverts dans le pool.
-        /// </summary>
-        private ISet<IProcess> Pool { get; set; }
     }
 }
