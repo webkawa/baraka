@@ -20,17 +20,6 @@
         ///     Charge initiale.
         /// </summary>
         IPlanStarter Starter { get; }
-
-        /// <summary>
-        ///     Options.
-        /// </summary>
-        IPlanOptions Options { get; }
-        
-        /// <summary>
-        ///     A la finalisation de tous les éléments contenus dans la
-        ///     charge initiale.
-        /// </summary>
-        IObservable<IEnumerable<ContractResult>> OnStarterFinalized { get; }
     }
 
     /// <summary>
@@ -59,12 +48,10 @@
         /// </summary>
         /// <param name="engine">Moteur applicatif.</param>
         /// <param name="starter">Charge initiale.</param>
-        /// <param name="options">Options.</param>
-        public Plan(IEngine engine, IPlanStarter starter, PlanOptions options) : base(engine)
+        public Plan(IEngine engine, IPlanStarter starter) : base(engine)
         {
             Id = Guid.NewGuid();
             Starter = starter;
-            Options = options;
         }
 
         /// <summary>
@@ -76,10 +63,5 @@
         ///     Charge initiale.
         /// </summary>
         public IPlanStarter Starter { get; private set; }
-
-        /// <summary>
-        ///     Options.
-        /// </summary>
-        public IPlanOptions Options { get; private set; }
     }
 }

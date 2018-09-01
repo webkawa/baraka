@@ -8,6 +8,8 @@
 
     using Baraka.API.Exceptions;
     using Baraka.API.Internals.Engine.Contracts.Plans;
+    using Baraka.API.Internals.Engine.Core.Dispatch;
+    using Baraka.API.Internals.Engine.Core.Piles;
     using Microsoft.Extensions.Logging;
 
     /// <summary>
@@ -50,7 +52,8 @@
         ILogger Logger { get; }
 
         /// <summary>
-        ///     Injecte un contrat dans le gestionnaire pour prise en charge.
+        ///     Injecte un contrat unitaire dans le gestionnaire pour 
+        ///     prise en charge.
         /// </summary>
         /// <param name="contract">Contrat injecté.</param>
         void Inject(TContract contract);
@@ -61,7 +64,7 @@
     /// </summary>
     /// <typeparam name="TContract">Type de contrats traité.</typeparam>
     internal abstract class ContractManager<TContract> : IContractManager<TContract>
-        where TContract : IContract
+        where TContract : class, IContract
     {
         /// <summary>
         ///     Constructeur.
@@ -71,6 +74,9 @@
         {
             Engine = engine;
             Activity = new Subject<TContract>();
+            Pile = new ScopeDispatcher<TContract>(
+                new ContractPile<TContract>(), 
+                (contract) => contract.Transaction);
         }
 
         /// <summary>
@@ -107,6 +113,11 @@
         ///     Gestionnaire de logs.
         /// </summary>
         public ILogger Logger => Engine.Logger;
+        
+        /// <summary>
+        ///     Accès à la pile.
+        /// </summary>
+        protected IContractProcessor<TContract> Pile { get; private set; }
 
         /// <summary>
         ///     Flux d'activité des contrats.
@@ -119,7 +130,10 @@
         /// <param name="contract">Contrat injecté.</param>
         public void Inject(TContract contract)
         {
-            // Intégration
+            // Classification
+            Pile.Inject(contract);
+
+            // Enregistrement
             contract.OnStatusChange.Subscribe((value) =>
             {
                 Activity.OnNext(contract);

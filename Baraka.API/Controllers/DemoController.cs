@@ -15,10 +15,8 @@
     using Baraka.API.Internals.Authentication;
     using Microsoft.AspNetCore.Mvc;
     using NHibernate;
-    using NLog;
     using Baraka.API.DTO.Persisted.Tables;
     using Baraka.API.DTO.Persisted.Fields;
-    using Baraka.API.Internals.Engine.Syntax.Factory;
 
     /// <summary>
     ///     Services liées à l'initialisation de l'application.
@@ -44,8 +42,7 @@
             [FromServices] UserDAO userDAO,
             [FromServices] TableDAO tableDAO,
             [FromServices] FieldDAO fieldDAO,
-            [FromServices] ViewDAO viewDAO,
-            [FromServices] SyntaxValidator validator)
+            [FromServices] ViewDAO viewDAO)
         {
             if (session.QueryOver<User>().RowCount() == 0)
             {

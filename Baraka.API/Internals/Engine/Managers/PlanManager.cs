@@ -39,7 +39,7 @@
                 // Mise en attente
                 contract.Wait(contract.Starter.All.ToArray()).Subscribe((results) =>
                 {
-                    contract.Finalize(ContractResult.SUCCESS);
+                    contract.IContract(ContractResult.SUCCESS);
                 });
 
                 // Injection

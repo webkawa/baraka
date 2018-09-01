@@ -10,6 +10,7 @@
     using Baraka.API.Exceptions;
     using Baraka.API.Internals.Engine.Contracts.Treatments;
     using Microsoft.Extensions.Logging;
+    using NHibernate;
 
     /// <summary>
     ///     Statut d'un contrat.
@@ -83,6 +84,27 @@
     }
 
     /// <summary>
+    ///     Priorité du contrat.
+    /// </summary>
+    internal enum ContractPriority
+    {
+        /// <summary>
+        ///     Exécution immédiate.
+        /// </summary>
+        IMMEDIATE,
+
+        /// <summary>
+        ///     Exécution dès disponibilité.
+        /// </summary>
+        PLANIFIED,
+
+        /// <summary>
+        ///     Exécution au plus tard.
+        /// </summary>
+        LAZY
+    }
+
+    /// <summary>
     ///     Interface des contrats.
     /// </summary>
     internal interface IContract
@@ -91,6 +113,11 @@
         ///     Moteur.
         /// </summary>
         IEngine Engine { get; }
+
+        /// <summary>
+        ///     Transaction de rattachement.
+        /// </summary>
+        ITransaction Transaction { get; }
 
         /// <summary>
         ///     Gestionnaire de logs.
@@ -179,7 +206,7 @@
     internal abstract class Contract : IContract
     {
         /// <summary>
-        ///     Constructeur.
+        ///     Constructeur sans origine.
         /// </summary>
         /// <param name="engine">Moteur applicatif.</param>
         public Contract(IEngine engine)
@@ -187,8 +214,21 @@
             Engine = engine;
             Status = new BehaviorSubject<ContractStatus>(ContractStatus.INITIAL);
             Result = new AsyncSubject<ContractResult>();
+
+            Transaction = null;
+            Priority = ContractPriority.PLANIFIED;
         }
-        
+
+        /// <summary>
+        ///     Transaction de rattachement.
+        /// </summary>
+        public ITransaction Transaction { get; set; }
+
+        /// <summary>
+        ///     Priorité.
+        /// </summary>
+        public ContractPriority Priority { get; set; }
+
         /// <summary>
         ///     Moteur applicatif.
         /// </summary>

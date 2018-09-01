@@ -3,9 +3,11 @@
     using System;
     using System.Collections.Generic;
     using System.Text;
+
     using Baraka.API.Internals.Engine.Contracts.Plans;
     using Baraka.API.Internals.Engine.Contracts.Processes;
     using Baraka.API.Internals.Engine.Core;
+    using Baraka.API.Internals.Engine.Core.Piles;
 
     /// <summary>
     ///     Interface des traitements.
@@ -47,7 +49,7 @@
         /// <param name="engine">Gestionnaire d'appartenance.</param>
         /// <param name="plan">Plan rattaché.</param>
         /// <param name="initializer">Processus initial.</param>
-        public Treatment(Engine engine, IPlan plan, IProcess initializer) : base(engine)
+        public Treatment(IEngine engine, IPlan plan, IProcess initializer) : base(engine)
         {
             Plan = plan;
             Initializer = initializer;

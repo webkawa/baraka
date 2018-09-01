@@ -3,8 +3,6 @@
     using System;
     using System.Collections.Generic;
     using System.Text;
-    using Baraka.API.Internals.Engine.Syntax.Factory;
-    using Baraka.API.Internals.Engine.Syntax.Specification;
     using Microsoft.Extensions.DependencyInjection;
 
     /// <summary>
@@ -19,13 +17,10 @@
         /// <returns>Liste des services.</returns>
         internal static IServiceCollection AddEngine(this IServiceCollection services)
         {
-            return services
-                .AddSingleton((provider) =>
+            return services;
+                /*.AddSingleton((provider) =>
                 {
-                    var result = new SyntaxValidator();
-                    result.Load(TSQLSpecification.INSERT);
-                    return result;
-                });
+                });*/
         }
     }
 }

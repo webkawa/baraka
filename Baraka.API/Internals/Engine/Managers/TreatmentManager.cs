@@ -30,9 +30,8 @@
         /// <param name="rulers">Liste des décisionnaires.</param>
         public TreatmentManager(IEngine engine, IEnumerable<ITreatmentRuler> rulers) : base(engine)
         {
-            Rulers = new HashSet<ITreatmentRuler>(rulers);
-            Buffer = new Dictionary<IContractGrouper, IContractGroup>();
 
+            /*
             OnContractInjected
                 .Where((treatment) =>
                 {
@@ -40,7 +39,7 @@
                     // bloque l'exécution
                     if (Rulers.Any((ruler) => ruler.Matches(treatment) && !ruler.Validates(treatment)))
                     {
-                        treatment.Finalize(ContractResult.CANCELED);
+                        treatment.IContract(ContractResult.CANCELED);
                         return false;
                     }
                     return true;
@@ -59,6 +58,7 @@
                         Buffer.Add(grouper, group);
                     }
                 });
+                */
         }
 
         /// <summary>
@@ -68,25 +68,14 @@
         internal void Launch(ITreatment treatment)
         {
             // Mise en attente
+            /*
             treatment.Wait(treatment.Initializer).Subscribe((results) =>
             {
-                treatment.Finalize(results.Single());
+                treatment.IContract(results.Single());
             });
 
             // Injection
-            Engine.ProcessManager.Inject(treatment.Initializer);
+            Engine.ProcessManager.Inject(treatment.Initializer);*/
         }
-
-        /// <summary>
-        ///     Liste des décisionnaires.
-        /// </summary>
-        private ISet<ITreatmentRuler> Rulers { get; set; }
-
-        /// <summary>
-        ///     Tampon.
-        ///     Dictionnaire utilisé pour stocker les traitements en attente de
-        ///     groupage.
-        /// </summary>
-        private IDictionary<IContractGrouper, IContractGroup> Buffer { get; set; }
     }
 }

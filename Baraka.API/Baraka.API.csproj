@@ -32,7 +32,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Internals\Engine\Contracts\Treatments\Groupers\" />
+    <Folder Include="Internals\Engine\Contracts\Treatments\Dispatch\" />
     <Folder Include="Internals\Persistence\Interceptors\" />
   </ItemGroup>
 
